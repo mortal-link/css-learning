@@ -1,0 +1,187 @@
+{
+  "title": "CSS Custom Properties for Cascading Variables Module Level 1",
+  "specName": "css-variables-1",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "status",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.1. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "defining-variables",
+      "heading": "2. Defining Custom Properties: the --* family of properties"
+    },
+    {
+      "level": 3,
+      "id": "syntax",
+      "heading": "2.1. Custom Property Value Syntax"
+    },
+    {
+      "level": 3,
+      "id": "guaranteed-invalid",
+      "heading": "2.2. Guaranteed-Invalid Values"
+    },
+    {
+      "level": 3,
+      "id": "cycles",
+      "heading": "2.3. Resolving Dependency Cycles"
+    },
+    {
+      "level": 2,
+      "id": "using-variables",
+      "heading": "3. Using Cascading Variables: the var() notation"
+    },
+    {
+      "level": 3,
+      "id": "invalid-variables",
+      "heading": "3.1. Invalid Variables"
+    },
+    {
+      "level": 3,
+      "id": "variables-in-shorthands",
+      "heading": "3.2. Variables in Shorthand Properties"
+    },
+    {
+      "level": 3,
+      "id": "long-variables",
+      "heading": "3.3. Safely Handling Overly-Long Variables"
+    },
+    {
+      "level": 2,
+      "id": "apis",
+      "heading": "4. APIs"
+    },
+    {
+      "level": 3,
+      "id": "serializing-custom-props",
+      "heading": "4.1. Serializing Custom Properties"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "5. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-20211111",
+      "heading": "5.1. Changes Since the 11 November 2021 CR Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-20151203",
+      "heading": "5.2. Changes Since the 03 December 2015 CR"
+    },
+    {
+      "level": 3,
+      "id": "changes-20140506",
+      "heading": "5.3. Changes since the May 6 2014 Last Call Working Draft"
+    },
+    {
+      "level": 2,
+      "id": "acks",
+      "heading": "6. Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "7. Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "8. Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 3,
+      "id": "w3c-cr-exit-criteria",
+      "heading": "CR exit criteria"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:52.979Z"
+}

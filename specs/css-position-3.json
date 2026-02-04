@@ -1,0 +1,267 @@
+{
+  "title": "CSS Positioned Layout Module Level 3",
+  "specName": "css-position-3",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "placement",
+      "heading": "1.1. Module Interactions"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.2. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "position-property",
+      "heading": "2. Choosing A Positioning Scheme: position property"
+    },
+    {
+      "level": 3,
+      "id": "def-cb",
+      "heading": "2.1. Containing Blocks of Positioned Boxes"
+    },
+    {
+      "level": 4,
+      "id": "original-cb",
+      "heading": "2.1.1. Further Adjustments to the Containing Block"
+    },
+    {
+      "level": 3,
+      "id": "stacking",
+      "heading": "2.2. Painting Order and Stacking Contexts"
+    },
+    {
+      "level": 2,
+      "id": "coords",
+      "heading": "3. Positioning Coordinates"
+    },
+    {
+      "level": 3,
+      "id": "insets",
+      "heading": "3.1. Box Insets: the top, right, bottom, left, inset-block-start, inset-inline-start, inset-block-end, and inset-inline-end properties"
+    },
+    {
+      "level": 3,
+      "id": "inset-shorthands",
+      "heading": "3.2. Box Insets Shorthands: the inset-block, inset-inline, and inset properties"
+    },
+    {
+      "level": 3,
+      "id": "relpos-insets",
+      "heading": "3.3. Relative Positioning"
+    },
+    {
+      "level": 3,
+      "id": "stickypos-insets",
+      "heading": "3.4. Sticky positioning"
+    },
+    {
+      "level": 4,
+      "id": "stickypos-scroll",
+      "heading": "3.4.1. Scroll Position of Sticky-Positioned Boxes"
+    },
+    {
+      "level": 3,
+      "id": "abspos-insets",
+      "heading": "3.5. Absolute (and Fixed) Positioning"
+    },
+    {
+      "level": 4,
+      "id": "resolving-insets",
+      "heading": "3.5.1. Resolvings Insets for the “Inset-Modified Containing Block”"
+    },
+    {
+      "level": 4,
+      "id": "staticpos-rect",
+      "heading": "3.5.2. Calculating the Static Position and the “Static-Position Rectangle”"
+    },
+    {
+      "level": 4,
+      "id": "abspos-breaking",
+      "heading": "3.5.3. Fragmenting Absolutely-positioned Elements"
+    },
+    {
+      "level": 2,
+      "id": "abspos-layout",
+      "heading": "4. Absolute Positioning Layout Model"
+    },
+    {
+      "level": 3,
+      "id": "abspos-auto-size",
+      "heading": "4.1. Automatic Sizes of Absolutely-Positioned Boxes"
+    },
+    {
+      "level": 3,
+      "id": "abspos-margins",
+      "heading": "4.2. Auto Margins of Absolutely-Positioned Boxes"
+    },
+    {
+      "level": 2,
+      "id": "abspos-alignment",
+      "heading": "5. Self-Alignment of Absolutely Positioned Boxes"
+    },
+    {
+      "level": 2,
+      "id": "abspos-old",
+      "heading": "6. Old Absolute Positioning Layout Model"
+    },
+    {
+      "level": 3,
+      "id": "abs-non-replaced-width",
+      "heading": "6.1. The Width of Absolutely-Positioned, Non-Replaced Elements"
+    },
+    {
+      "level": 3,
+      "id": "abs-replaced-width",
+      "heading": "6.2. The width of absolute or fixed positioned, replaced elements"
+    },
+    {
+      "level": 3,
+      "id": "abs-non-replaced-height",
+      "heading": "6.3. The Height Of Absolutely Positioned, Non-Replaced Elements"
+    },
+    {
+      "level": 3,
+      "id": "abs-replaced-height",
+      "heading": "6.4. The Height Of Absolutely Positioned, Replaced Elements"
+    },
+    {
+      "level": 2,
+      "id": "comparison",
+      "heading": "7. Informative Comparison of Normal Flow, Floats, and Positioning"
+    },
+    {
+      "level": 3,
+      "id": "comp-normal-flow",
+      "heading": "7.1. Normal Flow Example"
+    },
+    {
+      "level": 3,
+      "id": "comp-relpos",
+      "heading": "7.2. Relative Positioning Example"
+    },
+    {
+      "level": 3,
+      "id": "comp-floating",
+      "heading": "7.3. Floating Example"
+    },
+    {
+      "level": 3,
+      "id": "comp-abspos",
+      "heading": "7.4. Absolute Positioning Example"
+    },
+    {
+      "level": 2,
+      "id": "ack",
+      "heading": "8. Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Changes"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:43.055Z"
+}

@@ -1,0 +1,377 @@
+{
+  "title": "CSS Text Module Level 3",
+  "specName": "css-text-3",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "placement",
+      "heading": "1.1. Module Interactions"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.2. Value Definitions"
+    },
+    {
+      "level": 3,
+      "id": "languages",
+      "heading": "1.3. Languages and Typesetting"
+    },
+    {
+      "level": 3,
+      "id": "characters",
+      "heading": "1.4. Characters and Letters"
+    },
+    {
+      "level": 3,
+      "id": "text-encoding",
+      "heading": "1.5. Text Processing"
+    },
+    {
+      "level": 2,
+      "id": "transforming",
+      "heading": "2. Transforming Text"
+    },
+    {
+      "level": 3,
+      "id": "text-transform-property",
+      "heading": "2.1. Case Transforms: the text-transform property"
+    },
+    {
+      "level": 4,
+      "id": "text-transform-mapping",
+      "heading": "2.1.1. Mapping Rules"
+    },
+    {
+      "level": 4,
+      "id": "text-transform-order",
+      "heading": "2.1.2. Order of Operations"
+    },
+    {
+      "level": 2,
+      "id": "white-space-property",
+      "heading": "3. White Space and Wrapping: the white-space property"
+    },
+    {
+      "level": 2,
+      "id": "white-space-processing",
+      "heading": "4. White Space Processing &amp; Control Characters"
+    },
+    {
+      "level": 3,
+      "id": "white-space-rules",
+      "heading": "4.1. The White Space Processing Rules"
+    },
+    {
+      "level": 4,
+      "id": "white-space-phase-1",
+      "heading": "4.1.1. Phase I: Collapsing and Transformation"
+    },
+    {
+      "level": 4,
+      "id": "white-space-phase-2",
+      "heading": "4.1.2. Phase II: Trimming and Positioning"
+    },
+    {
+      "level": 4,
+      "id": "line-break-transform",
+      "heading": "4.1.3. Segment Break Transformation Rules"
+    },
+    {
+      "level": 3,
+      "id": "tab-size-property",
+      "heading": "4.2. Tab Character Size: the tab-size property"
+    },
+    {
+      "level": 2,
+      "id": "line-breaking",
+      "heading": "5. Line Breaking and Word Boundaries"
+    },
+    {
+      "level": 3,
+      "id": "line-break-details",
+      "heading": "5.1. Line Breaking Details"
+    },
+    {
+      "level": 3,
+      "id": "word-break-property",
+      "heading": "5.2. Breaking Rules for Letters: the word-break property"
+    },
+    {
+      "level": 3,
+      "id": "line-break-property",
+      "heading": "5.3. Line Breaking Strictness: the line-break property"
+    },
+    {
+      "level": 3,
+      "id": "hyphenation",
+      "heading": "5.4. Hyphenation: the hyphens property"
+    },
+    {
+      "level": 3,
+      "id": "overflow-wrap-property",
+      "heading": "5.5. Overflow Wrapping: the overflow-wrap/word-wrap property"
+    },
+    {
+      "level": 3,
+      "id": "word-break-shaping",
+      "heading": "5.6. Shaping Across Intra-word Breaks"
+    },
+    {
+      "level": 2,
+      "id": "justification",
+      "heading": "6. Alignment and Justification"
+    },
+    {
+      "level": 3,
+      "id": "text-align-property",
+      "heading": "6.1. Text Alignment: the text-align shorthand"
+    },
+    {
+      "level": 3,
+      "id": "text-align-all-property",
+      "heading": "6.2. Default Text Alignment: the text-align-all property"
+    },
+    {
+      "level": 3,
+      "id": "text-align-last-property",
+      "heading": "6.3. Last Line Alignment: the text-align-last property"
+    },
+    {
+      "level": 3,
+      "id": "text-justify-property",
+      "heading": "6.4. Justification Method: the text-justify property"
+    },
+    {
+      "level": 4,
+      "id": "expanding-text",
+      "heading": "6.4.1. Expanding and Compressing Text"
+    },
+    {
+      "level": 4,
+      "id": "justify-symbols",
+      "heading": "6.4.2. Handling Symbols and Punctuation"
+    },
+    {
+      "level": 4,
+      "id": "justify-limits",
+      "heading": "6.4.3. Unexpandable Text"
+    },
+    {
+      "level": 4,
+      "id": "justify-cursive",
+      "heading": "6.4.4. Cursive Scripts"
+    },
+    {
+      "level": 4,
+      "id": "justify-algos",
+      "heading": "6.4.5. Minimum Requirements for auto Justification"
+    },
+    {
+      "level": 2,
+      "id": "spacing",
+      "heading": "7. Spacing"
+    },
+    {
+      "level": 3,
+      "id": "word-spacing-property",
+      "heading": "7.1. Word Spacing: the word-spacing property"
+    },
+    {
+      "level": 3,
+      "id": "letter-spacing-property",
+      "heading": "7.2. Tracking: the letter-spacing property"
+    },
+    {
+      "level": 4,
+      "id": "cursive-tracking",
+      "heading": "7.2.1. Cursive Scripts"
+    },
+    {
+      "level": 3,
+      "id": "boundary-shaping",
+      "heading": "7.3. Shaping Across Element Boundaries"
+    },
+    {
+      "level": 2,
+      "id": "edge-effects",
+      "heading": "8. Edge Effects"
+    },
+    {
+      "level": 3,
+      "id": "text-indent-property",
+      "heading": "8.1. First Line Indentation: the text-indent property"
+    },
+    {
+      "level": 3,
+      "id": "hanging",
+      "heading": "8.2. Hanging Glyphs"
+    },
+    {
+      "level": 4,
+      "id": "hanging-punctuation-property",
+      "heading": "8.2.1. Hanging Punctuation: the hanging-punctuation property"
+    },
+    {
+      "level": 3,
+      "id": "bidi-linebox",
+      "heading": "8.3. Bidirectionality and Line Boxes"
+    },
+    {
+      "level": 2,
+      "id": "order",
+      "heading": "Appendix A: Text Processing Order of Operations"
+    },
+    {
+      "level": 2,
+      "id": "plaintext",
+      "heading": "Appendix B: Conversion to Plaintext"
+    },
+    {
+      "level": 2,
+      "id": "default-stylesheet",
+      "heading": "Appendix C: Default UA Stylesheet"
+    },
+    {
+      "level": 2,
+      "id": "script-groups",
+      "heading": "Appendix D: Scripts and Spacing"
+    },
+    {
+      "level": 2,
+      "id": "character-properties",
+      "heading": "Appendix E: Characters and Properties"
+    },
+    {
+      "level": 2,
+      "id": "script-tagging",
+      "heading": "Appendix F: Identifying the Content Writing System"
+    },
+    {
+      "level": 2,
+      "id": "small-kana",
+      "heading": "Appendix G: Small Kana Mappings"
+    },
+    {
+      "level": 2,
+      "id": "priv",
+      "heading": "Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "sec",
+      "heading": "Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgements",
+      "heading": "Acknowledgements"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Changes"
+    },
+    {
+      "level": 3,
+      "id": "recent-changes",
+      "heading": "Recent Changes"
+    },
+    {
+      "level": 3,
+      "id": "old-changes",
+      "heading": "Older Changes"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 3,
+      "id": "w3c-cr-exit-criteria",
+      "heading": "CR exit criteria"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:48.581Z"
+}

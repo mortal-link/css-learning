@@ -1,0 +1,237 @@
+{
+  "title": "CSS Transitions Module Level 1",
+  "specName": "css-transitions-1",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "introduction",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.1. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "transitions",
+      "heading": "2. Transitions"
+    },
+    {
+      "level": 3,
+      "id": "transition-property-property",
+      "heading": "2.1. The transition-property Property"
+    },
+    {
+      "level": 3,
+      "id": "transition-duration-property",
+      "heading": "2.2. The transition-duration Property"
+    },
+    {
+      "level": 3,
+      "id": "transition-timing-function-property",
+      "heading": "2.3. The transition-timing-function Property"
+    },
+    {
+      "level": 3,
+      "id": "transition-delay-property",
+      "heading": "2.4. The transition-delay Property"
+    },
+    {
+      "level": 3,
+      "id": "transition-shorthand-property",
+      "heading": "2.5. The transition Shorthand Property"
+    },
+    {
+      "level": 2,
+      "id": "starting",
+      "heading": "3. Starting of transitions"
+    },
+    {
+      "level": 3,
+      "id": "reversing",
+      "heading": "3.1. Faster reversing of interrupted transitions"
+    },
+    {
+      "level": 2,
+      "id": "application",
+      "heading": "4. Application of transitions"
+    },
+    {
+      "level": 2,
+      "id": "complete",
+      "heading": "5. Completion of transitions"
+    },
+    {
+      "level": 2,
+      "id": "transition-events",
+      "heading": "6. Transition Events"
+    },
+    {
+      "level": 3,
+      "id": "interface-transitionevent",
+      "heading": "6.1. Interface TransitionEvent"
+    },
+    {
+      "level": 4,
+      "id": "interface-transitionevent-idl",
+      "heading": "6.1.1. IDL Definition"
+    },
+    {
+      "level": 4,
+      "id": "interface-transitionevent-attributes",
+      "heading": "6.1.2. Attributes"
+    },
+    {
+      "level": 3,
+      "id": "event-transitionevent",
+      "heading": "6.2. Types of TransitionEvent"
+    },
+    {
+      "level": 3,
+      "id": "event-handlers-on-elements-document-objects-and-window-objects",
+      "heading": "6.3. Event handlers on elements, Document objects, and Window objects"
+    },
+    {
+      "level": 2,
+      "id": "interface-dom",
+      "heading": "7. DOM Interfaces"
+    },
+    {
+      "level": 3,
+      "id": "interface-globaleventhandlers-idl",
+      "heading": "7.1. IDL Definition"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "8. Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "9. Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "accessibility",
+      "heading": "10. Accessibility Considerations"
+    },
+    {
+      "level": 3,
+      "id": "accessibility-motion",
+      "heading": "10.1. Motion"
+    },
+    {
+      "level": 3,
+      "id": "accessibility-cascade",
+      "heading": "10.2. Cascade"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "11. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-2018",
+      "heading": "11.1. Changes since Working Draft of 11 October 2018"
+    },
+    {
+      "level": 3,
+      "id": "changes-earlier",
+      "heading": "11.2. Earlier changes"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgments",
+      "heading": "12. Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "idl-index",
+      "heading": "IDL Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:51.136Z"
+}

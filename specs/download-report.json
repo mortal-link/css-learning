@@ -1,0 +1,200 @@
+{
+  "downloadedAt": "2026-02-03T09:49:55.373Z",
+  "total": 32,
+  "downloaded": 31,
+  "skipped": 1,
+  "errors": 0,
+  "specs": [
+    {
+      "name": "css-cascade-4",
+      "status": "ok",
+      "message": "previously downloaded"
+    },
+    {
+      "name": "css-cascade-5",
+      "status": "ok",
+      "title": "CSS Cascading and Inheritance Level 5",
+      "sections": 74
+    },
+    {
+      "name": "css-box-3",
+      "status": "ok",
+      "title": "CSS Box Model Module Level 3",
+      "sections": 35
+    },
+    {
+      "name": "css-box-4",
+      "status": "ok",
+      "title": "CSS Box Model Module Level 4",
+      "sections": 39
+    },
+    {
+      "name": "css-display-3",
+      "status": "ok",
+      "title": "CSS Display Module Level 3",
+      "sections": 47
+    },
+    {
+      "name": "css-display-4",
+      "status": "ok",
+      "title": "CSS Display Module Level 4",
+      "sections": 48
+    },
+    {
+      "name": "css-values-3",
+      "status": "ok",
+      "title": "CSS Values and Units Module Level 3",
+      "sections": 69
+    },
+    {
+      "name": "css-values-4",
+      "status": "ok",
+      "title": "CSS Values and Units Module Level 4",
+      "sections": 108
+    },
+    {
+      "name": "selectors-3",
+      "status": "ok",
+      "title": "Selectors Level 3",
+      "sections": 0
+    },
+    {
+      "name": "selectors-4",
+      "status": "ok",
+      "title": "Selectors Level 4",
+      "sections": 137
+    },
+    {
+      "name": "css-flexbox-1",
+      "status": "ok",
+      "title": "CSS Flexible Box Layout Module Level 1",
+      "sections": 90
+    },
+    {
+      "name": "css-grid-1",
+      "status": "ok",
+      "title": "CSS Grid Layout Module Level 1",
+      "sections": 110
+    },
+    {
+      "name": "css-grid-2",
+      "status": "ok",
+      "title": "CSS Grid Layout Module Level 2",
+      "sections": 106
+    },
+    {
+      "name": "css-position-3",
+      "status": "ok",
+      "title": "CSS Positioned Layout Module Level 3",
+      "sections": 52
+    },
+    {
+      "name": "css-multicol-1",
+      "status": "ok",
+      "title": "CSS Multi-column Layout Module Level 1",
+      "sections": 52
+    },
+    {
+      "name": "css-align-3",
+      "status": "ok",
+      "title": "CSS Box Alignment Module Level 3",
+      "sections": 72
+    },
+    {
+      "name": "css-color-4",
+      "status": "ok",
+      "title": "CSS Color Module Level 4",
+      "sections": 130
+    },
+    {
+      "name": "css-color-5",
+      "status": "ok",
+      "title": "CSS Color Module Level 5",
+      "sections": 76
+    },
+    {
+      "name": "css-backgrounds-3",
+      "status": "ok",
+      "title": "CSS Backgrounds and Borders Module Level 3",
+      "sections": 80
+    },
+    {
+      "name": "css-images-3",
+      "status": "ok",
+      "title": "CSS Images Module Level 3",
+      "sections": 59
+    },
+    {
+      "name": "css-fonts-4",
+      "status": "ok",
+      "title": "CSS Fonts Module Level 4",
+      "sections": 149
+    },
+    {
+      "name": "css-text-3",
+      "status": "ok",
+      "title": "CSS Text Module Level 3",
+      "sections": 74
+    },
+    {
+      "name": "css-text-decor-3",
+      "status": "ok",
+      "title": "CSS Text Decoration Module Level 3",
+      "sections": 43
+    },
+    {
+      "name": "css-transforms-1",
+      "status": "ok",
+      "title": "CSS Transforms Module Level 1",
+      "sections": 57
+    },
+    {
+      "name": "css-transforms-2",
+      "status": "ok",
+      "title": "CSS Transforms Module Level 2",
+      "sections": 61
+    },
+    {
+      "name": "css-transitions-1",
+      "status": "ok",
+      "title": "CSS Transitions Module Level 1",
+      "sections": 46
+    },
+    {
+      "name": "css-animations-1",
+      "status": "ok",
+      "title": "CSS Animations Level 1",
+      "sections": 60
+    },
+    {
+      "name": "css-easing-1",
+      "status": "ok",
+      "title": "CSS Easing Functions Level 1",
+      "sections": 28
+    },
+    {
+      "name": "css-variables-1",
+      "status": "ok",
+      "title": "CSS Custom Properties for Cascading Variables Module Level 1",
+      "sections": 36
+    },
+    {
+      "name": "css-contain-2",
+      "status": "ok",
+      "title": "CSS Containment Module Level 2",
+      "sections": 44
+    },
+    {
+      "name": "css-writing-modes-4",
+      "status": "ok",
+      "title": "CSS Writing Modes Level 4",
+      "sections": 77
+    },
+    {
+      "name": "css-logical-1",
+      "status": "ok",
+      "title": "CSS Logical Properties and Values Module Level 1",
+      "sections": 39
+    }
+  ]
+}

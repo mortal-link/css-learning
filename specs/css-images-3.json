@@ -1,0 +1,302 @@
+{
+  "title": "CSS Images Module Level 3",
+  "specName": "css-images-3",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "placement",
+      "heading": "1.1. Module Interactions"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.2. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "image-values",
+      "heading": "2. Image Values: the &lt;image> type"
+    },
+    {
+      "level": 3,
+      "id": "url-notation",
+      "heading": "2.1. Image References: the url() notation"
+    },
+    {
+      "level": 4,
+      "id": "ambiguous-urls",
+      "heading": "2.1.1. Ambiguous Reference-or-Image URLs"
+    },
+    {
+      "level": 4,
+      "id": "url-metadata",
+      "heading": "2.1.2. Image Metadata"
+    },
+    {
+      "level": 2,
+      "id": "gradients",
+      "heading": "3. Gradients"
+    },
+    {
+      "level": 3,
+      "id": "linear-gradients",
+      "heading": "3.1. Linear Gradients: the linear-gradient() notation"
+    },
+    {
+      "level": 4,
+      "id": "linear-gradient-syntax",
+      "heading": "3.1.1. linear-gradient() syntax"
+    },
+    {
+      "level": 4,
+      "id": "linear-gradient-examples",
+      "heading": "3.1.2. Linear Gradient Examples"
+    },
+    {
+      "level": 3,
+      "id": "radial-gradients",
+      "heading": "3.2. Radial Gradients: the radial-gradient() notation"
+    },
+    {
+      "level": 4,
+      "id": "radial-gradient-syntax",
+      "heading": "3.2.1. radial-gradient() Syntax"
+    },
+    {
+      "level": 4,
+      "id": "radial-color-stops",
+      "heading": "3.2.2. Placing Color Stops"
+    },
+    {
+      "level": 4,
+      "id": "degenerate-radials",
+      "heading": "3.2.3. Degenerate Radial Gradients"
+    },
+    {
+      "level": 4,
+      "id": "radial-gradient-examples",
+      "heading": "3.2.4. Radial Gradient Examples"
+    },
+    {
+      "level": 3,
+      "id": "repeating-gradients",
+      "heading": "3.3. Repeating Gradients: the repeating-linear-gradient() and repeating-radial-gradient() notations"
+    },
+    {
+      "level": 3,
+      "id": "gradient-colors",
+      "heading": "3.4. Defining Gradient Color"
+    },
+    {
+      "level": 4,
+      "id": "color-stop-syntax",
+      "heading": "3.4.1. Color Stop Lists"
+    },
+    {
+      "level": 4,
+      "id": "coloring-gradient-line",
+      "heading": "3.4.2. Coloring the Gradient Line"
+    },
+    {
+      "level": 4,
+      "id": "color-stop-fixup",
+      "heading": "3.4.3. Color Stop “Fixup”"
+    },
+    {
+      "level": 2,
+      "id": "sizing",
+      "heading": "4. Sizing Images and Objects in CSS"
+    },
+    {
+      "level": 3,
+      "id": "sizing-terms",
+      "heading": "4.1. Object-Sizing Terminology"
+    },
+    {
+      "level": 3,
+      "id": "object-negotiation",
+      "heading": "4.2. CSS⇋Object Negotiation"
+    },
+    {
+      "level": 3,
+      "id": "concrete-size-resolution",
+      "heading": "4.3. Concrete Object Size Resolution"
+    },
+    {
+      "level": 4,
+      "id": "default-sizing",
+      "heading": "4.3.1. Default Sizing Algorithm"
+    },
+    {
+      "level": 4,
+      "id": "cover-contain",
+      "heading": "4.3.2. Cover and Contain Constraint Sizing"
+    },
+    {
+      "level": 3,
+      "id": "object-sizing-examples",
+      "heading": "4.4. Examples of CSS Object Sizing"
+    },
+    {
+      "level": 3,
+      "id": "the-object-fit",
+      "heading": "4.5. Sizing Objects: the object-fit property"
+    },
+    {
+      "level": 3,
+      "id": "the-object-position",
+      "heading": "4.6. Positioning Objects: the object-position property"
+    },
+    {
+      "level": 2,
+      "id": "image-processing",
+      "heading": "5. Image Processing"
+    },
+    {
+      "level": 3,
+      "id": "the-image-orientation",
+      "heading": "5.1. Orienting an Image on the Page: the image-orientation property"
+    },
+    {
+      "level": 3,
+      "id": "the-image-rendering",
+      "heading": "5.2. Determining How To Scale an Image: the image-rendering property"
+    },
+    {
+      "level": 2,
+      "id": "interpolation",
+      "heading": "6. Interpolation"
+    },
+    {
+      "level": 2,
+      "id": "serialization",
+      "heading": "7. Serialization"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgments",
+      "heading": "Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-20191010",
+      "heading": "Changes Since the 10 October 2019 Candidate Recommendation"
+    },
+    {
+      "level": 3,
+      "id": "changes-20120407",
+      "heading": "Changes Since the 17 April 2012 Candidate Recommendation"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 3,
+      "id": "w3c-cr-exit-criteria",
+      "heading": "CR exit criteria"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:47.213Z"
+}

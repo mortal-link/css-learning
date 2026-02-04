@@ -1,0 +1,302 @@
+{
+  "title": "CSS Cascading and Inheritance Level 4",
+  "specName": "css-cascade-4",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "status",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "placement",
+      "heading": "1.1. Module Interactions"
+    },
+    {
+      "level": 2,
+      "id": "at-import",
+      "heading": "2. Importing Style Sheets: the @import rule"
+    },
+    {
+      "level": 3,
+      "id": "conditional-import",
+      "heading": "2.1. Conditional @import Rules"
+    },
+    {
+      "level": 3,
+      "id": "import-processing",
+      "heading": "2.2. Processing Stylesheet Imports"
+    },
+    {
+      "level": 3,
+      "id": "content-type",
+      "heading": "2.3. Content-Type of CSS Style Sheets"
+    },
+    {
+      "level": 2,
+      "id": "shorthand",
+      "heading": "3. Shorthand Properties"
+    },
+    {
+      "level": 3,
+      "id": "aliasing",
+      "heading": "3.1. Property Aliasing"
+    },
+    {
+      "level": 3,
+      "id": "all-shorthand",
+      "heading": "3.2. Resetting All Properties: the all property"
+    },
+    {
+      "level": 2,
+      "id": "value-stages",
+      "heading": "4. Value Processing"
+    },
+    {
+      "level": 3,
+      "id": "declared",
+      "heading": "4.1. Declared Values"
+    },
+    {
+      "level": 4,
+      "id": "value-aliasing",
+      "heading": "4.1.1. Value Aliasing"
+    },
+    {
+      "level": 3,
+      "id": "cascaded",
+      "heading": "4.2. Cascaded Values"
+    },
+    {
+      "level": 3,
+      "id": "specified",
+      "heading": "4.3. Specified Values"
+    },
+    {
+      "level": 3,
+      "id": "computed",
+      "heading": "4.4. Computed Values"
+    },
+    {
+      "level": 3,
+      "id": "used",
+      "heading": "4.5. Used Values"
+    },
+    {
+      "level": 4,
+      "id": "applies-to",
+      "heading": "4.5.1. Applicable Properties"
+    },
+    {
+      "level": 3,
+      "id": "actual",
+      "heading": "4.6. Actual Values"
+    },
+    {
+      "level": 3,
+      "id": "stages-examples",
+      "heading": "4.7. Examples"
+    },
+    {
+      "level": 2,
+      "id": "filtering",
+      "heading": "5. Filtering"
+    },
+    {
+      "level": 2,
+      "id": "cascading",
+      "heading": "6. Cascading"
+    },
+    {
+      "level": 3,
+      "id": "cascade-sort",
+      "heading": "6.1. Cascade Sorting Order"
+    },
+    {
+      "level": 3,
+      "id": "cascading-origins",
+      "heading": "6.2. Cascading Origins"
+    },
+    {
+      "level": 3,
+      "id": "importance",
+      "heading": "6.3. Important Declarations: the !important annotation"
+    },
+    {
+      "level": 3,
+      "id": "preshint",
+      "heading": "6.4. Precedence of Non-CSS Presentational Hints"
+    },
+    {
+      "level": 2,
+      "id": "defaulting",
+      "heading": "7. Defaulting"
+    },
+    {
+      "level": 3,
+      "id": "initial-values",
+      "heading": "7.1. Initial Values"
+    },
+    {
+      "level": 3,
+      "id": "inheriting",
+      "heading": "7.2. Inheritance"
+    },
+    {
+      "level": 3,
+      "id": "defaulting-keywords",
+      "heading": "7.3. Explicit Defaulting"
+    },
+    {
+      "level": 4,
+      "id": "initial",
+      "heading": "7.3.1. Resetting a Property: the initial keyword"
+    },
+    {
+      "level": 4,
+      "id": "inherit",
+      "heading": "7.3.2. Explicit Inheritance: the inherit keyword"
+    },
+    {
+      "level": 4,
+      "id": "inherit-initial",
+      "heading": "7.3.3. Erasing All Declarations: the unset keyword"
+    },
+    {
+      "level": 4,
+      "id": "default",
+      "heading": "7.3.4. Rolling Back Cascade Origins: the revert keyword"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "8. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-2021-10",
+      "heading": "8.1. Changes since the 15 Oct 2021 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2018",
+      "heading": "8.2. Changes Since the 28 August 2018 Candidate Recommendation"
+    },
+    {
+      "level": 3,
+      "id": "changes-2016",
+      "heading": "8.3. Changes Since the 14 January 2016 Candidate Recommendation"
+    },
+    {
+      "level": 3,
+      "id": "changes-2015",
+      "heading": "8.4. Changes Since the 21 April 2015 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "additions-l3",
+      "heading": "8.5. Additions Since Level 3"
+    },
+    {
+      "level": 3,
+      "id": "changes-2",
+      "heading": "8.6. Additions Since Level 2"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgments",
+      "heading": "Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "priv-sec",
+      "heading": "Privacy and Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 3,
+      "id": "w3c-cr-exit-criteria",
+      "heading": "CR exit criteria"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:37:54.327Z"
+}

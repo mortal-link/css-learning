@@ -1,0 +1,387 @@
+{
+  "title": "CSS Color Module Level 5",
+  "specName": "css-color-5",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 2,
+      "id": "color-syntax",
+      "heading": "2. The &lt;color> syntax"
+    },
+    {
+      "level": 2,
+      "id": "color-mix",
+      "heading": "3. Mixing Colors: the color-mix() Function"
+    },
+    {
+      "level": 3,
+      "id": "color-mix-space",
+      "heading": "3.1. Colorspace for mixing"
+    },
+    {
+      "level": 3,
+      "id": "color-mix-percent-norm",
+      "heading": "3.2. Percentage Normalization"
+    },
+    {
+      "level": 3,
+      "id": "color-mix-result",
+      "heading": "3.3. Calculating the Result of color-mix"
+    },
+    {
+      "level": 3,
+      "id": "color-mix-color-space-effect",
+      "heading": "3.4. Effect of Mixing Color Space on color-mix"
+    },
+    {
+      "level": 3,
+      "id": "color-mix-with-alpha",
+      "heading": "3.5. Effect of Non-Unity Alpha on color-mix"
+    },
+    {
+      "level": 2,
+      "id": "relative-colors",
+      "heading": "4. Relative Colors"
+    },
+    {
+      "level": 3,
+      "id": "rcs-intro",
+      "heading": "4.1. Processing Model for Relative Colors"
+    },
+    {
+      "level": 3,
+      "id": "relative-syntax",
+      "heading": "4.2. Relative Color Syntax"
+    },
+    {
+      "level": 3,
+      "id": "relative-RGB",
+      "heading": "4.3. Relative sRGB Colors"
+    },
+    {
+      "level": 3,
+      "id": "relative-HSL",
+      "heading": "4.4. Relative HSL Colors"
+    },
+    {
+      "level": 3,
+      "id": "relative-HWB",
+      "heading": "4.5. Relative HWB Colors"
+    },
+    {
+      "level": 3,
+      "id": "relative-Lab",
+      "heading": "4.6. Relative Lab Colors"
+    },
+    {
+      "level": 3,
+      "id": "relative-Oklab",
+      "heading": "4.7. Relative Oklab Colors"
+    },
+    {
+      "level": 3,
+      "id": "relative-LCH",
+      "heading": "4.8. Relative LCH Colors"
+    },
+    {
+      "level": 3,
+      "id": "relative-OkLCh",
+      "heading": "4.9. Relative OkLCh Colors"
+    },
+    {
+      "level": 3,
+      "id": "relative-alpha",
+      "heading": "4.10. Relative Alpha Colors"
+    },
+    {
+      "level": 2,
+      "id": "color-function",
+      "heading": "5. Specifying Predefined and Custom Color Spaces: the color() Function"
+    },
+    {
+      "level": 3,
+      "id": "relative-color-function",
+      "heading": "5.1. Relative Color-Function Colors"
+    },
+    {
+      "level": 3,
+      "id": "custom-color",
+      "heading": "5.2. Custom Color Spaces"
+    },
+    {
+      "level": 3,
+      "id": "at-profile",
+      "heading": "5.3. Specifying a Color Profile: the @color-profile at-rule"
+    },
+    {
+      "level": 3,
+      "id": "cal-cmyk",
+      "heading": "5.4. CSS and Print: Using Calibrated CMYK and Other Printed Color Spaces"
+    },
+    {
+      "level": 3,
+      "id": "cmyk-to-lab",
+      "heading": "5.5. Converting CMYK colors to Lab"
+    },
+    {
+      "level": 3,
+      "id": "lab-to-cmyk",
+      "heading": "5.6. Converting Lab colors to CMYK"
+    },
+    {
+      "level": 2,
+      "id": "device-cmyk",
+      "heading": "6. Uncalibrated CMYK Colors: the device-cmyk() Function"
+    },
+    {
+      "level": 3,
+      "id": "cmyk-rgb",
+      "heading": "6.1. Naively Converting Between Uncalibrated CMYK and sRGB-Based Color"
+    },
+    {
+      "level": 2,
+      "id": "light-dark",
+      "heading": "7. Reacting to the used color-scheme: the light-dark() Function"
+    },
+    {
+      "level": 2,
+      "id": "contrast-color",
+      "heading": "8. Dynamically specifying a text color with adequate contrast: the contrast-color() Function"
+    },
+    {
+      "level": 2,
+      "id": "interpolation",
+      "heading": "9. Color Interpolation"
+    },
+    {
+      "level": 3,
+      "id": "interpolation-space",
+      "heading": "9.1. Color Space for Interpolation"
+    },
+    {
+      "level": 2,
+      "id": "resolving-color-values",
+      "heading": "10. Resolving &lt;color> Values"
+    },
+    {
+      "level": 3,
+      "id": "resolving-mix",
+      "heading": "10.1. Resolving color-mix() Values"
+    },
+    {
+      "level": 3,
+      "id": "resolving-rcs",
+      "heading": "10.2. Resolving Relative Color Syntax Values"
+    },
+    {
+      "level": 3,
+      "id": "resolving-device-cmyk-values",
+      "heading": "10.3. Resolving device-cmyk Values"
+    },
+    {
+      "level": 2,
+      "id": "serial",
+      "heading": "11. Serialization"
+    },
+    {
+      "level": 3,
+      "id": "serial-color-mix",
+      "heading": "11.1. Serializing color-mix()"
+    },
+    {
+      "level": 3,
+      "id": "serial-origin-color",
+      "heading": "11.2. Serializing Origin Colors"
+    },
+    {
+      "level": 3,
+      "id": "serial-relative-color",
+      "heading": "11.3. Serializing Relative Color Functions"
+    },
+    {
+      "level": 3,
+      "id": "serial-custom-color",
+      "heading": "11.4. Serializing Custom Color Spaces"
+    },
+    {
+      "level": 3,
+      "id": "serializing-device-cmyk-values",
+      "heading": "11.5. Serializing device-cmyk Values"
+    },
+    {
+      "level": 2,
+      "id": "apis",
+      "heading": "12. APIs"
+    },
+    {
+      "level": 3,
+      "id": "the-csscolorprofilerule-interface",
+      "heading": "12.1. The CSSColorProfileRule interface"
+    },
+    {
+      "level": 2,
+      "id": "sample",
+      "heading": "13. Default Style Rules"
+    },
+    {
+      "level": 2,
+      "id": "color-conversion-code",
+      "heading": "14. Sample code for Color Conversions"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "15. Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "16. Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "a11y-sec",
+      "heading": "17. Accessibility Considerations"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "18. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-20250318",
+      "heading": "18.1. Since the Working Draft of 18 March 2025"
+    },
+    {
+      "level": 3,
+      "id": "changes-20240229",
+      "heading": "18.2. Since the Working Draft of 29 February 2024"
+    },
+    {
+      "level": 3,
+      "id": "changes-20220628",
+      "heading": "18.3. Since the Working Draft of 28 June 2022"
+    },
+    {
+      "level": 3,
+      "id": "changes-20220428",
+      "heading": "18.4. Since the Working Draft of 28 April 2022"
+    },
+    {
+      "level": 3,
+      "id": "changes-20211215",
+      "heading": "18.5. Since the Working Draft of 15 December 2021"
+    },
+    {
+      "level": 3,
+      "id": "changes-20210601",
+      "heading": "18.6. Since the Working Draft of 1 June 2021"
+    },
+    {
+      "level": 3,
+      "id": "changes-20200303",
+      "heading": "18.7. Since the FPWD of 10 June 2020"
+    },
+    {
+      "level": 3,
+      "id": "changes-from-4",
+      "heading": "18.8. Changes from CSS Color 4"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 3,
+      "id": "color-profile-descriptor-table",
+      "heading": "@color-profile Descriptors"
+    },
+    {
+      "level": 2,
+      "id": "idl-index",
+      "heading": "IDL Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:45.922Z"
+}

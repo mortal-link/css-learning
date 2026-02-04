@@ -1,0 +1,292 @@
+{
+  "title": "CSS Transforms Module Level 1",
+  "specName": "css-transforms-1",
+  "sections": [
+    {
+      "level": 2,
+      "id": "subtitle",
+      "heading": "W3C Candidate Recommendation, 14 February 2019"
+    },
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "status",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "module-interactions",
+      "heading": "1.1. Module Interactions"
+    },
+    {
+      "level": 3,
+      "id": "css-values",
+      "heading": "1.2. CSS Values"
+    },
+    {
+      "level": 2,
+      "id": "terminology",
+      "heading": "2. Terminology"
+    },
+    {
+      "level": 2,
+      "id": "transform-rendering",
+      "heading": "3. The Transform Rendering Model"
+    },
+    {
+      "level": 2,
+      "id": "transform-property",
+      "heading": "4. The transform Property"
+    },
+    {
+      "level": 3,
+      "id": "serialization-of-transform-functions",
+      "heading": "4.1. Serialization of &lt;transform-function>s"
+    },
+    {
+      "level": 3,
+      "id": "serialization-of-the-computed-value",
+      "heading": "4.2. Serialization of the computed value of &lt;transform-list>"
+    },
+    {
+      "level": 2,
+      "id": "transform-origin-property",
+      "heading": "5. The transform-origin Property"
+    },
+    {
+      "level": 2,
+      "id": "transform-box",
+      "heading": "6. Transform reference box: the transform-box property"
+    },
+    {
+      "level": 2,
+      "id": "svg-transform",
+      "heading": "7. The SVG transform Attribute"
+    },
+    {
+      "level": 3,
+      "id": "transform-attribute-specificity",
+      "heading": "7.1. SVG presentation attributes"
+    },
+    {
+      "level": 3,
+      "id": "svg-syntax",
+      "heading": "7.2. Syntax of the SVG transform attribute"
+    },
+    {
+      "level": 3,
+      "id": "svg-transform-functions",
+      "heading": "7.3. SVG transform functions"
+    },
+    {
+      "level": 3,
+      "id": "svg-user-coordinate-space",
+      "heading": "7.4. User coordinate space"
+    },
+    {
+      "level": 3,
+      "id": "transform-attribute-dom",
+      "heading": "7.5. SVG DOM interface for the transform attribute"
+    },
+    {
+      "level": 2,
+      "id": "svg-animation",
+      "heading": "8. SVG Animation"
+    },
+    {
+      "level": 3,
+      "id": "svg-animate-element",
+      "heading": "8.1. The animate and set element"
+    },
+    {
+      "level": 3,
+      "id": "neutral-element",
+      "heading": "8.2. Neutral element for addition"
+    },
+    {
+      "level": 3,
+      "id": "svg-attribute-name",
+      "heading": "8.3. The SVG 1.1 'attributeName' attribute"
+    },
+    {
+      "level": 2,
+      "id": "transform-functions",
+      "heading": "9. The Transform Functions"
+    },
+    {
+      "level": 3,
+      "id": "two-d-transform-functions",
+      "heading": "9.1. 2D Transform Functions"
+    },
+    {
+      "level": 3,
+      "id": "transform-primitives",
+      "heading": "9.2. Transform function primitives and derivatives"
+    },
+    {
+      "level": 2,
+      "id": "transform-function-lists",
+      "heading": "10. The Transform Function Lists"
+    },
+    {
+      "level": 2,
+      "id": "interpolation-of-transforms",
+      "heading": "11. Interpolation of Transforms"
+    },
+    {
+      "level": 2,
+      "id": "interpolation-of-transform-functions",
+      "heading": "12. Interpolation of primitives and derived transform functions"
+    },
+    {
+      "level": 2,
+      "id": "matrix-interpolation",
+      "heading": "13. Interpolation of Matrices"
+    },
+    {
+      "level": 3,
+      "id": "supporting-functions",
+      "heading": "13.1. Supporting functions"
+    },
+    {
+      "level": 3,
+      "id": "interpolation-of-2d-matrices",
+      "heading": "13.2. Interpolation of 2D matrices"
+    },
+    {
+      "level": 4,
+      "id": "decomposing-a-2d-matrix",
+      "heading": "13.2.1. Decomposing a 2D matrix"
+    },
+    {
+      "level": 4,
+      "id": "interpolation-of-decomposed-2d-matrix-values",
+      "heading": "13.2.2. Interpolation of decomposed 2D matrix values"
+    },
+    {
+      "level": 4,
+      "id": "recomposing-to-a-2d-matrix",
+      "heading": "13.2.3. Recomposing to a 2D matrix"
+    },
+    {
+      "level": 2,
+      "id": "mathematical-description",
+      "heading": "14. Mathematical Description of Transform Functions"
+    },
+    {
+      "level": 2,
+      "id": "priv-sec",
+      "heading": "15. Privacy and Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Changes"
+    },
+    {
+      "level": 3,
+      "id": "WD20181130",
+      "heading": "Since the 30 November 2018 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "WD20171130",
+      "heading": "Since the 30 November 2017 Working Draft"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgments",
+      "heading": "Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "document-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "conform-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "conform-responsible",
+      "heading": "Requirements for Responsible Implementation of CSS"
+    },
+    {
+      "level": 4,
+      "id": "conform-partial",
+      "heading": "Partial Implementations"
+    },
+    {
+      "level": 4,
+      "id": "conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 4,
+      "id": "conform-testing",
+      "heading": "Implementations of CR-level Features"
+    },
+    {
+      "level": 3,
+      "id": "cr-exit-criteria",
+      "heading": "CR exit criteria"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:49.815Z"
+}

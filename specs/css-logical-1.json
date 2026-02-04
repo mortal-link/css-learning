@@ -1,0 +1,202 @@
+{
+  "title": "CSS Logical Properties and Values Module Level 1",
+  "specName": "css-logical-1",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.1. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "directional-keywords",
+      "heading": "2. Flow-Relative Values: block-start, block-end, inline-start, inline-end"
+    },
+    {
+      "level": 3,
+      "id": "caption-side",
+      "heading": "2.1. Logical Values for the caption-side Property"
+    },
+    {
+      "level": 3,
+      "id": "float-clear",
+      "heading": "2.2. Flow-Relative Values for the float and clear Properties"
+    },
+    {
+      "level": 3,
+      "id": "text-align",
+      "heading": "2.3. Flow-Relative Values for the text-align Property"
+    },
+    {
+      "level": 2,
+      "id": "page",
+      "heading": "3. Flow-Relative Page Classifications"
+    },
+    {
+      "level": 2,
+      "id": "box",
+      "heading": "4. Flow-Relative Box Model Properties"
+    },
+    {
+      "level": 3,
+      "id": "dimension-properties",
+      "heading": "4.1. Logical Height and Logical Width: the block-size/inline-size, min-block-size/min-inline-size, and max-block-size/max-inline-size properties"
+    },
+    {
+      "level": 3,
+      "id": "margin-properties",
+      "heading": "4.2. Flow-Relative Margins: the margin-block-start, margin-block-end, margin-inline-start, margin-inline-end properties and margin-block and margin-inline shorthands"
+    },
+    {
+      "level": 3,
+      "id": "position-properties",
+      "heading": "4.3. Flow-Relative Offsets: the inset-block-start, inset-block-end, inset-inline-start, inset-inline-end properties and inset-block, inset-inline, and inset shorthands"
+    },
+    {
+      "level": 3,
+      "id": "padding-properties",
+      "heading": "4.4. Flow-Relative Padding: the padding-block-start, padding-block-end, padding-inline-start, padding-inline-end properties and padding-block and padding-inline shorthands"
+    },
+    {
+      "level": 3,
+      "id": "border-properties",
+      "heading": "4.5. Flow-Relative Borders"
+    },
+    {
+      "level": 4,
+      "id": "border-width",
+      "heading": "4.5.1. Flow-Relative Border Widths: the border-block-start-width, border-block-end-width, border-inline-start-width, border-inline-end-width properties and border-block-width and border-inline-width shorthands"
+    },
+    {
+      "level": 4,
+      "id": "border-style",
+      "heading": "4.5.2. Flow-Relative Border Styles: the border-block-start-style, border-block-end-style, border-inline-start-style, border-inline-end-style properties and border-block-style and border-inline-style shorthands"
+    },
+    {
+      "level": 4,
+      "id": "border-color",
+      "heading": "4.5.3. Flow-Relative Border Colors: the border-block-start-color, border-block-end-color, border-inline-start-color, border-inline-end-color properties and border-block-color and border-inline-color shorthands"
+    },
+    {
+      "level": 4,
+      "id": "border-shorthands",
+      "heading": "4.5.4. Flow-Relative Border Shorthands: the border-block-start, border-block-end, border-inline-start, border-inline-end properties and border-block and border-inline shorthands"
+    },
+    {
+      "level": 3,
+      "id": "border-radius-properties",
+      "heading": "4.6. Flow-Relative Corner Rounding: the border-start-start-radius, border-start-end-radius, border-end-start-radius, border-end-end-radius properties"
+    },
+    {
+      "level": 3,
+      "id": "logical-shorthand-keyword",
+      "heading": "4.7. Four-Directional Shorthand Properties: the margin, padding, border-width, border-style, and border-color shorthands"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgements",
+      "heading": "5. Acknowledgements"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "6. Changes"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:54.871Z"
+}

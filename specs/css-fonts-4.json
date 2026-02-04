@@ -1,0 +1,752 @@
+{
+  "title": "CSS Fonts Module Level 4",
+  "specName": "css-fonts-4",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "introduction",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.1. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "basic-font-props",
+      "heading": "2. Basic Font Properties"
+    },
+    {
+      "level": 3,
+      "id": "font-family-prop",
+      "heading": "2.1. Font family: the font-family property"
+    },
+    {
+      "level": 4,
+      "id": "family-name-syntax",
+      "heading": "2.1.1. Syntax of &lt;family-name>"
+    },
+    {
+      "level": 4,
+      "id": "generic-family-name-syntax",
+      "heading": "2.1.2. Syntax of &lt;generic-family>"
+    },
+    {
+      "level": 4,
+      "id": "system",
+      "heading": "2.1.3. Syntax of &lt;system-family-name>"
+    },
+    {
+      "level": 4,
+      "id": "font-families",
+      "heading": "2.1.4. Relationship Between Faces and Families"
+    },
+    {
+      "level": 4,
+      "id": "generic-font-families",
+      "heading": "2.1.5. Generic font families"
+    },
+    {
+      "level": 3,
+      "id": "font-weight-prop",
+      "heading": "2.2. Font weight: the font-weight property"
+    },
+    {
+      "level": 4,
+      "id": "relative-weights",
+      "heading": "2.2.1. Relative Weights"
+    },
+    {
+      "level": 4,
+      "id": "missing-weights",
+      "heading": "2.2.2. Missing weights"
+    },
+    {
+      "level": 3,
+      "id": "font-width-prop",
+      "heading": "2.3. Font width: the font-width property"
+    },
+    {
+      "level": 4,
+      "id": "font-stretch-prop",
+      "heading": "2.3.1. Font width: the font-stretch legacy name alias"
+    },
+    {
+      "level": 3,
+      "id": "font-style-prop",
+      "heading": "2.4. Font style: the font-style property"
+    },
+    {
+      "level": 3,
+      "id": "font-size-prop",
+      "heading": "2.5. Font size: the font-size property"
+    },
+    {
+      "level": 4,
+      "id": "absolute-size-mapping",
+      "heading": "2.5.1. Absolute Size Keyword Mapping Table"
+    },
+    {
+      "level": 3,
+      "id": "font-size-adjust-prop",
+      "heading": "2.6. Relative sizing: the font-size-adjust property"
+    },
+    {
+      "level": 3,
+      "id": "font-prop",
+      "heading": "2.7. Shorthand font property: the font property"
+    },
+    {
+      "level": 3,
+      "id": "font-synthesis-intro",
+      "heading": "2.8. Controlling synthetic faces"
+    },
+    {
+      "level": 4,
+      "id": "font-synthesis-weight",
+      "heading": "2.8.1. Controlling synthesized bold: The font-synthesis-weight property"
+    },
+    {
+      "level": 4,
+      "id": "font-synthesis-style",
+      "heading": "2.8.2. Controlling synthesized oblique: The font-synthesis-style property"
+    },
+    {
+      "level": 4,
+      "id": "font-synthesis-small-caps",
+      "heading": "2.8.3. Controlling synthesized small caps: The font-synthesis-small-caps property"
+    },
+    {
+      "level": 4,
+      "id": "font-synthesis-position",
+      "heading": "2.8.4. Controlling synthesized super- and subscripts: The font-synthesis-position property"
+    },
+    {
+      "level": 4,
+      "id": "font-synthesis",
+      "heading": "2.8.5. Controlling synthetic faces: the font-synthesis shorthand"
+    },
+    {
+      "level": 2,
+      "id": "font-rendering-controls",
+      "heading": "3. Font Rendering Controls"
+    },
+    {
+      "level": 3,
+      "id": "font-rendering-controls-introduction",
+      "heading": "3.1. Introduction to Font Rendering Controls"
+    },
+    {
+      "level": 3,
+      "id": "font-display-timeline",
+      "heading": "3.2. The Font Display Timeline"
+    },
+    {
+      "level": 2,
+      "id": "font-resources",
+      "heading": "4. Font Resources"
+    },
+    {
+      "level": 3,
+      "id": "font-face-rule",
+      "heading": "4.1. The @font-face rule"
+    },
+    {
+      "level": 3,
+      "id": "font-family-desc",
+      "heading": "4.2. Font family: the font-family descriptor"
+    },
+    {
+      "level": 3,
+      "id": "src-desc",
+      "heading": "4.3. Font reference: the src descriptor"
+    },
+    {
+      "level": 4,
+      "id": "font-face-src-parsing",
+      "heading": "4.3.1. Parsing the src descriptor"
+    },
+    {
+      "level": 4,
+      "id": "font-face-src-loading",
+      "heading": "4.3.2. Loading an individual item in the src descriptor"
+    },
+    {
+      "level": 4,
+      "id": "font-face-src-formats",
+      "heading": "4.3.3. Selecting items in the src"
+    },
+    {
+      "level": 3,
+      "id": "font-prop-desc",
+      "heading": "4.4. Font property descriptors: the font-style, font-weight, and font-width descriptors"
+    },
+    {
+      "level": 4,
+      "id": "font-stretch-desc",
+      "heading": "4.4.1. Font width: the font-stretch legacy name alias"
+    },
+    {
+      "level": 3,
+      "id": "unicode-range-desc",
+      "heading": "4.5. Character range: the unicode-range descriptor"
+    },
+    {
+      "level": 4,
+      "id": "composite-fonts",
+      "heading": "4.5.1. Using character ranges to define composite fonts"
+    },
+    {
+      "level": 3,
+      "id": "font-rend-desc",
+      "heading": "4.6. Font features and variations: the font-feature-settings and font-variation-settings descriptors"
+    },
+    {
+      "level": 3,
+      "id": "font-named-instance",
+      "heading": "4.7. Using named instances from variable fonts: the font-named-instance descriptor"
+    },
+    {
+      "level": 3,
+      "id": "font-requests",
+      "heading": "4.8. Font request guidelines"
+    },
+    {
+      "level": 4,
+      "id": "font-face-loading",
+      "heading": "4.8.1. Font loading guidelines"
+    },
+    {
+      "level": 4,
+      "id": "font-fetching-requirements",
+      "heading": "4.8.2. Font fetching requirements"
+    },
+    {
+      "level": 3,
+      "id": "font-display-desc",
+      "heading": "4.9. Controlling Font Display Per Font-Face: the font-display descriptor"
+    },
+    {
+      "level": 4,
+      "id": "font-display-font-feature-values",
+      "heading": "4.9.1. Controlling Font Display Per Font-Family via @font-feature-values"
+    },
+    {
+      "level": 3,
+      "id": "font-language-override-desc",
+      "heading": "4.10. Default font language overriding: the font-language-override descriptor"
+    },
+    {
+      "level": 3,
+      "id": "font-metrics-override-desc",
+      "heading": "4.11. Default font metrics overriding: the ascent-override, descent-override and line-gap-override descriptors"
+    },
+    {
+      "level": 2,
+      "id": "font-matching-algorithm",
+      "heading": "5. Font Matching Algorithm"
+    },
+    {
+      "level": 3,
+      "id": "localized-name-matching",
+      "heading": "5.1. Localized name matching"
+    },
+    {
+      "level": 3,
+      "id": "font-style-matching",
+      "heading": "5.2. Matching font styles"
+    },
+    {
+      "level": 3,
+      "id": "cluster-matching",
+      "heading": "5.3. Cluster matching"
+    },
+    {
+      "level": 3,
+      "id": "char-handling-issues",
+      "heading": "5.4. Character handling issues"
+    },
+    {
+      "level": 2,
+      "id": "font-rend-props",
+      "heading": "6. Font Feature Properties"
+    },
+    {
+      "level": 3,
+      "id": "glyph-selection-positioning",
+      "heading": "6.1. Glyph selection and positioning"
+    },
+    {
+      "level": 3,
+      "id": "language-specific-support",
+      "heading": "6.2. Language-specific display"
+    },
+    {
+      "level": 3,
+      "id": "font-kerning-prop",
+      "heading": "6.3. Kerning: the font-kerning property"
+    },
+    {
+      "level": 3,
+      "id": "font-variant-ligatures-prop",
+      "heading": "6.4. Ligatures: the font-variant-ligatures property"
+    },
+    {
+      "level": 3,
+      "id": "font-variant-position-prop",
+      "heading": "6.5. Subscript and superscript forms: the font-variant-position property"
+    },
+    {
+      "level": 3,
+      "id": "font-variant-caps-prop",
+      "heading": "6.6. Capitalization: the font-variant-caps property"
+    },
+    {
+      "level": 3,
+      "id": "font-variant-numeric-prop",
+      "heading": "6.7. Numerical formatting: the font-variant-numeric property"
+    },
+    {
+      "level": 3,
+      "id": "font-variant-alternates-prop",
+      "heading": "6.8. Alternates and swashes: the font-variant-alternates property"
+    },
+    {
+      "level": 3,
+      "id": "font-feature-values",
+      "heading": "6.9. Defining font specific alternates: the @font-feature-values rule"
+    },
+    {
+      "level": 4,
+      "id": "font-feature-values-syntax",
+      "heading": "6.9.1. Basic syntax"
+    },
+    {
+      "level": 4,
+      "id": "multi-value-features",
+      "heading": "6.9.2. Multi-valued feature value definitions"
+    },
+    {
+      "level": 3,
+      "id": "font-variant-east-asian-prop",
+      "heading": "6.10. East Asian text rendering: the font-variant-east-asian property"
+    },
+    {
+      "level": 3,
+      "id": "font-variant-prop",
+      "heading": "6.11. Overall shorthand for font rendering: the font-variant property"
+    },
+    {
+      "level": 3,
+      "id": "font-feature-settings-prop",
+      "heading": "6.12. Low-level font feature settings control: the font-feature-settings property"
+    },
+    {
+      "level": 3,
+      "id": "font-language-override-prop",
+      "heading": "6.13. Font language override: the font-language-override property"
+    },
+    {
+      "level": 2,
+      "id": "font-feature-variation-resolution",
+      "heading": "7. Font Feature and Variation Resolution"
+    },
+    {
+      "level": 3,
+      "id": "default-features",
+      "heading": "7.1. Default features"
+    },
+    {
+      "level": 3,
+      "id": "feature-variation-precedence",
+      "heading": "7.2. Feature and variation precedence"
+    },
+    {
+      "level": 3,
+      "id": "feature-precedence-examples",
+      "heading": "7.3. Feature precedence examples"
+    },
+    {
+      "level": 2,
+      "id": "font-variation-props",
+      "heading": "8. Font Variation Properties"
+    },
+    {
+      "level": 3,
+      "id": "font-optical-sizing-def",
+      "heading": "8.1. Optical sizing control: the font-optical-sizing property"
+    },
+    {
+      "level": 3,
+      "id": "font-variation-settings-def",
+      "heading": "8.2. Low-level font variation settings control: the font-variation-settings property"
+    },
+    {
+      "level": 2,
+      "id": "color-font-support",
+      "heading": "9. Color Font Support"
+    },
+    {
+      "level": 3,
+      "id": "font-palette-prop",
+      "heading": "9.1. Controlling Color Font Palettes: The font-palette property"
+    },
+    {
+      "level": 3,
+      "id": "font-palette-values",
+      "heading": "9.2. User-defined font color palettes: The @font-palette-values rule"
+    },
+    {
+      "level": 4,
+      "id": "font-family-2-desc",
+      "heading": "9.2.1. Font family: the font-family descriptor"
+    },
+    {
+      "level": 4,
+      "id": "base-palette-desc",
+      "heading": "9.2.2. Specifying the base palette: the base-palette descriptor"
+    },
+    {
+      "level": 4,
+      "id": "override-color",
+      "heading": "9.2.3. Overriding a colors from a palette: The override-colors descriptor"
+    },
+    {
+      "level": 3,
+      "id": "font-variant-emoji-prop",
+      "heading": "9.3. Selecting the text presentation style: The font-variant-emoji property"
+    },
+    {
+      "level": 2,
+      "id": "font-taxonomy",
+      "heading": "10. Font Taxonomy"
+    },
+    {
+      "level": 3,
+      "id": "installed-fonts",
+      "heading": "10.1. Installed Fonts"
+    },
+    {
+      "level": 3,
+      "id": "web-fonts",
+      "heading": "10.2. Web Fonts"
+    },
+    {
+      "level": 3,
+      "id": "preinstalled-and-user-installed-fonts",
+      "heading": "10.3. Preinstalled Fonts and User-Installed Fonts"
+    },
+    {
+      "level": 3,
+      "id": "system-font",
+      "heading": "10.4. System Font"
+    },
+    {
+      "level": 2,
+      "id": "font-technologies-formats",
+      "heading": "11. Font Technologies and Formats"
+    },
+    {
+      "level": 3,
+      "id": "font-tech-definitions",
+      "heading": "11.1. Font tech"
+    },
+    {
+      "level": 3,
+      "id": "font-format-definitions",
+      "heading": "11.2. Font formats"
+    },
+    {
+      "level": 2,
+      "id": "object-model",
+      "heading": "12. Object Model"
+    },
+    {
+      "level": 3,
+      "id": "om-fontface",
+      "heading": "12.1. The CSSFontFaceRule interface"
+    },
+    {
+      "level": 3,
+      "id": "om-fontfeaturevalues",
+      "heading": "12.2. The CSSFontFeatureValuesRule interface"
+    },
+    {
+      "level": 3,
+      "id": "om-fontpalettevalues",
+      "heading": "12.3. The CSSFontPaletteValuesRule interface"
+    },
+    {
+      "level": 2,
+      "id": "serializing",
+      "heading": "13. Serializing"
+    },
+    {
+      "level": 3,
+      "id": "serializing-properties",
+      "heading": "13.1. Serializing font-related properties"
+    },
+    {
+      "level": 3,
+      "id": "serializing-at-rules",
+      "heading": "13.2. Serializing font-related at-rules"
+    },
+    {
+      "level": 2,
+      "id": "platform-props-to-css",
+      "heading": "Appendix A: Mapping platform font properties to CSS properties"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "14. Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "15. Privacy Considerations"
+    },
+    {
+      "level": 3,
+      "id": "sp201",
+      "heading": "15.1. What information might this feature expose to Web sites or other parties, and for what purposes is that exposure necessary?"
+    },
+    {
+      "level": 3,
+      "id": "sp202",
+      "heading": "15.2. Is this specification exposing the minimum amount of information necessary to power the feature?"
+    },
+    {
+      "level": 3,
+      "id": "sp203",
+      "heading": "15.3. How does this specification deal with personal information or personally-identifiable information or information derived thereof?"
+    },
+    {
+      "level": 3,
+      "id": "sp204",
+      "heading": "15.4. How does this specification deal with sensitive information?"
+    },
+    {
+      "level": 3,
+      "id": "sp205",
+      "heading": "15.5. Does this specification introduce new state for an origin that persists across browsing sessions?"
+    },
+    {
+      "level": 3,
+      "id": "sp206",
+      "heading": "15.6. What information from the underlying platform, e.g. configuration data, is exposed by this specification to an origin?"
+    },
+    {
+      "level": 3,
+      "id": "sp207",
+      "heading": "15.7. Does this specification allow an origin access to sensors on a user’s device"
+    },
+    {
+      "level": 3,
+      "id": "sp208",
+      "heading": "15.8. What data does this specification expose to an origin? Please also document what data is identical to data exposed by other features, in the same or different contexts."
+    },
+    {
+      "level": 3,
+      "id": "sp209",
+      "heading": "15.9. Does this specification enable new script execution/loading mechanisms?"
+    },
+    {
+      "level": 3,
+      "id": "sp210",
+      "heading": "15.10. Does this specification allow an origin to access other devices?"
+    },
+    {
+      "level": 3,
+      "id": "sp211",
+      "heading": "15.11. Does this specification allow an origin some measure of control over a user agent’s native UI?"
+    },
+    {
+      "level": 3,
+      "id": "sp212",
+      "heading": "15.12. What temporary identifiers might this specification create or expose to the web?"
+    },
+    {
+      "level": 3,
+      "id": "sp213",
+      "heading": "15.13. How does this specification distinguish between behavior in first-party and third-party contexts?"
+    },
+    {
+      "level": 3,
+      "id": "sp214",
+      "heading": "15.14. How does this specification work in the context of a user agent’s Private Browsing or \"incognito\" mode?"
+    },
+    {
+      "level": 3,
+      "id": "sp215",
+      "heading": "15.15. Does this specification have a \"Security Considerations\" and \"Privacy Considerations\" section?"
+    },
+    {
+      "level": 3,
+      "id": "sp216",
+      "heading": "15.16. Does this specification allow downgrading default security characteristics?"
+    },
+    {
+      "level": 3,
+      "id": "sp217",
+      "heading": "15.17. What should this questionnaire have asked?"
+    },
+    {
+      "level": 2,
+      "id": "a11y",
+      "heading": "16. Accessibility Considerations"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgments",
+      "heading": "17. Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "18. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-2021-12-21",
+      "heading": "18.1. Changes from the 21 December 2021 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2021-07-29",
+      "heading": "18.2. Changes from the 29 July 2021 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2020-11-17",
+      "heading": "18.3. Changes from the 17 November 2020 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2019-11-13",
+      "heading": "18.4. Changes from the 13 November 2019 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2018-09-20",
+      "heading": "18.5. Changes from the 20 September 2018 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2018-04-10",
+      "heading": "18.6. Changes from the 10 April 2018 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-fonts-3",
+      "heading": "18.7. Changes from the 20 September 2018 CSS Fonts 3 Recommendation"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 3,
+      "id": "font-face-descriptor-table",
+      "heading": "@font-face Descriptors"
+    },
+    {
+      "level": 3,
+      "id": "font-feature-values-descriptor-table",
+      "heading": "@font-feature-values Descriptors"
+    },
+    {
+      "level": 3,
+      "id": "font-palette-values-descriptor-table",
+      "heading": "@font-palette-values Descriptors"
+    },
+    {
+      "level": 2,
+      "id": "idl-index",
+      "heading": "IDL Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:47.940Z"
+}

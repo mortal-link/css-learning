@@ -1,0 +1,247 @@
+{
+  "title": "CSS Display Module Level 4",
+  "specName": "css-display-4",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "placement",
+      "heading": "1.1. Module interactions"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.2. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "the-display-properties",
+      "heading": "2. Box Layout Modes: the display property"
+    },
+    {
+      "level": 3,
+      "id": "outer-role",
+      "heading": "2.1. Outer Display Roles for Flow Layout: the block, inline, and run-in keywords"
+    },
+    {
+      "level": 3,
+      "id": "inner-model",
+      "heading": "2.2. Inner Display Layout Models: the flow, flow-root, table, flex, grid, and ruby keywords"
+    },
+    {
+      "level": 3,
+      "id": "list-items",
+      "heading": "2.3. Generating Marker Boxes: the list-item keyword"
+    },
+    {
+      "level": 3,
+      "id": "layout-specific-display",
+      "heading": "2.4. Layout-Internal Display Types: the table-* and ruby-* keywords"
+    },
+    {
+      "level": 3,
+      "id": "box-generation",
+      "heading": "2.5. Box Generation: the none and contents keywords"
+    },
+    {
+      "level": 3,
+      "id": "legacy-display",
+      "heading": "2.6. Precomposed Inline-level Display Values"
+    },
+    {
+      "level": 3,
+      "id": "transformations",
+      "heading": "2.7. Automatic Box Type Transformations"
+    },
+    {
+      "level": 3,
+      "id": "root",
+      "heading": "2.8. The Root Element’s Principal Box"
+    },
+    {
+      "level": 3,
+      "id": "display-animation",
+      "heading": "2.9. Animating and Interpolating display"
+    },
+    {
+      "level": 2,
+      "id": "order-property",
+      "heading": "3. Display Order: the order property"
+    },
+    {
+      "level": 3,
+      "id": "order-accessibility",
+      "heading": "3.1. Reordering and Accessibility"
+    },
+    {
+      "level": 2,
+      "id": "reading-flow",
+      "heading": "4. Reading Order: the reading-flow property"
+    },
+    {
+      "level": 3,
+      "id": "reading-order",
+      "heading": "4.1. Overriding Reading Flow: the reading-order property"
+    },
+    {
+      "level": 2,
+      "id": "visibility",
+      "heading": "5. Invisibility: the visibility property"
+    },
+    {
+      "level": 2,
+      "id": "run-in-layout",
+      "heading": "6. Run-In Layout"
+    },
+    {
+      "level": 2,
+      "id": "glossary",
+      "heading": "Appendix A: Glossary"
+    },
+    {
+      "level": 2,
+      "id": "unbox",
+      "heading": "Appendix B: Effects of display: contents on Unusual Elements"
+    },
+    {
+      "level": 3,
+      "id": "unbox-html",
+      "heading": "HTML Elements"
+    },
+    {
+      "level": 3,
+      "id": "unbox-svg",
+      "heading": "SVG Elements"
+    },
+    {
+      "level": 3,
+      "id": "unbox-mathml",
+      "heading": "MathML Elements"
+    },
+    {
+      "level": 2,
+      "id": "box-guidelines",
+      "heading": "Appendix C: Box Construction Guidelines for Spec Authors"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgments",
+      "heading": "Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Changes"
+    },
+    {
+      "level": 3,
+      "id": "recent-changes",
+      "heading": "Recent Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-L3",
+      "heading": "Additions since Level 3"
+    },
+    {
+      "level": 2,
+      "id": "priv",
+      "heading": "Privacy Considerations"
+    },
+    {
+      "level": 3,
+      "id": "sec",
+      "heading": "Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:37.588Z"
+}

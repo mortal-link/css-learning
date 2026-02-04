@@ -1,0 +1,537 @@
+{
+  "title": "CSS Grid Layout Module Level 2",
+  "specName": "css-grid-2",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "background",
+      "heading": "1.1. Background and Motivation"
+    },
+    {
+      "level": 4,
+      "id": "adapting-to-available-space",
+      "heading": "1.1.1. Adapting Layouts to Available Space"
+    },
+    {
+      "level": 4,
+      "id": "source-independence",
+      "heading": "1.1.2. Source-Order Independence"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.2. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "overview",
+      "heading": "2. Overview"
+    },
+    {
+      "level": 3,
+      "id": "overview-grid",
+      "heading": "2.1. Declaring the Grid"
+    },
+    {
+      "level": 3,
+      "id": "overview-placement",
+      "heading": "2.2. Placing Items"
+    },
+    {
+      "level": 3,
+      "id": "overview-sizing",
+      "heading": "2.3. Sizing the Grid"
+    },
+    {
+      "level": 2,
+      "id": "grid-concepts",
+      "heading": "3. Grid Layout Concepts and Terminology"
+    },
+    {
+      "level": 3,
+      "id": "grid-line-concept",
+      "heading": "3.1. Grid Lines"
+    },
+    {
+      "level": 3,
+      "id": "grid-track-concept",
+      "heading": "3.2. Grid Tracks and Cells"
+    },
+    {
+      "level": 3,
+      "id": "grid-area-concept",
+      "heading": "3.3. Grid Areas"
+    },
+    {
+      "level": 3,
+      "id": "subgrid-items",
+      "heading": "3.4. Nested vs. Subgridded Items"
+    },
+    {
+      "level": 2,
+      "id": "order-accessibility",
+      "heading": "4. Reordering and Accessibility"
+    },
+    {
+      "level": 2,
+      "id": "grid-model",
+      "heading": "5. Grid Containers"
+    },
+    {
+      "level": 3,
+      "id": "grid-containers",
+      "heading": "5.1. Establishing Grid Containers: the grid and inline-grid display values"
+    },
+    {
+      "level": 3,
+      "id": "intrinsic-sizes",
+      "heading": "5.2. Sizing Grid Containers"
+    },
+    {
+      "level": 3,
+      "id": "overflow",
+      "heading": "5.3. Scrollable Grid Overflow"
+    },
+    {
+      "level": 3,
+      "id": "overlarge-grids",
+      "heading": "5.4. Limiting Large Grids"
+    },
+    {
+      "level": 2,
+      "id": "grid-items",
+      "heading": "6. Grid Items"
+    },
+    {
+      "level": 3,
+      "id": "grid-item-display",
+      "heading": "6.1. Grid Item Display"
+    },
+    {
+      "level": 3,
+      "id": "grid-item-sizing",
+      "heading": "6.2. Grid Item Sizing"
+    },
+    {
+      "level": 3,
+      "id": "order-property",
+      "heading": "6.3. Reordered Grid Items: the order property"
+    },
+    {
+      "level": 3,
+      "id": "item-margins",
+      "heading": "6.4. Grid Item Margins and Paddings"
+    },
+    {
+      "level": 3,
+      "id": "z-order",
+      "heading": "6.5. Z-axis Ordering: the z-index property"
+    },
+    {
+      "level": 3,
+      "id": "min-size-auto",
+      "heading": "6.6. Automatic Minimum Size of Grid Items"
+    },
+    {
+      "level": 2,
+      "id": "grid-definition",
+      "heading": "7. Defining the Grid"
+    },
+    {
+      "level": 3,
+      "id": "explicit-grids",
+      "heading": "7.1. The Explicit Grid"
+    },
+    {
+      "level": 3,
+      "id": "track-sizing",
+      "heading": "7.2. Explicit Track Sizing: the grid-template-rows and grid-template-columns properties"
+    },
+    {
+      "level": 4,
+      "id": "track-sizes",
+      "heading": "7.2.1. Track Sizes"
+    },
+    {
+      "level": 4,
+      "id": "named-lines",
+      "heading": "7.2.2. Naming Grid Lines: the [&lt;custom-ident>*] syntax"
+    },
+    {
+      "level": 4,
+      "id": "repeat-notation",
+      "heading": "7.2.3. Repeating Rows and Columns: the repeat() notation"
+    },
+    {
+      "level": 4,
+      "id": "fr-unit",
+      "heading": "7.2.4. Flexible Lengths: the fr unit"
+    },
+    {
+      "level": 4,
+      "id": "computed-tracks",
+      "heading": "7.2.5. Computed Value of a Track Listing"
+    },
+    {
+      "level": 4,
+      "id": "resolved-track-list",
+      "heading": "7.2.6. Resolved Value of a Track Listing"
+    },
+    {
+      "level": 3,
+      "id": "grid-template-areas-property",
+      "heading": "7.3. Named Areas: the grid-template-areas property"
+    },
+    {
+      "level": 4,
+      "id": "serialize-template",
+      "heading": "7.3.1. Serialization Of Template Strings"
+    },
+    {
+      "level": 4,
+      "id": "implicit-named-lines",
+      "heading": "7.3.2. Implicitly-Assigned Line Names"
+    },
+    {
+      "level": 4,
+      "id": "implicit-named-areas",
+      "heading": "7.3.3. Implicitly-Named Areas"
+    },
+    {
+      "level": 3,
+      "id": "explicit-grid-shorthand",
+      "heading": "7.4. Explicit Grid Shorthand: the grid-template property"
+    },
+    {
+      "level": 3,
+      "id": "implicit-grids",
+      "heading": "7.5. The Implicit Grid"
+    },
+    {
+      "level": 3,
+      "id": "auto-tracks",
+      "heading": "7.6. Implicit Track Sizing: the grid-auto-rows and grid-auto-columns properties"
+    },
+    {
+      "level": 3,
+      "id": "grid-auto-flow-property",
+      "heading": "7.7. Automatic Placement: the grid-auto-flow property"
+    },
+    {
+      "level": 3,
+      "id": "grid-shorthand",
+      "heading": "7.8. Grid Definition Shorthand: the grid property"
+    },
+    {
+      "level": 2,
+      "id": "placement",
+      "heading": "8. Placing Grid Items"
+    },
+    {
+      "level": 3,
+      "id": "common-uses",
+      "heading": "8.1. Common Patterns for Grid Placement"
+    },
+    {
+      "level": 4,
+      "id": "common-uses-named-areas",
+      "heading": "8.1.1. Named Areas"
+    },
+    {
+      "level": 4,
+      "id": "common-uses-numeric",
+      "heading": "8.1.2. Numeric Indexes and Spans"
+    },
+    {
+      "level": 4,
+      "id": "common-uses-named-lines",
+      "heading": "8.1.3. Named Lines and Spans"
+    },
+    {
+      "level": 4,
+      "id": "common-uses-auto-placement",
+      "heading": "8.1.4. Auto Placement"
+    },
+    {
+      "level": 3,
+      "id": "placement-a11y",
+      "heading": "8.2. Grid Item Placement vs. Source Order"
+    },
+    {
+      "level": 3,
+      "id": "line-placement",
+      "heading": "8.3. Line-based Placement: the grid-row-start, grid-column-start, grid-row-end, and grid-column-end properties"
+    },
+    {
+      "level": 4,
+      "id": "grid-placement-errors",
+      "heading": "8.3.1. Grid Placement Conflict Handling"
+    },
+    {
+      "level": 3,
+      "id": "placement-shorthands",
+      "heading": "8.4. Placement Shorthands: the grid-column, grid-row, and grid-area properties"
+    },
+    {
+      "level": 3,
+      "id": "auto-placement-algo",
+      "heading": "8.5. Grid Item Placement Algorithm"
+    },
+    {
+      "level": 2,
+      "id": "subgrids",
+      "heading": "9. Subgrids"
+    },
+    {
+      "level": 2,
+      "id": "abspos",
+      "heading": "10. Absolute Positioning"
+    },
+    {
+      "level": 3,
+      "id": "abspos-items",
+      "heading": "10.1. With a Grid Container as Containing Block"
+    },
+    {
+      "level": 3,
+      "id": "static-position",
+      "heading": "10.2. With a Grid Container as Parent"
+    },
+    {
+      "level": 2,
+      "id": "alignment",
+      "heading": "11. Alignment and Spacing"
+    },
+    {
+      "level": 3,
+      "id": "gutters",
+      "heading": "11.1. Gutters: the row-gap, column-gap, and gap properties"
+    },
+    {
+      "level": 3,
+      "id": "auto-margins",
+      "heading": "11.2. Aligning with auto margins"
+    },
+    {
+      "level": 3,
+      "id": "row-align",
+      "heading": "11.3. Inline-axis Alignment: the justify-self and justify-items properties"
+    },
+    {
+      "level": 3,
+      "id": "column-align",
+      "heading": "11.4. Block-axis Alignment: the align-self and align-items properties"
+    },
+    {
+      "level": 3,
+      "id": "grid-align",
+      "heading": "11.5. Aligning the Grid: the justify-content and align-content properties"
+    },
+    {
+      "level": 3,
+      "id": "grid-baselines",
+      "heading": "11.6. Grid Container Baselines"
+    },
+    {
+      "level": 2,
+      "id": "layout-algorithm",
+      "heading": "12. Grid Layout Algorithm"
+    },
+    {
+      "level": 3,
+      "id": "algo-grid-sizing",
+      "heading": "12.1. Grid Sizing Algorithm"
+    },
+    {
+      "level": 3,
+      "id": "algo-terms",
+      "heading": "12.2. Track Sizing Terminology"
+    },
+    {
+      "level": 3,
+      "id": "algo-track-sizing",
+      "heading": "12.3. Track Sizing Algorithm"
+    },
+    {
+      "level": 3,
+      "id": "algo-init",
+      "heading": "12.4. Initialize Track Sizes"
+    },
+    {
+      "level": 3,
+      "id": "algo-content",
+      "heading": "12.5. Resolve Intrinsic Track Sizes"
+    },
+    {
+      "level": 4,
+      "id": "extra-space",
+      "heading": "12.5.1. Distributing Extra Space Across Spanned Tracks"
+    },
+    {
+      "level": 3,
+      "id": "algo-grow-tracks",
+      "heading": "12.6. Maximize Tracks"
+    },
+    {
+      "level": 3,
+      "id": "algo-flex-tracks",
+      "heading": "12.7. Expand Flexible Tracks"
+    },
+    {
+      "level": 4,
+      "id": "algo-find-fr-size",
+      "heading": "12.7.1. Find the Size of an fr"
+    },
+    {
+      "level": 3,
+      "id": "algo-stretch",
+      "heading": "12.8. Stretch auto Tracks"
+    },
+    {
+      "level": 2,
+      "id": "pagination",
+      "heading": "13. Fragmenting Grid Layout"
+    },
+    {
+      "level": 3,
+      "id": "fragmentation-alg",
+      "heading": "13.1. Sample Fragmentation Algorithm"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "14. Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "15. Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "16. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-202012",
+      "heading": "16.1. Changes since the 18 December 2020 CR"
+    },
+    {
+      "level": 3,
+      "id": "changes-202008",
+      "heading": "16.2. Changes since the August 2020 CR"
+    },
+    {
+      "level": 3,
+      "id": "changes-20180904",
+      "heading": "Changes since the December 2019 CSS Grid Layout Level 2 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2",
+      "heading": "16.3. Additions Since Level 1"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgements",
+      "heading": "17. Acknowledgements"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 3,
+      "id": "w3c-cr-exit-criteria",
+      "heading": "CR exit criteria"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:42.411Z"
+}

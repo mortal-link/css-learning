@@ -1,0 +1,267 @@
+{
+  "title": "CSS Multi-column Layout Module Level 1",
+  "specName": "css-multicol-1",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "introduction",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.1. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "the-multi-column-model",
+      "heading": "2. The Multi-Column Model"
+    },
+    {
+      "level": 2,
+      "id": "the-number-and-width-of-columns",
+      "heading": "3. The Number and Width of Columns"
+    },
+    {
+      "level": 3,
+      "id": "cw",
+      "heading": "3.1. The Inline Size of Columns: the column-width property"
+    },
+    {
+      "level": 3,
+      "id": "cc",
+      "heading": "3.2. The Number of Columns: the column-count property"
+    },
+    {
+      "level": 3,
+      "id": "columns",
+      "heading": "3.3. The column-width and column-count Shorthand: The columns Property"
+    },
+    {
+      "level": 3,
+      "id": "pseudo-algorithm",
+      "heading": "3.4. The Pseudo-algorithm"
+    },
+    {
+      "level": 3,
+      "id": "stacking-context",
+      "heading": "3.5. Stacking Context"
+    },
+    {
+      "level": 2,
+      "id": "column-gaps-and-rules",
+      "heading": "4. Column Gaps and Rules"
+    },
+    {
+      "level": 3,
+      "id": "cg",
+      "heading": "4.1. Gutters Between Columns: the column-gap property"
+    },
+    {
+      "level": 3,
+      "id": "crc",
+      "heading": "4.2. The Color of Column Rules: the column-rule-color property"
+    },
+    {
+      "level": 3,
+      "id": "crs",
+      "heading": "4.3. The Style Of Column Rules: the column-rule-style property"
+    },
+    {
+      "level": 3,
+      "id": "crw",
+      "heading": "4.4. The Width Of Column Rules: the column-rule-width property"
+    },
+    {
+      "level": 3,
+      "id": "cr",
+      "heading": "4.5. Column Rule Shorthand: the column-rule property"
+    },
+    {
+      "level": 2,
+      "id": "column-breaks",
+      "heading": "5. Column Breaks"
+    },
+    {
+      "level": 3,
+      "id": "break-before-break-after-break-inside",
+      "heading": "5.1. Controlling Fragmentation: the break-before, break-after, break-inside properties"
+    },
+    {
+      "level": 2,
+      "id": "spanning-columns",
+      "heading": "6. Spanning Columns"
+    },
+    {
+      "level": 3,
+      "id": "column-span",
+      "heading": "6.1. Spanning An Element Across Columns: the column-span property"
+    },
+    {
+      "level": 2,
+      "id": "filling-columns",
+      "heading": "7. Filling Columns"
+    },
+    {
+      "level": 3,
+      "id": "cf",
+      "heading": "7.1. Column Balancing: the column-fill property"
+    },
+    {
+      "level": 2,
+      "id": "overflow",
+      "heading": "8. Overflow"
+    },
+    {
+      "level": 3,
+      "id": "overflow-inside-multicol-elements",
+      "heading": "8.1. Overflow Inside Multicol Containers"
+    },
+    {
+      "level": 3,
+      "id": "pagination-and-overflow-outside-multicol",
+      "heading": "8.2. Pagination and Overflow Outside Multicol Containers"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Appendix B. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-from-20211012",
+      "heading": "Changes from the Candidate Recommendation (CR) of 12 October 2021"
+    },
+    {
+      "level": 3,
+      "id": "changes-from-20210212",
+      "heading": "Changes from the Working Draft (WD) of 12 February 2021"
+    },
+    {
+      "level": 3,
+      "id": "changes-from-20191015",
+      "heading": "Changes from the Working Draft (WD) of 15 October 2019"
+    },
+    {
+      "level": 3,
+      "id": "changes-from-20180528",
+      "heading": "Changes from the Working Draft (WD) of 28 May 2018"
+    },
+    {
+      "level": 3,
+      "id": "changes-from-20171005",
+      "heading": "Changes from the Working Draft (WD) of 5 October 2017"
+    },
+    {
+      "level": 3,
+      "id": "changes-from-20110412",
+      "heading": "Changes from the Candidate Recommendation (CR) of 12 April 2011."
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "a11y",
+      "heading": "Accessibility Considerations"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgments",
+      "heading": "Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 3,
+      "id": "w3c-cr-exit-criteria",
+      "heading": "CR exit criteria"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:43.712Z"
+}

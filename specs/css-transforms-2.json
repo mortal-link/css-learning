@@ -1,0 +1,312 @@
+{
+  "title": "CSS Transforms Module Level 2",
+  "specName": "css-transforms-2",
+  "sections": [
+    {
+      "level": 2,
+      "id": "w3c-state",
+      "heading": "W3C Working Draft, 9 November 2021"
+    },
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "status",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "module-interactions",
+      "heading": "1.1. Module Interactions"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.2. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "terminology",
+      "heading": "2. Terminology"
+    },
+    {
+      "level": 3,
+      "id": "serialization-of-the-computed-value",
+      "heading": "2.1. Serialization of the computed value of &lt;transform-list>"
+    },
+    {
+      "level": 2,
+      "id": "two-dimensional-subset",
+      "heading": "3. Two Dimensional Subset"
+    },
+    {
+      "level": 2,
+      "id": "transform-rendering",
+      "heading": "4. The Transform Rendering Model"
+    },
+    {
+      "level": 3,
+      "id": "3d-transform-rendering",
+      "heading": "4.1. 3D Transform Rendering"
+    },
+    {
+      "level": 4,
+      "id": "perspective",
+      "heading": "4.1.1. Perspective"
+    },
+    {
+      "level": 4,
+      "id": "3d-rendering-contexts",
+      "heading": "4.1.2. 3D Rendering Contexts"
+    },
+    {
+      "level": 4,
+      "id": "transformed-element-hierarchies",
+      "heading": "4.1.3. Transformed element hierarchies"
+    },
+    {
+      "level": 4,
+      "id": "accumulated-3d-transformation-matrix-computation",
+      "heading": "4.1.4. Accumulated 3D Transformation Matrix Computation"
+    },
+    {
+      "level": 4,
+      "id": "backface-visibility",
+      "heading": "4.1.5. Backface Visibility"
+    },
+    {
+      "level": 3,
+      "id": "processing-of-perspective-transformed-boxes",
+      "heading": "4.2. Processing of Perspective-Transformed Boxes"
+    },
+    {
+      "level": 2,
+      "id": "individual-transforms",
+      "heading": "5. Individual Transform Properties: the translate, scale, and rotate properties"
+    },
+    {
+      "level": 3,
+      "id": "individual-transform-serialization",
+      "heading": "5.1. Serialization"
+    },
+    {
+      "level": 2,
+      "id": "ctm",
+      "heading": "6. Current Transformation Matrix"
+    },
+    {
+      "level": 2,
+      "id": "transform-style-property",
+      "heading": "7. The transform-style Property"
+    },
+    {
+      "level": 3,
+      "id": "grouping-property-values",
+      "heading": "7.1. Grouping property values"
+    },
+    {
+      "level": 2,
+      "id": "perspective-property",
+      "heading": "8. The perspective Property"
+    },
+    {
+      "level": 2,
+      "id": "perspective-origin-property",
+      "heading": "9. The perspective-origin Property"
+    },
+    {
+      "level": 2,
+      "id": "backface-visibility-property",
+      "heading": "10. The backface-visibility Property"
+    },
+    {
+      "level": 2,
+      "id": "svg-three-dimensional-functions",
+      "heading": "11. SVG and 3D transform functions"
+    },
+    {
+      "level": 2,
+      "id": "transform-functions",
+      "heading": "12. The Transform Functions"
+    },
+    {
+      "level": 3,
+      "id": "two-d-transform-functions",
+      "heading": "12.1. 2D Transform Functions"
+    },
+    {
+      "level": 3,
+      "id": "three-d-transform-functions",
+      "heading": "12.2. 3D Transform Functions"
+    },
+    {
+      "level": 3,
+      "id": "transform-primitives",
+      "heading": "12.3. Transform function primitives and derivatives"
+    },
+    {
+      "level": 2,
+      "id": "matrix-interpolation",
+      "heading": "13. Interpolation of Matrices"
+    },
+    {
+      "level": 3,
+      "id": "interpolation-of-3d-matrices",
+      "heading": "13.1. Interpolation of 3D matrices"
+    },
+    {
+      "level": 4,
+      "id": "decomposing-a-3d-matrix",
+      "heading": "13.1.1. Decomposing a 3D matrix"
+    },
+    {
+      "level": 4,
+      "id": "interpolation-of-decomposed-3d-matrix-values",
+      "heading": "13.1.2. Interpolation of decomposed 3D matrix values"
+    },
+    {
+      "level": 4,
+      "id": "recomposing-to-a-3d-matrix",
+      "heading": "13.1.3. Recomposing to a 3D matrix"
+    },
+    {
+      "level": 2,
+      "id": "interpolation-of-transform-functions",
+      "heading": "14. Interpolation of primitives and derived transform functions"
+    },
+    {
+      "level": 2,
+      "id": "combining-transform-lists",
+      "heading": "15. Addition and accumulation of transform lists"
+    },
+    {
+      "level": 3,
+      "id": "neutral-element",
+      "heading": "15.1. Neutral element for addition"
+    },
+    {
+      "level": 2,
+      "id": "mathematical-description",
+      "heading": "16. Mathematical Description of Transform Functions"
+    },
+    {
+      "level": 2,
+      "id": "svg-transform",
+      "heading": "17. The SVG transform Attribute"
+    },
+    {
+      "level": 2,
+      "id": "svg-animation",
+      "heading": "18. SVG Animation"
+    },
+    {
+      "level": 3,
+      "id": "svg-animate-element",
+      "heading": "18.1. The animate and set element"
+    },
+    {
+      "level": 2,
+      "id": "more-issues",
+      "heading": "19. More Issues"
+    },
+    {
+      "level": 2,
+      "id": "priv-sec",
+      "heading": "20. Security and Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-recent",
+      "heading": "Recent Changes"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:50.453Z"
+}

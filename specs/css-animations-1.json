@@ -1,0 +1,307 @@
+{
+  "title": "CSS Animations Level 1",
+  "specName": "css-animations-1",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.1. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "animations",
+      "heading": "2. Animations"
+    },
+    {
+      "level": 2,
+      "id": "keyframes",
+      "heading": "3. Keyframes"
+    },
+    {
+      "level": 3,
+      "id": "timing-functions",
+      "heading": "3.1. Timing functions for keyframes"
+    },
+    {
+      "level": 3,
+      "id": "animation-name",
+      "heading": "3.2. The animation-name property"
+    },
+    {
+      "level": 3,
+      "id": "animation-duration",
+      "heading": "3.3. The animation-duration property"
+    },
+    {
+      "level": 3,
+      "id": "animation-timing-function",
+      "heading": "3.4. The animation-timing-function property"
+    },
+    {
+      "level": 3,
+      "id": "animation-iteration-count",
+      "heading": "3.5. The animation-iteration-count property"
+    },
+    {
+      "level": 3,
+      "id": "animation-direction",
+      "heading": "3.6. The animation-direction property"
+    },
+    {
+      "level": 3,
+      "id": "animation-play-state",
+      "heading": "3.7. The animation-play-state property"
+    },
+    {
+      "level": 3,
+      "id": "animation-delay",
+      "heading": "3.8. The animation-delay property"
+    },
+    {
+      "level": 3,
+      "id": "animation-fill-mode",
+      "heading": "3.9. The animation-fill-mode property"
+    },
+    {
+      "level": 3,
+      "id": "animation",
+      "heading": "3.10. The animation shorthand property"
+    },
+    {
+      "level": 2,
+      "id": "events",
+      "heading": "4. Animation Events"
+    },
+    {
+      "level": 3,
+      "id": "interface-animationevent",
+      "heading": "4.1. The AnimationEvent Interface"
+    },
+    {
+      "level": 4,
+      "id": "interface-animationevent-idl",
+      "heading": "4.1.1. IDL Definition"
+    },
+    {
+      "level": 4,
+      "id": "interface-animationevent-attributes",
+      "heading": "4.1.2. Attributes"
+    },
+    {
+      "level": 3,
+      "id": "event-animationevent",
+      "heading": "4.2. Types of AnimationEvent"
+    },
+    {
+      "level": 3,
+      "id": "event-handlers-on-elements-document-objects-and-window-objects",
+      "heading": "4.3. Event handlers on elements, Document objects, and Window objects"
+    },
+    {
+      "level": 2,
+      "id": "interface-dom",
+      "heading": "5. DOM Interfaces"
+    },
+    {
+      "level": 3,
+      "id": "interface-cssrule",
+      "heading": "5.1. The CSSRule Interface"
+    },
+    {
+      "level": 4,
+      "id": "interface-cssrule-idl",
+      "heading": "5.1.1. IDL Definition"
+    },
+    {
+      "level": 3,
+      "id": "interface-csskeyframerule",
+      "heading": "5.2. The CSSKeyframeRule Interface"
+    },
+    {
+      "level": 4,
+      "id": "interface-csskeyframerule-idl",
+      "heading": "5.2.1. IDL Definition"
+    },
+    {
+      "level": 4,
+      "id": "interface-csskeyframerule-attributes",
+      "heading": "5.2.2. Attributes"
+    },
+    {
+      "level": 3,
+      "id": "interface-csskeyframesrule",
+      "heading": "5.3. The CSSKeyframesRule Interface"
+    },
+    {
+      "level": 4,
+      "id": "interface-csskeyframesrule-idl",
+      "heading": "5.3.1. IDL Definition"
+    },
+    {
+      "level": 4,
+      "id": "interface-csskeyframesrule-attributes",
+      "heading": "5.3.2. Attributes"
+    },
+    {
+      "level": 4,
+      "id": "interface-csskeyframesrule-indexed-property-getter",
+      "heading": "5.3.3. The indexed property getter"
+    },
+    {
+      "level": 4,
+      "id": "interface-csskeyframesrule-appendrule",
+      "heading": "5.3.4. The appendRule method"
+    },
+    {
+      "level": 4,
+      "id": "interface-csskeyframesrule-deleterule",
+      "heading": "5.3.5. The deleteRule method"
+    },
+    {
+      "level": 4,
+      "id": "interface-csskeyframesrule-findrule",
+      "heading": "5.3.6. The findRule method"
+    },
+    {
+      "level": 3,
+      "id": "interface-globaleventhandlers",
+      "heading": "5.4. Extensions to the GlobalEventHandlers Interface Mixin"
+    },
+    {
+      "level": 4,
+      "id": "interface-globaleventhandlers-idl",
+      "heading": "5.4.1. IDL Definition"
+    },
+    {
+      "level": 2,
+      "id": "priv",
+      "heading": "6. Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "sec",
+      "heading": "7. Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "8. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-20181011",
+      "heading": "8.1. Changes since the Working Draft of 11 October 2018"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgements",
+      "heading": "9. Acknowledgements"
+    },
+    {
+      "level": 2,
+      "id": "other-open-issues",
+      "heading": "10. Other open issues"
+    },
+    {
+      "level": 2,
+      "id": "wg-resolutions-pending",
+      "heading": "11. Working Group Resolutions that are pending editing"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "idl-index",
+      "heading": "IDL Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:51.753Z"
+}

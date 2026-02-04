@@ -1,0 +1,547 @@
+{
+  "title": "CSS Values and Units Module Level 4",
+  "specName": "css-values-4",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "placement",
+      "heading": "1.1. Module Interactions"
+    },
+    {
+      "level": 2,
+      "id": "value-defs",
+      "heading": "2. Value Definition Syntax"
+    },
+    {
+      "level": 3,
+      "id": "component-types",
+      "heading": "2.1. Component Value Types"
+    },
+    {
+      "level": 3,
+      "id": "component-combinators",
+      "heading": "2.2. Component Value Combinators"
+    },
+    {
+      "level": 3,
+      "id": "component-multipliers",
+      "heading": "2.3. Component Value Multipliers"
+    },
+    {
+      "level": 3,
+      "id": "combinator-multiplier-patterns",
+      "heading": "2.4. Combinator and Multiplier Patterns"
+    },
+    {
+      "level": 3,
+      "id": "component-whitespace",
+      "heading": "2.5. Component Values and White Space"
+    },
+    {
+      "level": 3,
+      "id": "component-functions",
+      "heading": "2.6. Functional Notation Definitions"
+    },
+    {
+      "level": 3,
+      "id": "value-examples",
+      "heading": "2.7. Property Value Examples"
+    },
+    {
+      "level": 3,
+      "id": "production-blocks",
+      "heading": "2.8. Non-Terminal Definitions and Grammar Production Blocks"
+    },
+    {
+      "level": 2,
+      "id": "combining-values",
+      "heading": "3. Combining Values: Interpolation, Addition, and Accumulation"
+    },
+    {
+      "level": 3,
+      "id": "combining-range",
+      "heading": "3.1. Range Checking"
+    },
+    {
+      "level": 2,
+      "id": "textual-values",
+      "heading": "4. Textual Data Types"
+    },
+    {
+      "level": 3,
+      "id": "keywords",
+      "heading": "4.1. Pre-defined Keywords"
+    },
+    {
+      "level": 4,
+      "id": "common-keywords",
+      "heading": "4.1.1. CSS-wide keywords: initial, inherit and unset"
+    },
+    {
+      "level": 3,
+      "id": "custom-idents",
+      "heading": "4.2. Unprefixed Author-defined Identifiers: the &lt;custom-ident> type"
+    },
+    {
+      "level": 3,
+      "id": "dashed-idents",
+      "heading": "4.3. Prefixed Author-defined Identifiers: the &lt;dashed-ident> type"
+    },
+    {
+      "level": 3,
+      "id": "strings",
+      "heading": "4.4. Quoted Strings: the &lt;string> type"
+    },
+    {
+      "level": 3,
+      "id": "urls",
+      "heading": "4.5. Resource Locators: the &lt;url> type"
+    },
+    {
+      "level": 4,
+      "id": "relative-urls",
+      "heading": "4.5.1. Relative URLs"
+    },
+    {
+      "level": 4,
+      "id": "url-empty",
+      "heading": "4.5.2. Empty URLs"
+    },
+    {
+      "level": 4,
+      "id": "url-modifiers",
+      "heading": "4.5.3. URL Modifiers"
+    },
+    {
+      "level": 4,
+      "id": "url-processing",
+      "heading": "4.5.4. URL Processing Model"
+    },
+    {
+      "level": 2,
+      "id": "numeric-types",
+      "heading": "5. Numeric Data Types"
+    },
+    {
+      "level": 3,
+      "id": "numeric-ranges",
+      "heading": "5.1. Range Restrictions and Range Definition Notation"
+    },
+    {
+      "level": 3,
+      "id": "integers",
+      "heading": "5.2. Integers: the &lt;integer> type"
+    },
+    {
+      "level": 4,
+      "id": "combine-integers",
+      "heading": "5.2.1. Computation and Combination of &lt;integer>"
+    },
+    {
+      "level": 3,
+      "id": "numbers",
+      "heading": "5.3. Real Numbers: the &lt;number> type"
+    },
+    {
+      "level": 4,
+      "id": "combine-numbers",
+      "heading": "5.3.1. Computation and Combination of &lt;number>"
+    },
+    {
+      "level": 3,
+      "id": "dimensions",
+      "heading": "5.4. Numbers with Units: dimension values"
+    },
+    {
+      "level": 4,
+      "id": "compat",
+      "heading": "5.4.1. Compatible Units"
+    },
+    {
+      "level": 4,
+      "id": "combine-dimensions",
+      "heading": "5.4.2. Combination of Dimensions"
+    },
+    {
+      "level": 3,
+      "id": "percentages",
+      "heading": "5.5. Percentages: the &lt;percentage> type"
+    },
+    {
+      "level": 4,
+      "id": "combine-percentages",
+      "heading": "5.5.1. Computation and Combination of &lt;percentage>"
+    },
+    {
+      "level": 3,
+      "id": "mixed-percentages",
+      "heading": "5.6. Mixing Percentages and Dimensions"
+    },
+    {
+      "level": 4,
+      "id": "combine-mixed",
+      "heading": "5.6.1. Computation and Combination of Percentage and Dimension Mixes"
+    },
+    {
+      "level": 3,
+      "id": "ratios",
+      "heading": "5.7. Ratios: the &lt;ratio> type"
+    },
+    {
+      "level": 4,
+      "id": "combine-ratio",
+      "heading": "5.7.1. Combination of &lt;ratio>"
+    },
+    {
+      "level": 2,
+      "id": "lengths",
+      "heading": "6. Distance Units: the &lt;length> type"
+    },
+    {
+      "level": 3,
+      "id": "relative-lengths",
+      "heading": "6.1. Relative Lengths"
+    },
+    {
+      "level": 4,
+      "id": "font-relative-lengths",
+      "heading": "6.1.1. Font-relative Lengths: the em, rem, ex, rex, cap, rcap, ch, rch, ic, ric, lh, rlh units"
+    },
+    {
+      "level": 4,
+      "id": "viewport-relative-lengths",
+      "heading": "6.1.2. Viewport-percentage Lengths: the *vw, *vh, *vi, *vb, *vmin, *vmax units"
+    },
+    {
+      "level": 3,
+      "id": "absolute-lengths",
+      "heading": "6.2. Absolute Lengths: the cm, mm, Q, in, pt, pc, px units"
+    },
+    {
+      "level": 2,
+      "id": "other-units",
+      "heading": "7. Other Quantities"
+    },
+    {
+      "level": 3,
+      "id": "angles",
+      "heading": "7.1. Angle Units: the &lt;angle> type and deg, grad, rad, turn units"
+    },
+    {
+      "level": 3,
+      "id": "time",
+      "heading": "7.2. Duration Units: the &lt;time> type and s, ms units"
+    },
+    {
+      "level": 3,
+      "id": "frequency",
+      "heading": "7.3. Frequency Units: the &lt;frequency> type and Hz, kHz units"
+    },
+    {
+      "level": 3,
+      "id": "resolution",
+      "heading": "7.4. Resolution Units: the &lt;resolution> type and dpi, dpcm, dppx units"
+    },
+    {
+      "level": 2,
+      "id": "defined-elsewhere",
+      "heading": "8. Data Types Defined Elsewhere"
+    },
+    {
+      "level": 3,
+      "id": "colors",
+      "heading": "8.1. Colors: the &lt;color> type"
+    },
+    {
+      "level": 4,
+      "id": "combine-colors",
+      "heading": "8.1.1. Combination of &lt;color>"
+    },
+    {
+      "level": 3,
+      "id": "images",
+      "heading": "8.2. Images: the &lt;image> type"
+    },
+    {
+      "level": 4,
+      "id": "combine-images",
+      "heading": "8.2.1. Combination of &lt;image>"
+    },
+    {
+      "level": 3,
+      "id": "position",
+      "heading": "8.3. 2D Positioning: the &lt;position> type"
+    },
+    {
+      "level": 4,
+      "id": "position-parsing",
+      "heading": "8.3.1. Parsing &lt;position>"
+    },
+    {
+      "level": 4,
+      "id": "position-serialization",
+      "heading": "8.3.2. Serializing &lt;position>"
+    },
+    {
+      "level": 4,
+      "id": "combine-positions",
+      "heading": "8.3.3. Combination of &lt;position>"
+    },
+    {
+      "level": 2,
+      "id": "functional-notations",
+      "heading": "9. Functional Notations"
+    },
+    {
+      "level": 2,
+      "id": "math",
+      "heading": "10. Mathematical Expressions"
+    },
+    {
+      "level": 3,
+      "id": "calc-func",
+      "heading": "10.1. Basic Arithmetic: calc()"
+    },
+    {
+      "level": 3,
+      "id": "comp-func",
+      "heading": "10.2. Comparison Functions: min(), max(), and clamp()"
+    },
+    {
+      "level": 3,
+      "id": "round-func",
+      "heading": "10.3. Stepped Value Functions: round(), mod(), and rem()"
+    },
+    {
+      "level": 4,
+      "id": "round-infinities",
+      "heading": "10.3.1. Argument Ranges"
+    },
+    {
+      "level": 3,
+      "id": "trig-funcs",
+      "heading": "10.4. Trigonometric Functions: sin(), cos(), tan(), asin(), acos(), atan(), and atan2()"
+    },
+    {
+      "level": 4,
+      "id": "trig-infinities",
+      "heading": "10.4.1. Argument Ranges"
+    },
+    {
+      "level": 3,
+      "id": "exponent-funcs",
+      "heading": "10.5. Exponential Functions: pow(), sqrt(), hypot(), log(), exp()"
+    },
+    {
+      "level": 4,
+      "id": "exponent-infinities",
+      "heading": "10.5.1. Argument Ranges"
+    },
+    {
+      "level": 3,
+      "id": "sign-funcs",
+      "heading": "10.6. Sign-Related Functions: abs(), sign()"
+    },
+    {
+      "level": 3,
+      "id": "calc-keywords",
+      "heading": "10.7. Numeric Keywords"
+    },
+    {
+      "level": 4,
+      "id": "calc-constants",
+      "heading": "10.7.1. Numeric Constants: e, pi"
+    },
+    {
+      "level": 4,
+      "id": "calc-error-constants",
+      "heading": "10.7.2. Degenerate Numeric Constants: infinity, -infinity, NaN"
+    },
+    {
+      "level": 4,
+      "id": "calc-variables",
+      "heading": "10.7.3. Numeric Variables"
+    },
+    {
+      "level": 3,
+      "id": "calc-syntax",
+      "heading": "10.8. Syntax"
+    },
+    {
+      "level": 3,
+      "id": "calc-type-checking",
+      "heading": "10.9. Type Checking"
+    },
+    {
+      "level": 4,
+      "id": "calc-ieee",
+      "heading": "10.9.1. Infinities, NaN, and Signed Zero"
+    },
+    {
+      "level": 3,
+      "id": "calc-internal",
+      "heading": "10.10. Internal Representation"
+    },
+    {
+      "level": 4,
+      "id": "calc-simplification",
+      "heading": "10.10.1. Simplification"
+    },
+    {
+      "level": 3,
+      "id": "calc-computed-value",
+      "heading": "10.11. Computed Value"
+    },
+    {
+      "level": 3,
+      "id": "calc-range",
+      "heading": "10.12. Range Checking"
+    },
+    {
+      "level": 3,
+      "id": "calc-serialize",
+      "heading": "10.13. Serialization"
+    },
+    {
+      "level": 3,
+      "id": "combine-math",
+      "heading": "10.14. Combination of Math Functions"
+    },
+    {
+      "level": 2,
+      "id": "linked-properties",
+      "heading": "Appendix A: Coordinating List-Valued Properties"
+    },
+    {
+      "level": 2,
+      "id": "iana",
+      "heading": "Appendix B: IANA Considerations"
+    },
+    {
+      "level": 3,
+      "id": "about-invalid",
+      "heading": "Registration for the about:invalid URL scheme"
+    },
+    {
+      "level": 2,
+      "id": "deprecated-quirky-length",
+      "heading": "Appendix C: Quirky Lengths"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgments",
+      "heading": "Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-recent",
+      "heading": "Recent Changes"
+    },
+    {
+      "level": 3,
+      "id": "additions-L3",
+      "heading": "Additions Since Level 3"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:38.936Z"
+}

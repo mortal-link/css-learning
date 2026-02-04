@@ -1,0 +1,147 @@
+{
+  "title": "CSS Easing Functions Level 1",
+  "specName": "css-easing-1",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "introduction",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.1. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "easing-functions",
+      "heading": "2. Easing functions"
+    },
+    {
+      "level": 3,
+      "id": "the-linear-easing-function",
+      "heading": "2.1. The linear easing function: linear"
+    },
+    {
+      "level": 3,
+      "id": "cubic-bezier-easing-functions",
+      "heading": "2.2. Cubic Bézier easing functions: ease, ease-in, ease-out, ease-in-out, cubic-bezier()"
+    },
+    {
+      "level": 4,
+      "id": "cubic-bezier-algo",
+      "heading": "2.2.1. Output of a cubic bézier easing function"
+    },
+    {
+      "level": 3,
+      "id": "step-easing-functions",
+      "heading": "2.3. Step easing functions: step-start, step-end, steps()"
+    },
+    {
+      "level": 4,
+      "id": "step-easing-algo",
+      "heading": "2.3.1. Output of a step easing function"
+    },
+    {
+      "level": 3,
+      "id": "serialization",
+      "heading": "2.4. Serialization"
+    },
+    {
+      "level": 2,
+      "id": "priv-sec",
+      "heading": "3. Privacy and Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "4. Changes"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgements",
+      "heading": "5. Acknowledgements"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 3,
+      "id": "w3c-cr-exit-criteria",
+      "heading": "CR exit criteria"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:52.359Z"
+}

@@ -1,0 +1,202 @@
+{
+  "title": "CSS Box Model Module Level 4",
+  "specName": "css-box-4",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.1. Value Definitions"
+    },
+    {
+      "level": 3,
+      "id": "placement",
+      "heading": "1.2. Module Interactions"
+    },
+    {
+      "level": 2,
+      "id": "box-model",
+      "heading": "2. The CSS Box Model"
+    },
+    {
+      "level": 3,
+      "id": "box-edges",
+      "heading": "2.1. Boxes and Edges"
+    },
+    {
+      "level": 3,
+      "id": "fragmentation",
+      "heading": "2.2. Fragmentation"
+    },
+    {
+      "level": 3,
+      "id": "keywords",
+      "heading": "2.3. Box-edge Keywords"
+    },
+    {
+      "level": 2,
+      "id": "margins",
+      "heading": "3. Margins"
+    },
+    {
+      "level": 3,
+      "id": "margin-physical",
+      "heading": "3.1. Page-relative (Physical) Margin Properties: the margin-top, margin-right, margin-bottom, and margin-left properties"
+    },
+    {
+      "level": 3,
+      "id": "margin-shorthand",
+      "heading": "3.2. Margin Shorthand: the margin property"
+    },
+    {
+      "level": 3,
+      "id": "margin-trim",
+      "heading": "3.3. Margins at Container Edges: the margin-trim property"
+    },
+    {
+      "level": 4,
+      "id": "margin-trim-block",
+      "heading": "3.3.1. Trimming Block Container Content"
+    },
+    {
+      "level": 4,
+      "id": "margin-trim-flex",
+      "heading": "3.3.2. Trimming Flex Container Content"
+    },
+    {
+      "level": 4,
+      "id": "margin-trim-grid",
+      "heading": "3.3.3. Trimming Grid Container Content"
+    },
+    {
+      "level": 2,
+      "id": "paddings",
+      "heading": "4. Padding"
+    },
+    {
+      "level": 3,
+      "id": "padding-physical",
+      "heading": "4.1. Page-relative (Physical) Padding Properties: the padding-top, padding-right, padding-bottom, and padding-left properties"
+    },
+    {
+      "level": 3,
+      "id": "padding-shorthand",
+      "heading": "4.2. Padding Shorthand: the padding property"
+    },
+    {
+      "level": 2,
+      "id": "borders",
+      "heading": "5. Borders"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "6. Recent Changes"
+    },
+    {
+      "level": 2,
+      "id": "changes-since-3",
+      "heading": "7. Changes Since CSS Level 3"
+    },
+    {
+      "level": 2,
+      "id": "changes-since-2",
+      "heading": "8. Changes Since CSS Level 2"
+    },
+    {
+      "level": 2,
+      "id": "priv",
+      "heading": "9. Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "sec",
+      "heading": "10. Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:36.271Z"
+}

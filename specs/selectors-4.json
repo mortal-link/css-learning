@@ -1,0 +1,692 @@
+{
+  "title": "Selectors Level 4",
+  "specName": "selectors-4",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "context",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "placement",
+      "heading": "1.1. Module Interactions"
+    },
+    {
+      "level": 2,
+      "id": "overview",
+      "heading": "2. Selectors Overview"
+    },
+    {
+      "level": 2,
+      "id": "syntax",
+      "heading": "3. Selector Syntax and Structure"
+    },
+    {
+      "level": 3,
+      "id": "structure",
+      "heading": "3.1. Structure and Terminology"
+    },
+    {
+      "level": 3,
+      "id": "data-model",
+      "heading": "3.2. Data Model"
+    },
+    {
+      "level": 4,
+      "id": "featureless-elements",
+      "heading": "3.2.1. Featureless Elements"
+    },
+    {
+      "level": 3,
+      "id": "scoping",
+      "heading": "3.3. Scoped Selectors"
+    },
+    {
+      "level": 3,
+      "id": "relative",
+      "heading": "3.4. Relative Selectors"
+    },
+    {
+      "level": 3,
+      "id": "pseudo-classes",
+      "heading": "3.5. Pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "pseudo-elements",
+      "heading": "3.6. Pseudo-elements"
+    },
+    {
+      "level": 4,
+      "id": "pseudo-element-syntax",
+      "heading": "3.6.1. Syntax"
+    },
+    {
+      "level": 4,
+      "id": "pseudo-element-attachment",
+      "heading": "3.6.2. Binding to the Document Tree"
+    },
+    {
+      "level": 4,
+      "id": "pseudo-element-states",
+      "heading": "3.6.3. Pseudo-classing Pseudo-elements"
+    },
+    {
+      "level": 4,
+      "id": "sub-pseudo-elements",
+      "heading": "3.6.4. Sub-pseudo-elements"
+    },
+    {
+      "level": 4,
+      "id": "pseudo-element-structure",
+      "heading": "3.6.5. Internal Structure"
+    },
+    {
+      "level": 3,
+      "id": "case-sensitive",
+      "heading": "3.7. Characters and case sensitivity"
+    },
+    {
+      "level": 3,
+      "id": "namespaces",
+      "heading": "3.8. Declaring Namespace Prefixes"
+    },
+    {
+      "level": 3,
+      "id": "invalid",
+      "heading": "3.9. Invalid Selectors and Error Handling"
+    },
+    {
+      "level": 3,
+      "id": "legacy-aliasing",
+      "heading": "3.10. Legacy Aliases"
+    },
+    {
+      "level": 2,
+      "id": "logical-combination",
+      "heading": "4. Logical Combinations"
+    },
+    {
+      "level": 3,
+      "id": "grouping",
+      "heading": "4.1. Selector Lists"
+    },
+    {
+      "level": 3,
+      "id": "matches",
+      "heading": "4.2. The Matches-Any Pseudo-class: :is()"
+    },
+    {
+      "level": 3,
+      "id": "negation",
+      "heading": "4.3. The Negation (Matches-None) Pseudo-class: :not()"
+    },
+    {
+      "level": 3,
+      "id": "zero-matches",
+      "heading": "4.4. The Specificity-adjustment Pseudo-class: :where()"
+    },
+    {
+      "level": 3,
+      "id": "relational",
+      "heading": "4.5. The Relational Pseudo-class: :has()"
+    },
+    {
+      "level": 2,
+      "id": "elemental-selectors",
+      "heading": "5. Elemental selectors"
+    },
+    {
+      "level": 3,
+      "id": "type-selectors",
+      "heading": "5.1. Type (tag name) selector"
+    },
+    {
+      "level": 3,
+      "id": "the-universal-selector",
+      "heading": "5.2. Universal selector"
+    },
+    {
+      "level": 3,
+      "id": "type-nmsp",
+      "heading": "5.3. Namespaces in Elemental Selectors"
+    },
+    {
+      "level": 3,
+      "id": "the-defined-pseudo",
+      "heading": "5.4. The Defined Pseudo-class: :defined"
+    },
+    {
+      "level": 2,
+      "id": "attribute-selectors",
+      "heading": "6. Attribute selectors"
+    },
+    {
+      "level": 3,
+      "id": "attribute-representation",
+      "heading": "6.1. Attribute presence and value selectors"
+    },
+    {
+      "level": 3,
+      "id": "attribute-substrings",
+      "heading": "6.2. Substring matching attribute selectors"
+    },
+    {
+      "level": 3,
+      "id": "attribute-case",
+      "heading": "6.3. Case-sensitivity"
+    },
+    {
+      "level": 3,
+      "id": "attrnmsp",
+      "heading": "6.4. Attribute selectors and namespaces"
+    },
+    {
+      "level": 3,
+      "id": "def-values",
+      "heading": "6.5. Default attribute values in DTDs"
+    },
+    {
+      "level": 3,
+      "id": "class-html",
+      "heading": "6.6. Class selectors"
+    },
+    {
+      "level": 3,
+      "id": "id-selectors",
+      "heading": "6.7. ID selectors"
+    },
+    {
+      "level": 2,
+      "id": "linguistic-pseudos",
+      "heading": "7. Linguistic Pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "the-dir-pseudo",
+      "heading": "7.1. The Directionality Pseudo-class: :dir()"
+    },
+    {
+      "level": 3,
+      "id": "the-lang-pseudo",
+      "heading": "7.2. The Language Pseudo-class: :lang()"
+    },
+    {
+      "level": 2,
+      "id": "location",
+      "heading": "8. Location Pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "the-any-link-pseudo",
+      "heading": "8.1. The Hyperlink Pseudo-class: :any-link"
+    },
+    {
+      "level": 3,
+      "id": "link",
+      "heading": "8.2. The Link History Pseudo-classes: :link and :visited"
+    },
+    {
+      "level": 3,
+      "id": "the-target-pseudo",
+      "heading": "8.3. The Target Pseudo-class: :target"
+    },
+    {
+      "level": 3,
+      "id": "the-scope-pseudo",
+      "heading": "8.4. The Reference Element Pseudo-class: :scope"
+    },
+    {
+      "level": 2,
+      "id": "useraction-pseudos",
+      "heading": "9. User Action Pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "the-hover-pseudo",
+      "heading": "9.1. The Pointer Hover Pseudo-class: :hover"
+    },
+    {
+      "level": 3,
+      "id": "the-active-pseudo",
+      "heading": "9.2. The Activation Pseudo-class: :active"
+    },
+    {
+      "level": 3,
+      "id": "the-focus-pseudo",
+      "heading": "9.3. The Input Focus Pseudo-class: :focus"
+    },
+    {
+      "level": 3,
+      "id": "the-focus-visible-pseudo",
+      "heading": "9.4. The Focus-Indicated Pseudo-class: :focus-visible"
+    },
+    {
+      "level": 3,
+      "id": "the-focus-within-pseudo",
+      "heading": "9.5. The Focus Container Pseudo-class: :focus-within"
+    },
+    {
+      "level": 2,
+      "id": "resource-pseudos",
+      "heading": "10. Resource State Pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "video-state",
+      "heading": "10.1. Media Playback State: the :playing, :paused, and :seeking pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "media-loading-state",
+      "heading": "10.2. Media Loading State: the :buffering and :stalled pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "sound-state",
+      "heading": "10.3. Sound State: the :muted and :volume-locked pseudo-classes"
+    },
+    {
+      "level": 2,
+      "id": "display-state-pseudos",
+      "heading": "11. Element Display State Pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "open-state",
+      "heading": "11.1. Collapse State: the :open pseudo-class"
+    },
+    {
+      "level": 3,
+      "id": "popover-open-state",
+      "heading": "11.2. Popover State: the :popover-open pseudo-class"
+    },
+    {
+      "level": 3,
+      "id": "modal-state",
+      "heading": "11.3. Modal (Exclusive Interaction) State: the :modal pseudo-class"
+    },
+    {
+      "level": 3,
+      "id": "fullscreen-state",
+      "heading": "11.4. Fullscreen Presentation State: the :fullscreen pseudo-class"
+    },
+    {
+      "level": 3,
+      "id": "pip-state",
+      "heading": "11.5. Picture-in-Picture Presentation State: the :picture-in-picture pseudo-class"
+    },
+    {
+      "level": 2,
+      "id": "input-pseudos",
+      "heading": "12. The Input Pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "input-states",
+      "heading": "12.1. Input Control States"
+    },
+    {
+      "level": 4,
+      "id": "enableddisabled",
+      "heading": "12.1.1. The :enabled and :disabled Pseudo-classes"
+    },
+    {
+      "level": 4,
+      "id": "rw-pseudos",
+      "heading": "12.1.2. The Mutability Pseudo-classes: :read-only and :read-write"
+    },
+    {
+      "level": 4,
+      "id": "placeholder",
+      "heading": "12.1.3. The Placeholder-shown Pseudo-class: :placeholder-shown"
+    },
+    {
+      "level": 4,
+      "id": "autofill",
+      "heading": "12.1.4. The Automatic Input Pseudo-class: :autofill"
+    },
+    {
+      "level": 4,
+      "id": "the-default-pseudo",
+      "heading": "12.1.5. The Default-option Pseudo-class: :default"
+    },
+    {
+      "level": 3,
+      "id": "input-value-states",
+      "heading": "12.2. Input Value States"
+    },
+    {
+      "level": 4,
+      "id": "checked",
+      "heading": "12.2.1. The Selected-option Pseudo-classes: :checked, :unchecked, and :indeterminate"
+    },
+    {
+      "level": 3,
+      "id": "ui-validity",
+      "heading": "12.3. Input Value-checking"
+    },
+    {
+      "level": 4,
+      "id": "validity-pseudos",
+      "heading": "12.3.1. The Validity Pseudo-classes: :valid and :invalid"
+    },
+    {
+      "level": 4,
+      "id": "range-pseudos",
+      "heading": "12.3.2. The Range Pseudo-classes: :in-range and :out-of-range"
+    },
+    {
+      "level": 4,
+      "id": "opt-pseudos",
+      "heading": "12.3.3. The Optionality Pseudo-classes: :required and :optional"
+    },
+    {
+      "level": 4,
+      "id": "user-pseudos",
+      "heading": "12.3.4. The User-interaction Pseudo-classes: :user-valid and :user-invalid"
+    },
+    {
+      "level": 2,
+      "id": "structural-pseudos",
+      "heading": "13. Tree-Structural pseudo-classes"
+    },
+    {
+      "level": 3,
+      "id": "the-root-pseudo",
+      "heading": "13.1. :root pseudo-class"
+    },
+    {
+      "level": 3,
+      "id": "the-empty-pseudo",
+      "heading": "13.2. :empty pseudo-class"
+    },
+    {
+      "level": 3,
+      "id": "child-index",
+      "heading": "13.3. Child-indexed Pseudo-classes"
+    },
+    {
+      "level": 4,
+      "id": "the-nth-child-pseudo",
+      "heading": "13.3.1. :nth-child() pseudo-class"
+    },
+    {
+      "level": 4,
+      "id": "the-nth-last-child-pseudo",
+      "heading": "13.3.2. :nth-last-child() pseudo-class"
+    },
+    {
+      "level": 4,
+      "id": "the-first-child-pseudo",
+      "heading": "13.3.3. :first-child pseudo-class"
+    },
+    {
+      "level": 4,
+      "id": "the-last-child-pseudo",
+      "heading": "13.3.4. :last-child pseudo-class"
+    },
+    {
+      "level": 4,
+      "id": "the-only-child-pseudo",
+      "heading": "13.3.5. :only-child pseudo-class"
+    },
+    {
+      "level": 3,
+      "id": "typed-child-index",
+      "heading": "13.4. Typed Child-indexed Pseudo-classes"
+    },
+    {
+      "level": 4,
+      "id": "the-nth-of-type-pseudo",
+      "heading": "13.4.1. :nth-of-type() pseudo-class"
+    },
+    {
+      "level": 4,
+      "id": "the-nth-last-of-type-pseudo",
+      "heading": "13.4.2. :nth-last-of-type() pseudo-class"
+    },
+    {
+      "level": 4,
+      "id": "the-first-of-type-pseudo",
+      "heading": "13.4.3. :first-of-type pseudo-class"
+    },
+    {
+      "level": 4,
+      "id": "the-last-of-type-pseudo",
+      "heading": "13.4.4. :last-of-type pseudo-class"
+    },
+    {
+      "level": 4,
+      "id": "the-only-of-type-pseudo",
+      "heading": "13.4.5. :only-of-type pseudo-class"
+    },
+    {
+      "level": 2,
+      "id": "combinators",
+      "heading": "14. Combinators"
+    },
+    {
+      "level": 3,
+      "id": "descendant-combinators",
+      "heading": "14.1. Descendant combinator ( )"
+    },
+    {
+      "level": 3,
+      "id": "child-combinators",
+      "heading": "14.2. Child combinator (>)"
+    },
+    {
+      "level": 3,
+      "id": "adjacent-sibling-combinators",
+      "heading": "14.3. Next-sibling combinator (+)"
+    },
+    {
+      "level": 3,
+      "id": "general-sibling-combinators",
+      "heading": "14.4. Subsequent-sibling combinator (~)"
+    },
+    {
+      "level": 2,
+      "id": "specificity-rules",
+      "heading": "15. Calculating a selector’s specificity"
+    },
+    {
+      "level": 2,
+      "id": "grammar",
+      "heading": "16. Grammar"
+    },
+    {
+      "level": 3,
+      "id": "forgiving-selector",
+      "heading": "16.1. &lt;forgiving-selector-list> and &lt;forgiving-relative-selector-list>"
+    },
+    {
+      "level": 2,
+      "id": "api-hooks",
+      "heading": "17. API Hooks"
+    },
+    {
+      "level": 3,
+      "id": "parse-selector",
+      "heading": "17.1. Parse A Selector"
+    },
+    {
+      "level": 3,
+      "id": "parse-relative-selector",
+      "heading": "17.2. Parse A Relative Selector"
+    },
+    {
+      "level": 3,
+      "id": "match-against-element",
+      "heading": "17.3. Match a Selector Against an Element"
+    },
+    {
+      "level": 3,
+      "id": "match-against-pseudo-element",
+      "heading": "17.4. Match a Selector Against a Pseudo-element"
+    },
+    {
+      "level": 3,
+      "id": "match-against-tree",
+      "heading": "17.5. Match a Selector Against a Tree"
+    },
+    {
+      "level": 2,
+      "id": "dom-mapping",
+      "heading": "Appendix A: Guidance on Mapping Source Documents &amp; Data to an Element Tree"
+    },
+    {
+      "level": 2,
+      "id": "compat",
+      "heading": "Appendix B: Obsolete but Required -webkit- Parsing Quirks for Web Compat"
+    },
+    {
+      "level": 2,
+      "id": "visited-privacy",
+      "heading": "Appendix C: Example Privacy-Preserving :visited Restrictions"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "18. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-2022-11",
+      "heading": "18.1. Changes since the 11 November 2022 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2022-05",
+      "heading": "18.2. Changes since the 7 May 2022 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2018-11",
+      "heading": "18.3. Changes since the 21 November 2018 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2018-02",
+      "heading": "18.4. Changes since the 2 February 2018 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2013",
+      "heading": "18.5. Changes since the 2 May 2013 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2012",
+      "heading": "18.6. Changes since the 23 August 2012 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-2011",
+      "heading": "18.7. Changes since the 29 September 2011 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-level-3",
+      "heading": "18.8. Changes Since Level 3"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgements",
+      "heading": "19. Acknowledgements"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:40.279Z"
+}

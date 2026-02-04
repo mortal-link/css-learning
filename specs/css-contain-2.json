@@ -1,0 +1,227 @@
+{
+  "title": "CSS Containment Module Level 2",
+  "specName": "css-contain-2",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "interaction",
+      "heading": "1.1. Module Interactions"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.2. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "contain-property",
+      "heading": "2. Strong Containment: the contain property"
+    },
+    {
+      "level": 2,
+      "id": "containment-types",
+      "heading": "3. Types of Containment"
+    },
+    {
+      "level": 3,
+      "id": "containment-size",
+      "heading": "3.1. Size Containment"
+    },
+    {
+      "level": 4,
+      "id": "containment-size-opt",
+      "heading": "3.1.1. Possible Size-Containment Optimizations"
+    },
+    {
+      "level": 3,
+      "id": "containment-layout",
+      "heading": "3.2. Layout Containment"
+    },
+    {
+      "level": 4,
+      "id": "containment-layout-opt",
+      "heading": "3.2.1. Possible Layout-Containment Optimizations"
+    },
+    {
+      "level": 3,
+      "id": "containment-style",
+      "heading": "3.3. Style Containment"
+    },
+    {
+      "level": 4,
+      "id": "containment-style-opt",
+      "heading": "3.3.1. Possible Style-Containment Optimizations"
+    },
+    {
+      "level": 3,
+      "id": "containment-paint",
+      "heading": "3.4. Paint Containment"
+    },
+    {
+      "level": 4,
+      "id": "containment-paint-opt",
+      "heading": "3.4.1. Possible Paint-Containment Optimizations"
+    },
+    {
+      "level": 2,
+      "id": "content-visibility",
+      "heading": "4. Suppressing An Element’s Contents Entirely: the content-visibility property"
+    },
+    {
+      "level": 3,
+      "id": "using-cv-hidden",
+      "heading": "4.1. Using content-visibility: hidden"
+    },
+    {
+      "level": 3,
+      "id": "using-cv-auto",
+      "heading": "4.2. Using content-visibility: auto"
+    },
+    {
+      "level": 3,
+      "id": "content-visibility-auto-state-changed",
+      "heading": "4.3. Detecting content-visibility: auto state changes: the contentvisibilityautostatechanged event"
+    },
+    {
+      "level": 3,
+      "id": "cv-notes",
+      "heading": "4.4. Restrictions and Clarifications"
+    },
+    {
+      "level": 3,
+      "id": "cv-a11y",
+      "heading": "4.5. Accessibility Implications"
+    },
+    {
+      "level": 3,
+      "id": "cv-examples",
+      "heading": "4.6. Examples"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "5. Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "6. Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Appendix A. Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-since-2020-12-16",
+      "heading": "Changes from 2020-12-16 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-since-2020-06-03",
+      "heading": "Changes from 2020-06-03 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "changes-since-2019-11-11",
+      "heading": "Changes from 2019-11-11 Working Draft"
+    },
+    {
+      "level": 3,
+      "id": "l1-changes",
+      "heading": "Changes from CSS Containment Level 1"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "idl-index",
+      "heading": "IDL Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:53.596Z"
+}

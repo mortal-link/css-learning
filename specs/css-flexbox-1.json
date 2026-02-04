@@ -1,0 +1,457 @@
+{
+  "title": "CSS Flexible Box Layout Module Level 1",
+  "specName": "css-flexbox-1",
+  "sections": [
+    {
+      "level": 2,
+      "id": "abstract",
+      "heading": "Abstract"
+    },
+    {
+      "level": 2,
+      "id": "sotd",
+      "heading": "Status of this document"
+    },
+    {
+      "level": 2,
+      "id": "contents",
+      "heading": "Table of Contents"
+    },
+    {
+      "level": 2,
+      "id": "intro",
+      "heading": "1. Introduction"
+    },
+    {
+      "level": 3,
+      "id": "overview",
+      "heading": "1.1. Overview"
+    },
+    {
+      "level": 3,
+      "id": "placement",
+      "heading": "1.2. Module interactions"
+    },
+    {
+      "level": 3,
+      "id": "values",
+      "heading": "1.3. Value Definitions"
+    },
+    {
+      "level": 2,
+      "id": "box-model",
+      "heading": "2. Flex Layout Box Model and Terminology"
+    },
+    {
+      "level": 2,
+      "id": "flex-containers",
+      "heading": "3. Flex Containers: the flex and inline-flex display values"
+    },
+    {
+      "level": 2,
+      "id": "flex-items",
+      "heading": "4. Flex Items"
+    },
+    {
+      "level": 3,
+      "id": "abspos-items",
+      "heading": "4.1. Absolutely-Positioned Flex Children"
+    },
+    {
+      "level": 3,
+      "id": "item-margins",
+      "heading": "4.2. Flex Item Margins and Paddings"
+    },
+    {
+      "level": 3,
+      "id": "painting",
+      "heading": "4.3. Flex Item Z-Ordering"
+    },
+    {
+      "level": 3,
+      "id": "visibility-collapse",
+      "heading": "4.4. Collapsed Items"
+    },
+    {
+      "level": 3,
+      "id": "min-size-auto",
+      "heading": "4.5. Automatic Minimum Size of Flex Items"
+    },
+    {
+      "level": 2,
+      "id": "flow-order",
+      "heading": "5. Ordering and Orientation"
+    },
+    {
+      "level": 3,
+      "id": "flex-direction-property",
+      "heading": "5.1. Flex Flow Direction: the flex-direction property"
+    },
+    {
+      "level": 3,
+      "id": "flex-wrap-property",
+      "heading": "5.2. Flex Line Wrapping: the flex-wrap property"
+    },
+    {
+      "level": 3,
+      "id": "flex-flow-property",
+      "heading": "5.3. Flex Direction and Wrap: the flex-flow shorthand"
+    },
+    {
+      "level": 3,
+      "id": "order-property",
+      "heading": "5.4. Reordering and Accessibility: the order property"
+    },
+    {
+      "level": 2,
+      "id": "flex-lines",
+      "heading": "6. Flex Lines"
+    },
+    {
+      "level": 2,
+      "id": "flexibility",
+      "heading": "7. Flexibility"
+    },
+    {
+      "level": 3,
+      "id": "flex-property",
+      "heading": "7.1. The flex Shorthand"
+    },
+    {
+      "level": 4,
+      "id": "flex-common",
+      "heading": "7.1.1. Basic Values of flex"
+    },
+    {
+      "level": 3,
+      "id": "flex-components",
+      "heading": "7.2. Components of Flexibility"
+    },
+    {
+      "level": 4,
+      "id": "flex-grow-property",
+      "heading": "7.2.1. The flex-grow property"
+    },
+    {
+      "level": 4,
+      "id": "flex-shrink-property",
+      "heading": "7.2.2. The flex-shrink property"
+    },
+    {
+      "level": 4,
+      "id": "flex-basis-property",
+      "heading": "7.2.3. The flex-basis property"
+    },
+    {
+      "level": 2,
+      "id": "alignment",
+      "heading": "8. Alignment"
+    },
+    {
+      "level": 3,
+      "id": "auto-margins",
+      "heading": "8.1. Aligning with auto margins"
+    },
+    {
+      "level": 3,
+      "id": "justify-content-property",
+      "heading": "8.2. Axis Alignment: the justify-content property"
+    },
+    {
+      "level": 3,
+      "id": "align-items-property",
+      "heading": "8.3. Cross-axis Alignment: the align-items and align-self properties"
+    },
+    {
+      "level": 3,
+      "id": "align-content-property",
+      "heading": "8.4. Packing Flex Lines: the align-content property"
+    },
+    {
+      "level": 3,
+      "id": "flex-baselines",
+      "heading": "8.5. Flex Container Baselines"
+    },
+    {
+      "level": 2,
+      "id": "layout-algorithm",
+      "heading": "9. Flex Layout Algorithm"
+    },
+    {
+      "level": 3,
+      "id": "box-manip",
+      "heading": "9.1. Initial Setup"
+    },
+    {
+      "level": 3,
+      "id": "line-sizing",
+      "heading": "9.2. Line Length Determination"
+    },
+    {
+      "level": 3,
+      "id": "main-sizing",
+      "heading": "9.3. Main Size Determination"
+    },
+    {
+      "level": 3,
+      "id": "cross-sizing",
+      "heading": "9.4. Cross Size Determination"
+    },
+    {
+      "level": 3,
+      "id": "main-alignment",
+      "heading": "9.5. Main-Axis Alignment"
+    },
+    {
+      "level": 3,
+      "id": "cross-alignment",
+      "heading": "9.6. Cross-Axis Alignment"
+    },
+    {
+      "level": 3,
+      "id": "resolve-flexible-lengths",
+      "heading": "9.7. Resolving Flexible Lengths"
+    },
+    {
+      "level": 3,
+      "id": "definite-sizes",
+      "heading": "9.8. Definite and Indefinite Sizes"
+    },
+    {
+      "level": 3,
+      "id": "intrinsic-sizes",
+      "heading": "9.9. Intrinsic Sizes"
+    },
+    {
+      "level": 4,
+      "id": "intrinsic-main-sizes",
+      "heading": "9.9.1. Flex Container Intrinsic Main Sizes"
+    },
+    {
+      "level": 4,
+      "id": "intrinsic-cross-sizes",
+      "heading": "9.9.2. Flex Container Intrinsic Cross Sizes"
+    },
+    {
+      "level": 4,
+      "id": "intrinsic-item-contributions",
+      "heading": "9.9.3. Flex Item Intrinsic Size Contributions"
+    },
+    {
+      "level": 2,
+      "id": "pagination",
+      "heading": "10. Fragmenting Flex Layout"
+    },
+    {
+      "level": 3,
+      "id": "pagination-algo",
+      "heading": "10.1. Sample Flex Fragmentation Algorithm"
+    },
+    {
+      "level": 2,
+      "id": "axis-mapping",
+      "heading": "Appendix A: Axis Mappings"
+    },
+    {
+      "level": 2,
+      "id": "webkit-aliases",
+      "heading": "Appendix B: -webkit- Legacy Properties"
+    },
+    {
+      "level": 2,
+      "id": "acknowledgments",
+      "heading": "Acknowledgments"
+    },
+    {
+      "level": 2,
+      "id": "changes",
+      "heading": "Changes"
+    },
+    {
+      "level": 3,
+      "id": "changes-20181119",
+      "heading": "Changes since the 19 November 2018 CR"
+    },
+    {
+      "level": 3,
+      "id": "changes-20171016",
+      "heading": "Changes since the 16 October 2017 CR"
+    },
+    {
+      "level": 3,
+      "id": "changes-20160526",
+      "heading": "Changes since the 26 May 2016 CR"
+    },
+    {
+      "level": 4,
+      "id": "change-201605-substantive",
+      "heading": "Substantive Changes and Bugfixes"
+    },
+    {
+      "level": 4,
+      "id": "change-201605-clarify",
+      "heading": "Clarifications"
+    },
+    {
+      "level": 3,
+      "id": "changes-20160301",
+      "heading": "Changes since the 1 March 2016 CR"
+    },
+    {
+      "level": 4,
+      "id": "change-201603-substantive",
+      "heading": "Substantive Changes and Bugfixes"
+    },
+    {
+      "level": 4,
+      "id": "change-201603-clarify",
+      "heading": "Clarifications"
+    },
+    {
+      "level": 3,
+      "id": "changes-201505",
+      "heading": "Changes since the 14 May 2015 LCWD"
+    },
+    {
+      "level": 4,
+      "id": "change-201505-substantive",
+      "heading": "Substantive Changes and Bugfixes"
+    },
+    {
+      "level": 4,
+      "id": "change-201505-clarify",
+      "heading": "Clarifications"
+    },
+    {
+      "level": 3,
+      "id": "changes-201409",
+      "heading": "Changes since the 25 September 2014 LCWD"
+    },
+    {
+      "level": 4,
+      "id": "change-201409-substantive",
+      "heading": "Substantive Changes and Bugfixes"
+    },
+    {
+      "level": 4,
+      "id": "change-201409-clarify",
+      "heading": "Clarifications"
+    },
+    {
+      "level": 3,
+      "id": "changes-201403",
+      "heading": "Changes since the 25 March 2014 LCWD"
+    },
+    {
+      "level": 4,
+      "id": "change-201403-substantive",
+      "heading": "Substantive Changes and Bugfixes"
+    },
+    {
+      "level": 4,
+      "id": "change-201403-clarify",
+      "heading": "Clarifications"
+    },
+    {
+      "level": 3,
+      "id": "changes-2012",
+      "heading": "Changes since the 18 September 2012 Candidate Recommendation"
+    },
+    {
+      "level": 4,
+      "id": "changes-2014-substantive",
+      "heading": "Substantive Changes and Bugfixes"
+    },
+    {
+      "level": 4,
+      "id": "changes-2014-clarify",
+      "heading": "Clarifications"
+    },
+    {
+      "level": 2,
+      "id": "privacy",
+      "heading": "Privacy Considerations"
+    },
+    {
+      "level": 2,
+      "id": "security",
+      "heading": "Security Considerations"
+    },
+    {
+      "level": 2,
+      "id": "w3c-conformance",
+      "heading": "Conformance"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conventions",
+      "heading": "Document conventions"
+    },
+    {
+      "level": 3,
+      "id": "w3c-conformance-classes",
+      "heading": "Conformance classes"
+    },
+    {
+      "level": 3,
+      "id": "w3c-partial",
+      "heading": "Partial implementations"
+    },
+    {
+      "level": 4,
+      "id": "w3c-conform-future-proofing",
+      "heading": "Implementations of Unstable and Proprietary Features"
+    },
+    {
+      "level": 3,
+      "id": "w3c-testing",
+      "heading": "Non-experimental implementations"
+    },
+    {
+      "level": 3,
+      "id": "w3c-cr-exit-criteria",
+      "heading": "CR exit criteria"
+    },
+    {
+      "level": 2,
+      "id": "index",
+      "heading": "Index"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-here",
+      "heading": "Terms defined by this specification"
+    },
+    {
+      "level": 3,
+      "id": "index-defined-elsewhere",
+      "heading": "Terms defined by reference"
+    },
+    {
+      "level": 2,
+      "id": "references",
+      "heading": "References"
+    },
+    {
+      "level": 3,
+      "id": "normative",
+      "heading": "Normative References"
+    },
+    {
+      "level": 3,
+      "id": "informative",
+      "heading": "Informative References"
+    },
+    {
+      "level": 2,
+      "id": "property-index",
+      "heading": "Property Index"
+    },
+    {
+      "level": 2,
+      "id": "issues-index",
+      "heading": "Issues Index"
+    }
+  ],
+  "fetchedAt": "2026-02-03T09:49:41.033Z"
+}
