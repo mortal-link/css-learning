@@ -28,7 +28,6 @@
 ### 安装依赖
 
 ```bash
-cd website
 pnpm install
 ```
 
@@ -44,38 +43,38 @@ pnpm dev
 
 ```bash
 # 下载单个规范
-node scripts/fetch-spec.js css-cascade-4
+pnpm spec:fetch css-cascade-4
 
 # 批量下载所有规范
-node scripts/fetch-all-specs.js
+pnpm spec:fetch-all
 ```
 
 ### 提取内容
 
 ```bash
 # 提取规范内容
-node scripts/extract-content.js css-cascade-4
+pnpm spec:extract css-cascade-4
 
 # 渲染到页面
-node scripts/render-module.js css-cascade-4 01-cascade
+pnpm spec:render css-cascade-4 01-cascade
 ```
 
 ## 项目结构
 
 ```
 css/
-├── website/              # Next.js 网站
-│   ├── src/
-│   │   ├── app/         # 页面
-│   │   ├── components/  # 组件
-│   │   └── lib/         # 工具函数
-│   └── public/          # 静态资源
-├── specs/               # W3C 规范文档
-│   ├── *.html          # 原始 HTML
-│   ├── *.json          # 解析后的结构
-│   └── *-content.json  # 提取的内容
-├── scripts/             # 工具脚本
-└── PLAN.md             # 学习计划和迭代记录
+├── package.json          # 根目录脚本入口
+├── src/                  # Next.js 源码
+│   ├── app/             # 页面
+│   ├── components/      # 组件
+│   └── lib/             # 工具函数
+├── public/               # 静态资源
+├── specs/                # W3C 规范文档
+│   ├── *.html           # 原始 HTML
+│   ├── *.json           # 解析后的结构
+│   └── *-content.json   # 提取的内容
+├── scripts/              # 工具脚本
+└── PLAN.md               # 学习计划和迭代记录
 ```
 
 ## 学习路线

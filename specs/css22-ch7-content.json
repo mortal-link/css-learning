@@ -1,0 +1,38 @@
+{
+  "specName": "css22-ch7",
+  "extractedAt": "2026-02-06T08:54:13.745Z",
+  "totalSections": 5,
+  "coreSections": 5,
+  "sections": {
+    "media-intro": {
+      "id": "media-intro",
+      "heading": "7.1 Introduction to media types",
+      "content": "One of the most important features of style sheets is that they\nspecify how a document is to be presented on different media: on the\nscreen, on paper, with a speech synthesizer, with a braille device,\netc.\n\nCertain CSS properties are only designed for certain media (e.g.,\nthe ['page-break-before'](page.html#propdef-page-break-before) property\nonly applies to paged media). On occasion, however, style sheets for\ndifferent media types may share a property, but require different\nvalues for that property. For example, the ['font-size'](fonts.html#propdef-font-size) property is useful both\nfor screen and print media. The two media types are different enough\nto require different values for the common property; a document will\ntypically need a larger font on a computer screen than on paper.\nTherefore, it is necessary to express that a style sheet, or a\nsection of a style sheet, applies to certain media types.",
+      "rawLength": 1064
+    },
+    "media-sheets": {
+      "id": "media-sheets",
+      "heading": "7.2 Specifying media-dependent style sheets",
+      "content": "There are currently two ways to specify media dependencies for\nstyle sheets:\n\nSpecify the target medium from a style sheet with the @media or @import at-rules.\n\nExample(s):\n\n```\n\n@import url(\"fancyfonts.css\") screen;\n@media print {\n /* style sheet for print goes here */\n}\n\n```\n\nSpecify the target medium within the document language. For\nexample, in HTML 4 ([[HTML4]](refs.html#ref-HTML4)), the \"media\" attribute on the LINK\nelement specifies the target media of an external style sheet:\n\n```\n\n<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n<HTML>\n <HEAD>\n <TITLE>Link to a target medium</TITLE>\n <LINK REL=\"stylesheet\" TYPE=\"text/css\" \n MEDIA=\"print, handheld\" HREF=\"foo.css\">\n </HEAD>\n <BODY>\n <P>The body...\n </BODY>\n</HTML>\n\n```\n\nThe [@import](cascade.html#at-import) rule is defined in\nthe [chapter on the cascade](cascade.html).",
+      "rawLength": 1296
+    },
+    "at-media-rule": {
+      "id": "at-media-rule",
+      "heading": "7.2.1 The @media rule",
+      "content": "An @media rule\nspecifies the target [media types](#media-types) (separated\nby commas) of a set of [statements](syndata.html#tokenization) (delimited by curly\nbraces). Invalid statements must be ignored per [4.1.7 \"Rule sets, declaration blocks,\nand selectors\"](syndata.html#rule-sets) and [4.2\n\"Rules for handling parsing errors.\"](syndata.html#parsing-errors) The @media construct allows style\nsheet rules for various media in the same style sheet:\n\n```\n\n @media print {\n body { font-size: 10pt }\n }\n @media screen {\n body { font-size: 13px }\n }\n @media screen, print {\n body { line-height: 1.2 }\n }\n\n```\n\nStyle rules outside of @media rules apply to all media types\nthat the style sheet applies to. At-rules inside @media are invalid in\nCSS 2.2.",
+      "rawLength": 971
+    },
+    "media-types": {
+      "id": "media-types",
+      "heading": "7.3 Recognized media types",
+      "content": "The names chosen for CSS media types reflect target devices for\nwhich the relevant properties make sense. In the following list of CSS\nmedia types the names of media types are normative, but the\ndescriptions are informative. Likewise, the \"Media\" field in the \ndescription of each property is informative.\n\nall\nSuitable for all devices.\n\nbraille\nIntended for braille tactile feedback devices.\n\nembossed\nIntended for paged braille printers.\n\nhandheld\nIntended for handheld devices (typically small\nscreen, limited bandwidth).\n\nprint \nIntended for paged material and for documents viewed on\nscreen in print preview mode. Please consult the section on [paged media](page.html) for information about formatting\nissues that are specific to paged media.\n\nprojection\nIntended for projected presentations, for example projectors.\nPlease consult the section on [paged media](page.html) for\ninformation about formatting issues that are specific to paged media.\n\nscreen \nIntended primarily for color computer screens. \n\nspeech\nIntended for speech synthesizers. Note: CSS2 had a similar media type \ncalled 'aural' for this purpose. See the appendix on \n[aural style sheets](./aural.html) for details. \n\ntty\nIntended for media using a fixed-pitch character grid (such as\nteletypes, terminals, or portable devices with limited display\ncapabilities). Authors should not use [pixel units](syndata.html#length-units) with the \"tty\" media\ntype.\n\ntv\nIntended for television-type devices (low \nresolution, color, limited-scrollability screens, sound available). \n\nMedia type names are case-insensitive. \n\nMedia types are mutually exclusive in the sense that a user agent can\nonly support one media type when rendering a document. However, user\nagents may use different media types on different canvases. For\nexample, a document may (simultaneously) be shown in 'screen' mode on\none canvas and 'print' mode on another canvas. \n\nNote that a multimodal media type is still only one media\ntype. The 'tv' media type, for example, is a multimodal media\ntype that renders both visually and aurally to a single canvas.\n\n@media and @import rules with unknown media types (that are\nnonetheless valid identifiers) are treated as if the unknown media\ntypes are not present. If an @media/@import rule contains a malformed\nmedia type (not an identifier) then the statement is invalid.\n\nNote: Media Queries supercedes this\nerror handling.\n\nExample(s):\n\nFor example, in the following snippet, the rule on the P element applies\nin 'screen' mode (even though the '3D' media type is not known).\n\n```\n\n@media screen, 3D {\n P { color: green; }\n}\n\n```\n\nNote.\nFuture updates of CSS may extend the list of media types. Authors\nshould not rely on media type names that are not yet defined\nby a CSS specification.",
+      "rawLength": 3258
+    },
+    "media-groups": {
+      "id": "media-groups",
+      "heading": "7.3.1 Media groups",
+      "content": "This section is informative, not normative.\n\nEach CSS property definition specifies which media types the\nproperty applies to. Since properties generally apply to several media\ntypes, the \"Applies to media\" section of each property definition\nlists media groups\nrather than individual media types. Each property applies to all media\ntypes in the media groups listed in its definition.\n\nCSS 2.2 defines the following media groups: \n\ncontinuous\nor paged.\n\n visual, \naudio, \nspeech, \nor tactile.\ngrid (for\ncharacter grid devices), or\nbitmap.\n\ninteractive (for\ndevices that allow user interaction), or\nstatic (for\nthose that do not).\n\n all\n(includes all media types)\n\nThe following table shows the relationships\nbetween media groups and media types:\n\nRelationship between media groups and media types\nMedia Types Media Groups\n \n continuous/paged\n visual/audio/speech/tactile\n grid/bitmap\n interactive/static\n\nbraillecontinuoustactilegridboth\nembossedpagedtactilegridstatic\nhandheldbothvisual, audio, speechbothboth\nprintpagedvisualbitmapstatic\nprojectionpagedvisualbitmapinteractive\nscreencontinuousvisual, audiobitmapboth\nspeechcontinuousspeechN/Aboth\nttycontinuousvisualgridboth\ntvbothvisual, audiobitmapboth\n\n[previous](cascade.html) \n[next](box.html) \n[contents](Overview.html#minitoc) \n[properties](propidx.html) \n[index](indexlist.html)",
+      "rawLength": 3811
+    }
+  }
+}

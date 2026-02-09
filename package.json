@@ -1,0 +1,39 @@
+{
+  "name": "css-quest",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "spec:fetch": "node scripts/fetch-spec.js",
+    "spec:fetch-all": "node scripts/fetch-all-specs.js",
+    "spec:extract": "node scripts/extract-content.js",
+    "spec:render": "node scripts/render-module.js",
+    "css2:fetch": "node scripts/fetch-css2.js",
+    "css2:extract": "node scripts/extract-css2.js"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.563.0",
+    "next": "16.1.6",
+    "radix-ui": "^1.4.3",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.4.0",
+    "typescript": "^5"
+  }
+}
