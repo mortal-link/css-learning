@@ -32,3 +32,11 @@ next-env.d.ts
 
 # Vercel
 .vercel
+
+# Claude Code / OMC
+.claude/
+.omc/
+
+# Build artifacts
+tsconfig.tsbuildinfo
+package-lock.json
