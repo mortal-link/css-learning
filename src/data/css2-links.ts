@@ -5,6 +5,22 @@
  * 映射到站内的 moduleId，用于 SpecLink 组件的站内导航。
  */
 
+import { anchors as introAnchors } from './chapters/intro';
+import { anchors as syntaxAnchors } from './chapters/syntax';
+import { anchors as selectorsAnchors } from './chapters/selectors';
+import { anchors as cascadeAnchors } from './chapters/cascade';
+import { anchors as mediaAnchors } from './chapters/media';
+import { anchors as boxModelAnchors } from './chapters/box-model';
+import { anchors as visualFormattingAnchors } from './chapters/visual-formatting';
+import { anchors as sizingAnchors } from './chapters/sizing';
+import { anchors as visualEffectsAnchors } from './chapters/visual-effects';
+import { anchors as generatedContentAnchors } from './chapters/generated-content';
+import { anchors as colorsBackgroundsAnchors } from './chapters/colors-backgrounds';
+import { anchors as fontsAnchors } from './chapters/fonts';
+import { anchors as textAnchors } from './chapters/text';
+import { anchors as transformsAnchors } from './chapters/transforms';
+import { anchors as modernAnchors } from './chapters/modern';
+
 /** CSS2 文件名 → 站内 moduleId */
 export const CSS2_FILE_TO_MODULE: Record<string, string> = {
   'about.html': 'intro',
@@ -72,76 +88,21 @@ export const BIBREF_URLS: Record<string, string> = {
  * 格式: { [moduleId]: { [css2Anchor]: sectionId } }
  */
 export const ANCHOR_TO_SECTION: Record<string, Record<string, string>> = {
-  // ── syntax (CSS2 Ch4) ──
-  syntax: {
-    // §1 syntax-overview 的子锚点
-    'tokenization': 'syntax-overview',
-    'block': 'syntax-overview',
-    'rule-sets': 'syntax-overview',
-    'at-rules': 'syntax-overview',
-    'declaration': 'syntax-overview',
-    'comments': 'syntax-overview',
-    // §2 parsing-errors 的子锚点
-    'ignore': 'parsing-errors',
-    'illegalvalues': 'parsing-errors',
-    // §4 textual-values 的子锚点
-    'strings': 'textual-values',
-    'value-def-identifier': 'textual-values',
-    'keywords': 'textual-values',
-    'properties': 'textual-values',
-    // §5 characters-escaping 的子锚点
-    'whitespace': 'characters-escaping',
-    'escaped-characters': 'characters-escaping',
-    'charset': 'characters-escaping',
-    // §6 vendor-extensions 的子锚点
-    'vendor-keywords': 'vendor-extensions',
-    'vendor-keyword-history': 'vendor-extensions',
-    // §7 numeric-values 的子锚点
-    'numbers': 'numeric-values',
-    'value-def-number': 'numeric-values',
-    'value-def-integer': 'numeric-values',
-    'percentage-wrt': 'numeric-values',
-    // §8 length-units 的子锚点
-    'value-def-length': 'length-units',
-    'em-width': 'length-units',
-    'absolute-lengths': 'length-units',
-    // §9 other-value-types 的子锚点
-    'value-def-uri': 'other-value-types',
-    'value-def-counter': 'other-value-types',
-    'value-def-color': 'other-value-types',
-    'color-units': 'other-value-types',
-  },
-  // ── cascade (CSS2 Ch6) ──
-  cascade: {
-    'cascade': 'cascading',
-    'specificity': 'cascading',
-    'important-rules': 'cascading',
-    'inheritance': 'defaulting',
-    'initial-value': 'value-stages',
-    'specified-value': 'value-stages',
-    'computed-value': 'value-stages',
-    'computed-values': 'value-stages',
-    'actual-value': 'value-stages',
-    'usedValue': 'value-stages',
-    'used-value': 'value-stages',
-    'at-import': 'at-import',
-  },
-  // ── box-model (CSS2 Ch8) ──
-  'box-model': {
-    'box-dimensions': 'box-model',
-    'mpb-examples': 'margins',
-    'collapsing-margins': 'margins',
-    'bidi-box-model': 'box-model',
-  },
-  // ── intro (CSS2 Ch1-3) ──
-  intro: {
-    'conformance': 'intro',
-    'q1.0': 'intro',
-    'the-canvas': 'intro',
-    'addressing': 'intro',
-    'doctree': 'intro',
-    'root': 'intro',
-  },
+  intro: introAnchors,
+  syntax: syntaxAnchors,
+  selectors: selectorsAnchors,
+  cascade: cascadeAnchors,
+  media: mediaAnchors,
+  'box-model': boxModelAnchors,
+  'visual-formatting': visualFormattingAnchors,
+  sizing: sizingAnchors,
+  'visual-effects': visualEffectsAnchors,
+  'generated-content': generatedContentAnchors,
+  'colors-backgrounds': colorsBackgroundsAnchors,
+  fonts: fontsAnchors,
+  text: textAnchors,
+  transforms: transformsAnchors,
+  modern: modernAnchors,
 };
 
 /**

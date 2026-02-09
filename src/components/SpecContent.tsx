@@ -1,6 +1,7 @@
 import React from 'react';
 import { SpecLink } from './SpecLink';
 import { lookupGlossary } from '@/data/glossary';
+import { lookupProperty } from '@/data/properties';
 import { resolveCSS2Link, toCSS2ExternalUrl, getBibrefUrl, degradeAnchor } from '@/data/css2-links';
 import { getModule, type Section } from '@/data/modules';
 import { t } from '@/lib/i18n';
@@ -230,22 +231,49 @@ function renderInline(text: string, ctx: InlineContext): React.ReactNode[] {
       const url = getBibrefUrl(ref);
       result.push(<SpecLink key={key++} type="bibref" text={ref} url={url} />);
     } else if (match[3]) {
-      // 外部链接: [text](https://...) → keep as external <a>
+      // 外部链接: [text](https://...)
+      const extUrl = match[5];
+      const extText = match[4];
+      // CSS3 规范中的属性定义链接：https://.../#propdef-xxx → 属性弹窗
+      const extPropMatch = extUrl.match(/#propdef-([a-z][\w-]*)/);
+      if (extPropMatch) {
+        const propEntry = lookupProperty(extPropMatch[1]);
+        if (propEntry) {
+          result.push(
+            <SpecLink key={key++} type="property" text={extText} entry={propEntry} />
+          );
+          lastIndex = match.index + match[0].length;
+          continue;
+        }
+      }
       result.push(
         <a
           key={key++}
-          href={match[5]}
+          href={extUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="text-primary underline decoration-primary/30 hover:decoration-primary transition-colors"
         >
-          {match[4]}
+          {extText}
         </a>
       );
     } else if (match[6]) {
       // 内部锚点: [text](#anchor)
       const anchor = match[8];
       const linkText = match[7];
+
+      // 属性定义锚点：#propdef-xxx → 属性弹窗
+      if (anchor.startsWith('propdef-')) {
+        const propEntry = lookupProperty(anchor.slice('propdef-'.length));
+        if (propEntry) {
+          result.push(
+            <SpecLink key={key++} type="property" text={linkText} entry={propEntry} />
+          );
+          lastIndex = match.index + match[0].length;
+          continue;
+        }
+      }
+
       let section = ctx.sections.find((s) => s.specId === anchor || s.id === anchor);
 
       // 降级：CSS2 细粒度锚点 → 我们的 section
@@ -285,6 +313,19 @@ function renderInline(text: string, ctx: InlineContext): React.ReactNode[] {
       const resolved = resolveCSS2Link(url);
 
       if (resolved && resolved.moduleId) {
+        // 属性定义链接：#propdef-* → 属性弹窗
+        if (resolved.anchor?.startsWith('propdef-')) {
+          const propName = resolved.anchor.slice('propdef-'.length);
+          const propEntry = lookupProperty(propName);
+          if (propEntry) {
+            result.push(
+              <SpecLink key={key++} type="property" text={linkText} entry={propEntry} />
+            );
+            lastIndex = match.index + match[0].length;
+            continue;
+          }
+        }
+
         const targetMod = getModule(resolved.moduleId);
         // 尝试匹配目标 section 获取 summary + keyPoints
         let sectionSummary: string | undefined;
@@ -381,11 +422,19 @@ function renderInline(text: string, ctx: InlineContext): React.ReactNode[] {
           />
         );
       } else {
-        result.push(
-          <strong key={key++} className="text-foreground font-semibold">
-            {term}
-          </strong>
-        );
+        // 属性 fallback：加粗术语不在 glossary 时查找属性注册表
+        const propEntry = lookupProperty(term);
+        if (propEntry) {
+          result.push(
+            <SpecLink key={key++} type="property" text={term} entry={propEntry} />
+          );
+        } else {
+          result.push(
+            <strong key={key++} className="text-foreground font-semibold">
+              {term}
+            </strong>
+          );
+        }
       }
     }
 

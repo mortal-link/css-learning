@@ -18,6 +18,7 @@ import {
 import { getModule, getAllModuleSlugs, getAdjacentModules, getCSS2SpecNames, CSS2_CHAPTER_MAP } from '@/data/modules';
 import { getSpecContent, getCSS2SectionList } from '@/lib/specs';
 import { DemoSlot } from '@/components/demos/DemoSlot';
+import { hasDemo } from '@/components/demos/has-demo';
 import { SpecContent } from '@/components/SpecContent';
 import { SidebarNav } from '@/components/SidebarNav';
 import { TocSidebar } from '@/components/TocSidebar';
@@ -233,17 +234,19 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                       </AccordionContent>
                     </AccordionItem>
 
-                    <AccordionItem value="demo" className="border-none">
-                      <AccordionTrigger className="py-2 text-sm hover:no-underline">
-                        <span className="flex items-center gap-2">
-                          <Code className="w-4 h-4" />
-                          {t(UI.interactiveDemo)}
-                        </span>
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <DemoSlot moduleId={mod.id} sectionId={section.id} />
-                      </AccordionContent>
-                    </AccordionItem>
+                    {hasDemo(mod.id, section.id) && (
+                      <AccordionItem value="demo" className="border-none">
+                        <AccordionTrigger className="py-2 text-sm hover:no-underline">
+                          <span className="flex items-center gap-2">
+                            <Code className="w-4 h-4" />
+                            {t(UI.interactiveDemo)}
+                          </span>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <DemoSlot moduleId={mod.id} sectionId={section.id} />
+                        </AccordionContent>
+                      </AccordionItem>
+                    )}
                   </Accordion>
 
                   {/* 规范原文区域 — Tabs 平铺展示 */}

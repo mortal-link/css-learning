@@ -1,0 +1,289 @@
+import type { Section } from '../modules';
+import type { GlossaryEntry } from '../glossary';
+
+export const sections: Section[] = [
+  {
+    id: 'selector-overview',
+    number: '1',
+    title: { zh: '选择器概述', en: 'Selector Overview' },
+    specId: 'pattern-matching',
+    summary:
+      '选择器是 CSS 的核心机制——它决定了样式规则会应用到文档中的哪些元素上。一个选择器可以简单到只匹配一个元素类型（如 p），也可以复杂到组合多个条件精确定位某个特定上下文中的元素。理解选择器的分类（简单选择器、复合选择器、复杂选择器）和组合方式（选择器列表），是掌握 CSS 的第一步。浏览器从右向左匹配选择器，这个方向影响着选择器的性能表现。',
+    keyPoints: [
+      '选择器的作用：将样式规则关联到文档树中的一个或多个元素',
+      '选择器列表（逗号分隔）：h1, h2, h3 表示三个选择器共享同一组声明',
+      '简单选择器（simple selector）：类型、通配符、类、ID、属性、伪类等单一条件',
+      '复合选择器（compound selector）：多个简单选择器紧密连接，如 div.card#main',
+      '复杂选择器（complex selector）：用组合符（空格、>、+、~）连接多个复合选择器',
+      '浏览器从右向左匹配：div p 先找所有 p，再检查祖先是否有 div',
+      '无效选择器会导致整个规则集被忽略（CSS3 之前），但 :is()/:where() 具有宽容性',
+    ],
+  },
+  {
+    id: 'simple-selectors',
+    number: '2',
+    title: { zh: '简单选择器', en: 'Simple Selectors' },
+    specId: 'type-selectors',
+    summary:
+      '简单选择器是选择器系统的基石。类型选择器（h1, div, p）匹配特定元素名；通配符（*）匹配所有元素；类选择器（.class）和 ID 选择器（#id）匹配 HTML 属性；属性选择器提供更灵活的属性匹配能力，从精确匹配到子串匹配。这些选择器可以单独使用，也可以组合成复合选择器实现更精确的匹配。',
+    keyPoints: [
+      '类型选择器（type selector）：h1、div、p 等，匹配元素名（大小写不敏感）',
+      '通配符选择器（universal selector）：* 匹配所有元素，常用于重置样式',
+      '类选择器（class selector）：.card 匹配 class="card"，一个元素可以有多个类',
+      'ID 选择器（id selector）：#main 匹配 id="main"，ID 在文档中应该唯一',
+      '属性选择器：[attr] 存在性、[attr=value] 精确匹配、[attr~=value] 词列表匹配',
+      '属性选择器扩展（CSS3）：[attr|=value] 连字符匹配、[attr^=value] 前缀、[attr$=value] 后缀、[attr*=value] 子串',
+      '属性选择器可以带 i 标志实现大小写不敏感匹配：[attr=value i]',
+    ],
+  },
+  {
+    id: 'combinators',
+    number: '3',
+    title: { zh: '组合器', en: 'Combinators' },
+    specId: 'descendant-selectors',
+    summary:
+      '组合器（combinator）用于连接多个选择器，描述元素之间的关系。CSS 提供了四种组合器：后代（空格）、子代（>）、相邻兄弟（+）、通用兄弟（~）。这些组合器让我们能够根据元素在文档树中的位置关系来匹配元素。理解组合器的语义和浏览器的匹配方向（从右向左），对写出高效的选择器至关重要。',
+    keyPoints: [
+      '后代选择器（descendant combinator）：div p 匹配 div 内的所有 p（任意深度）',
+      '子代选择器（child combinator）：div > p 只匹配 div 的直接子元素 p',
+      '相邻兄弟选择器（adjacent sibling combinator）：h1 + p 匹配紧跟在 h1 后的第一个 p',
+      '通用兄弟选择器（general sibling combinator）：h1 ~ p 匹配 h1 后所有同级的 p（CSS3）',
+      '浏览器从右向左匹配：div > p.intro 先找所有 .intro 的 p，再检查父元素是否是 div',
+      '组合器两侧的空白会被标准化，div>p 和 div > p 等价',
+      '避免过深的后代选择器（如 div div div p）——匹配范围过广，性能较差',
+    ],
+  },
+  {
+    id: 'pseudo-classes',
+    number: '4',
+    title: { zh: '伪类', en: 'Pseudo-classes' },
+    specId: 'pseudo-elements',
+    summary:
+      '伪类（pseudo-class）用单冒号 : 表示，描述元素的特定状态或在文档树中的特定位置。CSS2 定义了链接伪类（:link、:visited）、用户交互伪类（:hover、:active、:focus）和结构伪类（:first-child）。CSS3 大幅扩展了结构伪类家族，引入了 :nth-child()、:nth-of-type() 等强大的模式匹配能力，以及表单状态伪类（:checked、:disabled、:valid 等）。',
+    keyPoints: [
+      '链接伪类：:link（未访问）、:visited（已访问）、:any-link（任意链接，CSS4）',
+      '用户交互伪类：:hover（鼠标悬停）、:active（激活）、:focus（焦点）',
+      ':focus-visible（CSS4）：仅在键盘导航时显示焦点样式，避免鼠标点击时的焦点环',
+      ':focus-within（CSS4）：元素自身或其后代获得焦点时匹配',
+      '结构伪类：:first-child、:last-child、:only-child、:nth-child(an+b)、:nth-of-type(an+b)',
+      ':nth-child(2n) 匹配偶数位子元素，:nth-child(odd) 匹配奇数位',
+      '表单伪类（CSS3）：:checked、:disabled、:enabled、:required、:optional、:valid、:invalid、:in-range、:out-of-range',
+      ':target（CSS3）：匹配 URL 片段标识符指向的元素',
+    ],
+  },
+  {
+    id: 'logical-pseudo-classes',
+    number: '5',
+    title: { zh: '逻辑伪类', en: 'Logical Pseudo-classes' },
+    specId: 'negation',
+    summary:
+      '逻辑伪类是 CSS 选择器系统的高级特性，它们接受选择器列表作为参数，提供逻辑运算能力。:not() 是否定伪类，排除匹配的元素；:is() 匹配列表中任一选择器；:where() 与 :is() 功能相同但特异性为 0；:has() 是"关系选择器"，能根据后代或兄弟元素的存在来匹配父元素。这些伪类极大地提升了选择器的表达能力，减少了重复代码。',
+    keyPoints: [
+      ':not(selector) — 否定伪类：p:not(.intro) 匹配所有不含 .intro 类的 p',
+      'CSS3 的 :not() 只接受简单选择器，CSS4 扩展为接受选择器列表：:not(.a, .b)',
+      ':is(selector-list) — 匹配列表：:is(h1, h2, h3) 等价于 h1, h2, h3',
+      ':is() 的特异性 = 参数中最高的特异性（而非 0）',
+      ':is() 具有宽容性（forgiving）：列表中某个选择器无效不影响其他选择器',
+      ':where(selector-list) — 与 :is() 功能相同，但特异性始终为 0',
+      ':where() 常用于工具类库（如 Tailwind），确保用户样式能轻松覆盖',
+      ':has(relative-selector) — 关系选择器（CSS4）：a:has(> img) 匹配包含直接子元素 img 的 a',
+      ':has() 的特异性 = 参数中最高的特异性',
+      ':has() 常被称为"父选择器"，但实际上是根据后代/兄弟关系匹配元素',
+    ],
+  },
+  {
+    id: 'pseudo-elements',
+    number: '6',
+    title: { zh: '伪元素', en: 'Pseudo-elements' },
+    specId: 'pseudo-element-selectors',
+    summary:
+      '伪元素（pseudo-element）用双冒号 :: 表示（CSS3 语法），用于选择元素的特定部分或生成不存在于文档树中的内容。CSS2 定义了 ::first-line、::first-letter、::before、::after 四个伪元素。CSS3 统一采用双冒号语法以区分伪类，但为了向后兼容，浏览器仍然接受单冒号写法。现代 CSS 还引入了 ::marker、::placeholder、::selection 等新伪元素。',
+    keyPoints: [
+      '::before 和 ::after — 生成内容伪元素，配合 content 属性在元素前后插入内容',
+      '::first-line — 匹配块级元素的首行文本，可设置字体、颜色、背景等',
+      '::first-letter — 匹配块级元素的首字母，常用于首字下沉效果',
+      '单冒号 vs 双冒号：CSS2 用单冒号（:before），CSS3 规范统一为双冒号（::before）',
+      '浏览器为了兼容性同时接受两种写法，但推荐使用双冒号',
+      '::marker（CSS3）— 匹配列表项的标记（如 li 的圆点或数字）',
+      '::placeholder（CSS3）— 匹配表单输入框的占位符文本',
+      '::selection（CSS3）— 匹配用户选中的文本，可自定义选中背景色',
+      '每个选择器只能有一个伪元素，且必须出现在选择器末尾',
+    ],
+  },
+  {
+    id: 'specificity-calculation',
+    number: '7',
+    title: { zh: '特异性计算', en: 'Specificity Calculation' },
+    specId: 'specificity',
+    summary:
+      '特异性（specificity）是 CSS 层叠机制的核心组成部分，用于决定当多条规则作用于同一属性时哪条规则胜出。特异性用 (a, b, c) 三元组表示：a 是 ID 选择器数量，b 是类/属性/伪类选择器数量，c 是类型/伪元素选择器数量。比较时从左到右依次比较，a 最高。逻辑伪类（:is()、:not()、:has()）不计入特异性，但它们的参数会；:where() 特异性为 0。',
+    keyPoints: [
+      '特异性三元组 (a, b, c)：a = ID 数量，b = class/attr/伪类数量，c = type/伪元素数量',
+      'ID 选择器（#id）贡献 (1,0,0)，类选择器（.class）贡献 (0,1,0)，类型选择器（div）贡献 (0,0,1)',
+      '属性选择器 [attr] 和伪类 :hover 都贡献 (0,1,0)',
+      '伪元素 ::before 贡献 (0,0,1)',
+      '通配符 *、组合符（>、+、~、空格）不贡献特异性',
+      ':is()、:not()、:has() 本身不贡献特异性，但取参数列表中最高的特异性',
+      ':where() 的特异性始终为 0，无论参数是什么',
+      '行内样式 style="..." 的特异性为 (1,0,0,0)（四元组），高于任何选择器',
+      '!important 不是特异性机制，而是层叠层面的优先级提升',
+      '示例：div#main .card > p.intro:hover 的特异性是 (1, 2, 2)',
+    ],
+  },
+  {
+    id: 'selector-performance',
+    number: '8',
+    title: { zh: '选择器性能与最佳实践', en: 'Selector Performance & Best Practices' },
+    summary:
+      '选择器的性能影响主要来自浏览器的匹配机制。浏览器从右向左匹配选择器，先找到右侧的"关键选择器"（key selector）对应的所有元素，再逐个检查左侧条件。因此，右侧选择器过于宽泛（如 * 或 div）会导致大量不必要的匹配尝试。不过现代浏览器的选择器引擎已经高度优化，选择器性能很少成为实际瓶颈——可读性和可维护性通常更重要。',
+    keyPoints: [
+      '浏览器从右向左匹配：div p.intro 先找所有 .intro 的 p，再向上查找 div 祖先',
+      '关键选择器（key selector）是最右侧的选择器，决定了初始匹配范围',
+      '避免关键选择器过于宽泛：body * { } 会对每个元素进行匹配检查',
+      '避免过深的后代选择器：html body div div div p 性能较差且难以维护',
+      'BEM 等命名方法论通过单一类名降低选择器复杂度：.card__title 而非 .card .title',
+      '现代浏览器的选择器引擎使用 Bloom filter 等技术加速匹配，性能已不是主要问题',
+      '实际优化建议：优先考虑可读性和可维护性，只在性能分析确认瓶颈时才优化选择器',
+      '真正的性能瓶颈通常在布局计算和绘制，而非选择器匹配',
+    ],
+  },
+];
+
+export const anchors: Record<string, string> = {
+  // §1 selector-overview
+  'pattern-matching': 'selector-overview',
+  'selector-syntax': 'selector-overview',
+  'grouping': 'selector-overview',
+
+  // §2 simple-selectors
+  'universal-selector': 'simple-selectors',
+  'type-selectors': 'simple-selectors',
+  'attribute-selectors': 'simple-selectors',
+  'matching-attrs': 'simple-selectors',
+  'default-attrs': 'simple-selectors',
+  'class-html': 'simple-selectors',
+  'id-selectors': 'simple-selectors',
+
+  // §3 combinators
+  'descendant-selectors': 'combinators',
+  'child-selectors': 'combinators',
+  'adjacent-selectors': 'combinators',
+
+  // §4 pseudo-classes
+  'pseudo-elements': 'pseudo-classes',
+  'first-child': 'pseudo-classes',
+  'link-pseudo-classes': 'pseudo-classes',
+  'dynamic-pseudo-classes': 'pseudo-classes',
+  'lang': 'pseudo-classes',
+
+  // §6 pseudo-elements
+  'pseudo-element-selectors': 'pseudo-elements',
+  'first-line-pseudo': 'pseudo-elements',
+  'first-letter': 'pseudo-elements',
+  'before-and-after': 'pseudo-elements',
+
+  // §7 specificity-calculation
+  'specificity': 'specificity-calculation',
+};
+
+export const glossaryTerms: Record<string, GlossaryEntry> = {
+  'selector': {
+    zh: '选择器',
+    description: '用于匹配文档中元素的模式，决定样式规则应用到哪些元素上。',
+    sectionRef: 'selectors#selector-overview',
+    css2Url: 'https://www.w3.org/TR/CSS22/selector.html',
+    specUrl: 'https://www.w3.org/TR/selectors-4/',
+  },
+  'simple selector': {
+    zh: '简单选择器',
+    description: '单一的选择条件，如类型选择器（div）、类选择器（.class）、ID 选择器（#id）、属性选择器、伪类等。',
+    sectionRef: 'selectors#simple-selectors',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#simple',
+  },
+  'compound selector': {
+    zh: '复合选择器',
+    description: '多个简单选择器紧密连接（无空格），如 div.card#main。所有条件必须同时满足。',
+    sectionRef: 'selectors#selector-overview',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#compound',
+  },
+  'complex selector': {
+    zh: '复杂选择器',
+    description: '用组合器（空格、>、+、~）连接多个复合选择器，描述元素之间的关系。',
+    sectionRef: 'selectors#selector-overview',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#complex',
+  },
+  'combinator': {
+    zh: '组合器',
+    description: '连接选择器的符号，表示元素间关系：空格（后代）、>（子代）、+（相邻兄弟）、~（通用兄弟）。',
+    sectionRef: 'selectors#combinators',
+    css2Url: 'https://www.w3.org/TR/CSS22/selector.html#descendant-selectors',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#combinators',
+  },
+  'pseudo-class': {
+    zh: '伪类',
+    description: '用单冒号表示的选择器，描述元素的特定状态或位置，如 :hover、:first-child、:checked。',
+    sectionRef: 'selectors#pseudo-classes',
+    css2Url: 'https://www.w3.org/TR/CSS22/selector.html#pseudo-elements',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#pseudo-classes',
+  },
+  'pseudo-element': {
+    zh: '伪元素',
+    description: '用双冒号表示，选择元素的特定部分或生成内容，如 ::before、::after、::first-line。',
+    sectionRef: 'selectors#pseudo-elements',
+    css2Url: 'https://www.w3.org/TR/CSS22/selector.html#pseudo-element-selectors',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#pseudo-elements',
+  },
+  'type selector': {
+    zh: '类型选择器',
+    description: '匹配特定元素名的选择器，如 h1、div、p。',
+    sectionRef: 'selectors#simple-selectors',
+    css2Url: 'https://www.w3.org/TR/CSS22/selector.html#type-selectors',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#type-selectors',
+  },
+  'class selector': {
+    zh: '类选择器',
+    description: '以点号开头的选择器，匹配 class 属性值，如 .card 匹配 class="card"。',
+    sectionRef: 'selectors#simple-selectors',
+    css2Url: 'https://www.w3.org/TR/CSS22/selector.html#class-html',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#class-html',
+  },
+  'id selector': {
+    zh: 'ID 选择器',
+    description: '以井号开头的选择器，匹配 id 属性值，如 #main 匹配 id="main"。',
+    sectionRef: 'selectors#simple-selectors',
+    css2Url: 'https://www.w3.org/TR/CSS22/selector.html#id-selectors',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#id-selectors',
+  },
+  'attribute selector': {
+    zh: '属性选择器',
+    description: '匹配具有特定属性或属性值的元素，如 [type="text"]、[class~="active"]。',
+    sectionRef: 'selectors#simple-selectors',
+    css2Url: 'https://www.w3.org/TR/CSS22/selector.html#attribute-selectors',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#attribute-selectors',
+  },
+  ':has()': {
+    zh: '关系伪类',
+    description: 'CSS4 新增的关系选择器，根据后代或兄弟元素的存在来匹配元素，如 a:has(> img) 匹配包含图片的链接。',
+    sectionRef: 'selectors#logical-pseudo-classes',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#relational',
+  },
+  ':is()': {
+    zh: '匹配列表伪类',
+    description: '匹配参数列表中任一选择器的元素，具有宽容性，特异性为参数中最高值。',
+    sectionRef: 'selectors#logical-pseudo-classes',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#matches',
+  },
+  ':where()': {
+    zh: '零特异性匹配伪类',
+    description: '功能与 :is() 相同，但特异性始终为 0，常用于工具类库。',
+    sectionRef: 'selectors#logical-pseudo-classes',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#zero-matches',
+  },
+  'specificity': {
+    zh: '特异性',
+    description: '选择器的优先级权重，用 (a, b, c) 三元组表示，a 为 ID 数量，b 为类/属性/伪类数量，c 为类型/伪元素数量。',
+    sectionRef: 'selectors#specificity-calculation',
+    css2Url: 'https://www.w3.org/TR/CSS22/cascade.html#specificity',
+    specUrl: 'https://www.w3.org/TR/selectors-4/#specificity-rules',
+  },
+};

@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { DemoSlot } from '@/components/demos/DemoSlot';
 import { getDemoComponent } from '@/components/demos/index';
 import type { GlossaryEntry } from '@/data/glossary';
+import type { PropertyEntry } from '@/data/properties';
 
 // ============================================================
 // Props
@@ -64,12 +65,19 @@ interface ExternalUrlLinkProps {
   url: string;
 }
 
+interface PropertyLinkProps {
+  type: 'property';
+  text: string;
+  entry: PropertyEntry;
+}
+
 export type SpecLinkProps =
   | TermLinkProps
   | RelativeLinkProps
   | InternalLinkProps
   | BibrefLinkProps
-  | ExternalUrlLinkProps;
+  | ExternalUrlLinkProps
+  | PropertyLinkProps;
 
 // ============================================================
 // Component
@@ -87,6 +95,8 @@ export function SpecLink(props: SpecLinkProps) {
       return <BibrefLink {...props} />;
     case 'external-relative':
       return <ExternalRelativeLink {...props} />;
+    case 'property':
+      return <PropertyPopover {...props} />;
   }
 }
 
@@ -366,5 +376,68 @@ function ExternalRelativeLink({ text, url }: ExternalUrlLinkProps) {
     >
       {text}
     </a>
+  );
+}
+
+// ── Property Popover (CSS 属性元数据卡片) ──
+// 颜色：teal 色调，表示 CSS 属性定义
+
+function PropertyPopover({ text, entry }: PropertyLinkProps) {
+  const [moduleId, sectionId] = entry.sectionRef?.split('#') ?? [];
+  const siteHref = moduleId && sectionId ? `/modules/${moduleId}#${sectionId}` : undefined;
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button className="font-mono text-teal-700 dark:text-teal-400 font-medium border-b-2 border-teal-400/60 hover:border-teal-500 hover:bg-teal-500/10 rounded-sm px-0.5 transition-colors cursor-pointer">
+          {text}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-96 p-0" align="start">
+        <ScrollArea className="max-h-[70vh]">
+          <div className="p-4 space-y-3">
+            {/* 属性标题 */}
+            <div>
+              <div className="font-mono font-semibold text-sm text-foreground">{text}</div>
+              <div className="text-xs text-muted-foreground">{entry.zh}</div>
+            </div>
+
+            {/* 属性元数据表格 */}
+            <div className="grid grid-cols-[5.5rem_1fr] gap-y-1.5 gap-x-2 text-xs">
+              <span className="text-muted-foreground font-medium">值语法</span>
+              <span className="font-mono text-foreground/90 break-all">{entry.value}</span>
+
+              <span className="text-muted-foreground font-medium">初始值</span>
+              <span className="text-foreground/90">{entry.initial}</span>
+
+              <span className="text-muted-foreground font-medium">适用于</span>
+              <span className="text-foreground/90">{entry.appliesTo}</span>
+
+              <span className="text-muted-foreground font-medium">是否继承</span>
+              <span className={entry.inherited ? 'text-green-600 dark:text-green-400' : 'text-foreground/90'}>
+                {entry.inherited ? '是' : '否'}
+              </span>
+
+              {entry.percentages !== null && (
+                <>
+                  <span className="text-muted-foreground font-medium">百分比</span>
+                  <span className="text-foreground/90">{entry.percentages}</span>
+                </>
+              )}
+
+              <span className="text-muted-foreground font-medium">计算值</span>
+              <span className="text-foreground/90">{entry.computedValue}</span>
+            </div>
+
+            {/* 规范链接 */}
+            <SpecVersionLinks
+              siteHref={siteHref}
+              css2Url={entry.css2Url}
+              css3Url={entry.css3Url}
+            />
+          </div>
+        </ScrollArea>
+      </PopoverContent>
+    </Popover>
   );
 }

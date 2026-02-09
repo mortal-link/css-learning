@@ -79,10 +79,10 @@
 
 | 章节 | 标题 | 状态 | 关联规范 | 章节内容 | Demo |
 |------|------|------|----------|----------|------|
-| Ch 01 | Introduction to CSS | ⚪ 未开始 | — | - | - |
+| Ch 01 | Introduction to CSS | 🟢 内容完成 | — | 6/6 | 0/0 |
 | Ch 02 | Syntax, Values & Units | 🟢 内容完成 | css-syntax-3, css-values-3/4 | 10/10 | 3/3 |
-| Ch 03 | Selectors | ⚪ 未开始 | selectors-3/4 | - | - |
-| Ch 04 | Cascading & Inheritance | 🟢 内容完成 | css-cascade-4/5, css-variables-1 | 7/7 | 1/3 |
+| Ch 03 | Selectors | 🟢 内容完成 | selectors-3/4 | 8/8 | 2/2 |
+| Ch 04 | Cascading & Inheritance | 🟢 内容完成 | css-cascade-4/5, css-variables-1 | 7/7 | 2/3 |
 | Ch 05 | Media Queries | ⚪ 未开始 | mediaqueries-4/5 | - | - |
 | Ch 06 | Box Model | 🟡 骨架完成 | css-box-3/4, css-logical-1 | 5/5 | 1/1 |
 | Ch 07 | Visual Formatting Model | ⚪ 未开始 | css-display-3, css-position-3, css-flexbox-1, css-grid-1/2 | - | - |
@@ -131,11 +131,14 @@ css/
 │   │   ├── demos/               # 交互式 demo 组件
 │   │   │   ├── index.tsx        # Demo 注册表（moduleId → sectionId → Component）
 │   │   │   ├── DemoSlot.tsx     # 客户端插槽（服务端页面中嵌入客户端 demo）
-│   │   │   ├── SpecificityCalculator.tsx  # CSS 特异性计算器
+│   │   │   ├── has-demo.ts     # 服务端 demo 存在性检查（条件渲染用）
+│   │   │   ├── SpecificityCalculator.tsx  # CSS 特异性计算器（Ch04 + Ch03 复用）
 │   │   │   ├── BoxModelVisualizer.tsx     # 盒模型可视化器
 │   │   │   ├── CSSTokenizer.tsx           # CSS Token 流可视化（Monaco Editor）
 │   │   │   ├── CSSValueParser.tsx         # CSS 值类型解析器
-│   │   │   └── UnitConverter.tsx          # CSS 单位换算器
+│   │   │   ├── UnitConverter.tsx          # CSS 单位换算器
+│   │   │   ├── SelectorMatcher.tsx        # 选择器匹配可视化（HTML + 实时高亮）
+│   │   │   └── ValuePipeline.tsx          # CSS 值处理六阶段可视化
 │   │   ├── SidebarNav.tsx       # 章节导航（客户端组件，桌面端固定侧边栏 + 移动端 Sheet）
 │   │   ├── SidebarToggle.tsx    # 移动端 Sheet 侧边栏触发器
 │   │   ├── TocSidebar.tsx       # 右侧 TOC 目录（客户端组件，IntersectionObserver scroll-spy）
@@ -144,9 +147,16 @@ css/
 │   │   ├── theme-provider.tsx   # 主题管理
 │   │   └── theme-toggle.tsx     # 主题切换
 │   ├── data/
-│   │   ├── modules.ts           # 章节元数据（15 章 + 5 阶段，首页和章节页共用）
-│   │   ├── glossary.ts          # CSS 术语表（~35 条，Popover 定义卡片数据源）
-│   │   └── css2-links.ts        # CSS2 文件→站内模块映射 + 参考文献 URL
+│   │   ├── modules.ts           # 章节元数据（15 章 + 5 阶段，从 chapters/ 聚合 sections）
+│   │   ├── glossary.ts          # CSS 术语表聚合（~70 条，从 chapters/ 聚合）
+│   │   ├── css2-links.ts        # CSS2 文件→站内模块映射（从 chapters/ 聚合锚点）
+│   │   └── chapters/            # 按章节拆分的数据文件
+│   │       ├── common.ts        # 通用术语（user agent, author, user）
+│   │       ├── intro.ts         # Ch01: 6 sections + 24 anchors + 14 glossary
+│   │       ├── syntax.ts        # Ch02: 10 sections + 38 anchors + 23 glossary
+│   │       ├── selectors.ts     # Ch03: 8 sections + 20 anchors + 15 glossary
+│   │       ├── cascade.ts       # Ch04: 7 sections + 12 anchors + 7 glossary
+│   │       └── box-model.ts     # Ch06: 5 sections + 4 anchors + 5 glossary
 │   └── lib/
 │       ├── utils.ts             # Tailwind 工具函数
 │       ├── specs.ts             # 规范数据读取工具
@@ -188,11 +198,11 @@ specs/{name}.html  ──→  extract-content.js  ──→  specs/{name}-conten
 - 32 份 CSS3 规范 HTML 已全部下载
 - 15 份 CSS2.2 章节 HTML 已下载并提取（185 个核心章节）
 - `css-cascade-4-content.json`、`css-box-3-content.json` 等已提取，其余待提取
-- 5 个交互 Demo 已完成（SpecificityCalculator、BoxModelVisualizer、CSSTokenizer、CSSValueParser、UnitConverter）
+- 8 个交互 Demo 已完成（SpecificityCalculator、BoxModelVisualizer、CSSTokenizer、CSSValueParser、UnitConverter、SelectorMatcher、ValuePipeline + SpecificityCalculator 在 Ch03 复用）
 - 三栏文档布局：桌面端左侧章节导航 + 右侧 TOC（scroll-spy），移动端 Sheet 导航
 - 规范内容渲染器 `SpecContent` 已实现（解析引用、链接、代码块），通过 `SpecLink` 组件支持 Popover 交互
 - 规范原文展示改为 Tabs 平铺（CSS2/CSS3 双标签页），不再折叠在 Accordion 中
-- 术语系统：`glossary.ts` 提供 ~35 条术语定义，粗体术语自动弹出 Popover 解释卡
+- 术语系统：`glossary.ts` 聚合 ~70 条术语定义（按章节分文件），粗体术语自动弹出 Popover 解释卡
 - CSS2 链接映射：`css2-links.ts` 将相对路径映射到站内模块，支持跨章节导航
 - i18n 架构已预留（`LocaleText` 双语类型 + `t()` 函数 + UI 字符串常量）
 - **CSS2 原文 fallback**：无人工 sections 的章节自动展示 CSS2.2 原文子章节，侧边栏同步显示子章节目录
@@ -279,10 +289,11 @@ specs/{name}.html  ──→  extract-content.js  ──→  specs/{name}-conten
 
 ### 短期
 
-- [ ] Ch 01 Introduction to CSS 内容填充
+- [x] Ch 01 Introduction to CSS 内容填充（6 sections, 14 glossary terms）
 - [x] Ch 02 Syntax, Values & Units 内容填充（10 sections + 3 demos）
-- [ ] Ch 03 Selectors 内容填充
-- [ ] 为 Ch 04 Cascade 补充更多 Demo（ValuePipeline、CascadeOriginDemo）
+- [x] Ch 03 Selectors 内容填充（8 sections + SelectorMatcher + SpecificityCalculator 复用）
+- [x] 为 Ch 04 Cascade 补充 ValuePipeline Demo
+- [ ] 为 Ch 04 Cascade 补充 CascadeOriginDemo
 
 ### 中期
 
@@ -576,6 +587,59 @@ specs/{name}.html  ──→  extract-content.js  ──→  specs/{name}-conten
 - 首页保持纯居中布局，无左右侧边栏
 - CSS2 sidebar 数据在章节页面内预计算（构建时执行），避免依赖 layout props 传递
 - 三栏使用 CSS Grid：`xl:grid-cols-[16rem_1fr_14rem]`，非 xl 屏幕为单栏
+
+---
+
+### 2026-02-09 阶段一闭环：架构拆分 + Ch01/Ch03/Ch04 Demo
+
+**做了什么**：
+
+**Phase 0: 架构标准化（防返工）**
+- 将 `modules.ts`（729 行）拆分为 `src/data/chapters/` 目录，每章独立文件
+- 每个章节文件导出 `sections`、`anchors`、`glossaryTerms` 三组数据
+- `modules.ts`（559 行）、`glossary.ts`（38 行）、`css2-links.ts`（142 行）改为聚合入口
+- 新建 `has-demo.ts` 服务端组件，修复无 demo 章节仍显示空 Accordion 的问题
+- 新建 `chapters/common.ts` 存放通用术语（user agent, author, user）
+
+**Phase 1: Ch01 Introduction to CSS（6 sections）**
+- 基于 CSS2 Ch1-3 原文编写 6 个学习 sections：
+  - `css-overview` — CSS 是什么：样式表语言的定位与作用
+  - `design-principles` — CSS 设计原则：前向兼容、层叠、继承、容错
+  - `processing-model` — 处理模型：源文档→元素树→盒子树→Canvas 渲染
+  - `css-history` — CSS 的演进：CSS1→CSS2→CSS3 模块化→Snapshot
+  - `reading-specs` — 如何阅读规范：结构、术语约定、阅读技巧
+  - `core-terminology` — 核心术语：属性、值、声明、规则集、选择器
+- 14 条新术语加入 glossary（canvas, element tree, box tree, replaced element 等）
+- 24 条 CSS2 锚点映射
+
+**Phase 2: Ch03 Selectors（8 sections + 2 demos）**
+- 基于 CSS2 Ch5 + selectors-3 + selectors-4 编写 8 个学习 sections：
+  - `selector-overview` — 选择器概述与基本语法
+  - `simple-selectors` — 简单选择器（类型、类、ID、属性、通配符）
+  - `combinators` — 组合选择器（后代、子代、兄弟）
+  - `pseudo-classes` — 伪类选择器（结构性、状态、用户行为）
+  - `logical-pseudo-classes` — 逻辑伪类（:not, :is, :where, :has）
+  - `pseudo-elements` — 伪元素（::before, ::after, ::first-line 等）
+  - `specificity-calculation` — 选择器特异性计算规则
+  - `selector-performance` — 从右到左匹配算法与性能考量
+- 新建 `SelectorMatcher.tsx` demo：输入 HTML + CSS 选择器，实时高亮匹配元素
+- 复用 `SpecificityCalculator` 在 Ch03 specificity-calculation section
+- 15 条新术语 + 20 条锚点映射
+
+**Phase 3: Ch04 ValuePipeline Demo**
+- 新建 `ValuePipeline.tsx`（268 行）：可视化 CSS 值处理六阶段流程
+  - declared → cascaded → specified → computed → used → actual
+  - 5 个预设场景（width 50%, font-size 1.5em, color inherit, margin auto, border-width thin）
+  - 点击阶段显示详细解释，响应式布局
+
+**Phase 4: 验证**
+- `pnpm build` 通过：18 个静态页面，0 错误
+- 更新 PLAN.md 进度追踪表和本迭代记录
+
+**架构决策（防返工）**：
+- 新章节只需创建 `chapters/{slug}.ts` 并在三个聚合文件中 import，无需修改渲染逻辑
+- `has-demo.ts` 使用静态注册表而非运行时检测，避免服务端组件引入客户端依赖
+- 术语和锚点与 sections 共置于同一文件，便于章节作者一站式维护
 
 ---
 

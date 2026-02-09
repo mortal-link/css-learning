@@ -33,18 +33,51 @@ const UnitConverter = dynamic(
   { ssr: false }
 ) as ComponentType;
 
+const ValuePipeline = dynamic(
+  () => import('./ValuePipeline').then((m) => m.ValuePipeline),
+  { ssr: false }
+) as ComponentType;
+
+const SelectorMatcher = dynamic(
+  () => import('./SelectorMatcher').then((m) => m.SelectorMatcher),
+  { ssr: false }
+) as ComponentType;
+
+const CascadeOriginDemo = dynamic(
+  () => import('./CascadeOriginDemo').then((m) => m.CascadeOriginDemo),
+  { ssr: false }
+) as ComponentType;
+
+const InheritanceDemo = dynamic(
+  () => import('./InheritanceDemo').then((m) => m.InheritanceDemo),
+  { ssr: false }
+) as ComponentType;
+
+const MarginCollapseDemo = dynamic(
+  () => import('./MarginCollapseDemo').then((m) => m.MarginCollapseDemo),
+  { ssr: false }
+) as ComponentType;
+
 /** demo 注册表：moduleId → sectionId → Component */
 export const demoRegistry: Record<string, Record<string, ComponentType>> = {
   cascade: {
     cascading: SpecificityCalculator,
+    'value-stages': ValuePipeline,
+    filtering: CascadeOriginDemo,
+    defaulting: InheritanceDemo,
   },
   'box-model': {
     'box-model': BoxModelVisualizer,
+    margins: MarginCollapseDemo,
   },
   syntax: {
     'syntax-overview': CSSTokenizer,
     'numeric-values': CSSValueParser,
     'length-units': UnitConverter,
+  },
+  selectors: {
+    'selector-overview': SelectorMatcher,
+    'specificity-calculation': SpecificityCalculator,
   },
 };
 
