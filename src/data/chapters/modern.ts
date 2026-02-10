@@ -17,6 +17,11 @@ export const sections: Section[] = [
       'container-name 为容器命名，支持多个查询容器',
       '容器查询相比媒体查询更适合组件化开发',
       '查询条件支持宽度、高度、纵横比等特性',
+      '容器查询单位 cqw/cqh/cqi/cqb/cqmin/cqmax 相对于查询容器尺寸计算',
+      '容器样式查询（style()）可基于容器的计算样式值应用规则',
+      '声明为查询容器的元素必须建立尺寸包含（size containment），不能依赖子元素确定自身尺寸',
+      'container 简写属性同时设置 container-name 和 container-type',
+      '@container 支持 and/or/not 组合多条件查询',
     ],
   },
   {
@@ -33,6 +38,11 @@ export const sections: Section[] = [
       '嵌套规则的特异性与非嵌套写法完全一致',
       '相比预处理器，原生嵌套无需编译步骤',
       '支持复杂的嵌套组合和条件嵌套',
+      '嵌套选择器在特异性计算时会被 :is() 包裹，取参数列表中最高特异性',
+      '& 可以出现在选择器的任何位置，不限于开头',
+      '支持直接嵌套 @media、@supports、@container 等条件规则',
+      '相对选择器（如 > .child）在嵌套中隐含 & 前缀',
+      '早期规范中的 @nest 已被移除，当前语法更简洁',
     ],
   },
   {
@@ -49,6 +59,11 @@ export const sections: Section[] = [
       '未分层的样式（unlayered styles）优先级高于所有层',
       '可以嵌套层，使用点号表示层级关系（如 framework.components）',
       '级联层与 !important、特异性、来源共同参与完整的层叠计算',
+      '匿名层（anonymous layer）没有名称，无法从外部追加规则',
+      'revert-layer 关键字将属性值回退到下一层级的声明',
+      '!important 规则在层中的优先级顺序与普通规则相反——先声明的层优先',
+      '@import 可通过 layer() 函数或 layer 关键字将外部样式表分配到指定层',
+      '@layer 语句（无花括号）可预先声明层顺序，控制后续规则的优先级',
     ],
   },
   {
@@ -65,6 +80,11 @@ export const sections: Section[] = [
       '作用域内的选择器自动限制在作用域范围内',
       'Scoping proximity：距离作用域根更近的规则优先级更高',
       '适用于组件样式隔离和局部样式覆盖',
+      ':scope 伪类匹配当前作用域根元素，在 @scope 内等同于作用域根',
+      '内联 <style> 中的 @scope 无需参数，隐式以父元素为作用域根',
+      '作用域不影响选择器特异性，仅在级联的"Scoping proximity"步骤生效',
+      '@scope 与 @layer 可组合使用，层级优先级在作用域就近原则之前判定',
+      '@scope 提供轻量级样式隔离，相比 Shadow DOM 无需创建独立 DOM 树',
     ],
   },
   {
@@ -81,6 +101,11 @@ export const sections: Section[] = [
       'contain-intrinsic-size 为未渲染内容提供占位尺寸',
       'content-visibility: hidden 类似于 display: none 但保留渲染状态',
       '适用于长列表、虚拟滚动和复杂页面的性能优化',
+      '包含类型分为四种：size（尺寸）、layout（布局）、style（样式）、paint（绘制）',
+      'contain: strict 等同于 size layout paint style，开启全部包含优化',
+      'contain: content 等同于 layout paint style，不含尺寸包含，更安全易用',
+      'content-visibility: auto 通过 IntersectionObserver 判断元素是否"与用户相关"',
+      'paint containment 裁剪元素溢出内容，并使元素建立新的层叠上下文和格式化上下文',
     ],
   },
 ];
@@ -199,6 +224,20 @@ export const propertyTerms: Record<string, PropertyEntry> = {
     css3Url: CONTAIN_2,
     sectionRef: 'modern#content-visibility',
   },
+
+  // ── Performance ──
+  'will-change': {
+    zh: '将要变化',
+    value: 'auto | <animateable-feature>#',
+    initial: 'auto',
+    appliesTo: '所有元素',
+    inherited: false,
+    percentages: null,
+    computedValue: '指定值',
+    css2Url: '',
+    css3Url: 'https://www.w3.org/TR/css-will-change-1/',
+    sectionRef: 'modern#content-visibility',
+  },
 };
 
 // ============================================================
@@ -259,6 +298,76 @@ export const glossaryTerms: Record<string, GlossaryEntry> = {
     zh: '作用域就近原则',
     description:
       '在 @scope 规则中，距离作用域根更近的规则优先级更高，无论特异性如何。这是一种基于 DOM 距离的级联机制。',
+    sectionRef: 'modern#scope',
+    specUrl: SCOPE,
+  },
+  'container unit': {
+    zh: '容器单位',
+    description:
+      '相对于查询容器尺寸的长度单位。cqw/cqh 为容器宽高的 1%，cqi/cqb 为内联/块方向的 1%，cqmin/cqmax 取两者较小/较大值。',
+    sectionRef: 'modern#container-queries',
+    specUrl: CONTAIN_3,
+  },
+  'container style query': {
+    zh: '容器样式查询',
+    description:
+      '通过 style() 函数查询容器的计算样式值来应用规则的机制，如 @container style(--theme: dark) { ... }。',
+    sectionRef: 'modern#container-queries',
+    specUrl: CONTAIN_3,
+  },
+  'size containment': {
+    zh: '尺寸包含',
+    description:
+      'contain: size 使元素在布局时不依赖子元素确定自身尺寸，固有尺寸视为无内容计算。这是容器查询的前提条件之一。',
+    sectionRef: 'modern#content-visibility',
+    specUrl: CONTAIN_2,
+  },
+  'layout containment': {
+    zh: '布局包含',
+    description:
+      'contain: layout 使元素建立独立格式化上下文，内部布局变化不影响外部，外部也无法影响内部布局。',
+    sectionRef: 'modern#content-visibility',
+    specUrl: CONTAIN_2,
+  },
+  'paint containment': {
+    zh: '绘制包含',
+    description:
+      'contain: paint 裁剪元素溢出内容至边框边缘，建立新的层叠上下文和格式化上下文，优化绘制范围。',
+    sectionRef: 'modern#content-visibility',
+    specUrl: CONTAIN_2,
+  },
+  'style containment': {
+    zh: '样式包含',
+    description:
+      'contain: style 将计数器和引号等样式效果限制在元素子树内，防止内部样式副作用泄漏到外部。',
+    sectionRef: 'modern#content-visibility',
+    specUrl: CONTAIN_2,
+  },
+  'revert-layer': {
+    zh: '层回退',
+    description:
+      'revert-layer 关键字将属性值回退到当前级联层的下一层声明。若无更低层声明，则回退到上一个来源。',
+    sectionRef: 'modern#cascade-layers',
+    specUrl: CASCADE_5,
+  },
+  'anonymous layer': {
+    zh: '匿名层',
+    description:
+      '没有名称的级联层。可通过 @layer { ... } 或 @import ... layer 创建。因无名称，外部无法向其追加规则。',
+    sectionRef: 'modern#cascade-layers',
+    specUrl: CASCADE_5,
+  },
+  'nesting selector': {
+    zh: '嵌套选择器',
+    description:
+      '& 符号在 CSS 嵌套中代表父规则的选择器。在特异性计算时等同于 :is() 包裹父选择器，取最高特异性值。',
+    sectionRef: 'modern#css-nesting',
+    specUrl: NESTING,
+  },
+  ':scope': {
+    zh: '作用域伪类',
+    description:
+      ':scope 伪类匹配作为选择器匹配参考点的元素。在 @scope 规则内匹配作用域根，在 DOM API 中匹配调用方法的元素。',
     sectionRef: 'modern#scope',
     specUrl: SCOPE,
   },

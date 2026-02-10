@@ -11,8 +11,12 @@ export const sections: Section[] = [
     keyPoints: [
       '每个元素根据盒模型生成零个或多个盒子',
       '盒子的布局由以下因素决定:盒子尺寸和类型、定位方案(常规流/浮动/绝对定位)、文档树中元素之间的关系、外部信息(视口大小、图片固有尺寸等)',
-      '本章定义的属性适用于连续媒体(continuous media)和分页媒体(paged media)',
-      '用户代理对于 overflow 内容的处理在 CSS 2.2 中未定义',
+      '本章定义的属性适用于连续媒体(continuous media)和分页媒体(paged media),但 margin 属性在分页媒体中含义不同',
+      '画布(canvas)是文档渲染的无限表面;视口(viewport)是用户代理提供的可视区域,当视口小于画布时应提供滚动机制',
+      '每个画布最多对应一个视口,但用户代理可以渲染到多个画布(即同一文档的不同视图)',
+      '脱离流(out-of-flow)的元素包括:浮动元素、绝对定位元素和根元素;不脱离流的元素称为流内(in-flow)元素',
+      '匿名盒子(anonymous box)在需要时自动生成,用于满足格式化模型的结构要求;匿名盒子继承包含它的非匿名盒子的可继承属性,不可继承属性取初始值',
+      '视觉格式化模型不指定格式化的所有方面(如字母间距算法),符合规范的用户代理可能在这些方面有不同行为',
     ],
   },
   {
@@ -24,10 +28,13 @@ export const sections: Section[] = [
       'block: 生成块级盒子(block-level box),参与块格式化上下文(BFC)',
       'inline: 生成行内盒子(inline box),参与行内格式化上下文(IFC)',
       'inline-block: 生成行内级块容器(inline-level block container),对外是行内盒子,对内建立 BFC',
-      'none: 元素不生成盒子,不影响布局',
-      'list-item: 生成块级盒子和标记盒子(marker box)',
-      'CSS3 display 拆分为 display-outside(block/inline)和 display-inside(flow/flow-root/flex/grid/table)的组合',
-      'table 相关值(table、table-row、table-cell 等)用于表格布局',
+      'none: 元素不生成任何盒子,后代元素也不生成盒子,元素及其内容完全从格式化结构中移除;与 visibility: hidden 不同,后者仍生成不可见的盒子',
+      'list-item: 生成块级主体盒子(principal box)和标记盒子(marker box)',
+      'CSS3 display 拆分为外部显示类型 display-outside(block/inline)和内部显示类型 display-inside(flow/flow-root/flex/grid/table)的二值组合',
+      'display: flow-root 生成块级盒子并建立新的 BFC,是触发 BFC 的最直接方式(替代 overflow: hidden 等 hack)',
+      'display: contents 使元素自身不生成盒子,但其子元素和伪元素仍正常生成盒子,如同子元素直接替代了该元素在文档树中的位置',
+      'display: run-in 生成游离盒子(run-in box),如果后面紧跟块盒子则合并到该块盒子开头作为行内内容',
+      'display、position、float 三者相互影响:若 display 为 none 则忽略 position/float;若 position 为 absolute/fixed 则 float 计算为 none 且 display 按转换表调整;若 float 非 none 则 display 按转换表调整为 block 等值',
     ],
   },
   {
@@ -37,10 +44,14 @@ export const sections: Section[] = [
     summary: { zh: 'CSS 2.2 中有三种定位方案:常规流(Normal flow)、浮动(Floats)和绝对定位(Absolute positioning)。盒子根据 position、float 和 display 属性参与不同的定位方案。', en: 'CSS 2.2 has three positioning schemes: Normal flow, Floats, and Absolute positioning. Boxes participate in different positioning schemes based on the position, float, and display properties.' },
     keyPoints: [
       'Normal flow: 包括块级盒子的块格式化(block formatting)、行内级盒子的行内格式化(inline formatting)以及相对定位(relative positioning)',
-      'Floats: 盒子先按常规流布局,然后从流中取出并向左或向右移动',
-      'Absolute positioning: 盒子完全从常规流中移除,相对于包含块定位',
-      'position 属性值:static(常规流)、relative(常规流+偏移)、absolute(绝对定位)、fixed(绝对定位,相对视口)',
-      'CSS3 新增 position: sticky,结合常规流和固定定位的特性',
+      'Floats: 盒子先按常规流布局,然后从流中取出并向左或向右移动,后续内容沿浮动盒子一侧排列',
+      'Absolute positioning: 盒子完全从常规流中移除,相对于包含块定位,不影响兄弟元素的布局',
+      'position 属性值:static(常规流,inset 属性不生效)、relative(常规流+视觉偏移,不影响后续元素位置)、absolute(脱离常规流)、fixed(脱离常规流,相对视口固定)',
+      'CSS3 新增 position: sticky — 粘性定位元素在常规流中布局,当滚动到 inset 属性指定的阈值时固定在最近滚动容器的可视区域(scrollport)内',
+      'sticky 定位的约束范围是其包含块:元素不会超出包含块的边界,当包含块滚出可视区域时 sticky 元素随之离开',
+      'CSS3 引入 inset 简写属性(top/right/bottom/left 的简写)以及逻辑方向属性 inset-block-start/end、inset-inline-start/end',
+      'display/position/float 三属性互相约束(详见 CSS2.2 §9.7):position: absolute/fixed 强制 float 计算为 none;float 非 none 时,display 的行内值(如 inline)被转换为对应块值(如 block)',
+      '所有 position 非 static 的元素称为定位元素(positioned element),会为后代建立绝对定位包含块',
     ],
   },
   {
@@ -49,13 +60,16 @@ export const sections: Section[] = [
     title: { zh: '常规流', en: 'Normal flow' },
     summary: { zh: '常规流中的盒子属于某个格式化上下文(formatting context),可以是块格式化上下文(BFC)或行内格式化上下文(IFC)。块级盒子参与 BFC,行内级盒子参与 IFC。', en: 'Boxes in normal flow belong to a formatting context, which can be a block formatting context (BFC) or an inline formatting context (IFC). Block-level boxes participate in BFC, and inline-level boxes participate in IFC.' },
     keyPoints: [
-      '块格式化上下文(BFC):块级盒子在其中垂直排列,相邻 margin 会折叠',
-      '行内格式化上下文(IFC):行内盒子在其中水平排列,形成行盒(line box)',
+      '块格式化上下文(BFC):块级盒子在其中垂直排列,每个盒子的左外边缘紧贴包含块的左边缘(RTL 时右边缘),相邻 margin 会折叠',
+      '行内格式化上下文(IFC):行内盒子在其中水平排列,形成行盒(line box);由不包含块级盒子的块容器盒子建立',
       '块级盒子(block-level box):display 为 block、list-item 或 table 的盒子,参与 BFC',
-      '块容器盒子(block container box):只包含块级盒子或只包含行内级盒子(建立 IFC)的盒子',
-      '块盒子(block box):既是块级盒子又是块容器盒子',
-      'position: relative 让盒子先按常规流布局,然后相对于其常规位置偏移(不影响后续元素布局)',
-      'BFC 独立性:BFC 内部布局不影响外部,外部布局不影响内部;BFC 可以包含浮动元素,并阻止 margin 折叠',
+      '块容器盒子(block container box):只包含块级盒子或只包含行内级盒子(建立 IFC)的盒子;非替换 inline-block 和非替换 table-cell 也是块容器但不是块级盒子',
+      '块盒子(block box):既是块级盒子又是块容器盒子;display: block 的非替换元素生成块盒子',
+      '匿名块盒子(anonymous block box):当块容器同时包含块级内容和行内内容时,行内内容被包裹在自动生成的匿名块盒子中,以确保块容器只包含同类型的子盒子',
+      '匿名行内盒子(anonymous inline box):块容器中直接包含的文本(不在行内元素中)会被当作匿名行内元素处理;根据 white-space 属性折叠后为空的匿名行内盒子不会生成',
+      'position: relative 让盒子先按常规流布局,然后相对于其常规位置偏移(不影响后续元素布局);若 left/right 均非 auto 则产生过约束,由 direction 决定保留哪个值',
+      'BFC 建立条件:根元素、浮动元素、绝对定位元素、inline-block、table-cell、table-caption、overflow 非 visible 的块盒子;CSS3 新增 display: flow-root 可直接建立 BFC',
+      'BFC 独立性:BFC 内部布局不影响外部,外部布局不影响内部;BFC 包含浮动元素(解决高度塌陷),阻止与外部元素的 margin 折叠',
     ],
   },
   {
@@ -72,6 +86,8 @@ export const sections: Section[] = [
       '浮动元素会生成块级盒子,无论其 display 值是什么(除了 none)',
       '浮动不会影响绝对定位元素的布局',
       '父元素高度塌陷问题:浮动子元素不参与父元素高度计算,可通过建立 BFC 或清除浮动解决',
+      '浮动盒子的精确定位遵循 9 条规则:不能超出包含块边缘、不能与同侧先前浮动重叠、左右浮动不互相重叠、尽可能高、尽可能靠左/右等',
+      '浮动盒子的 margin 永远不会与相邻盒子的 margin 折叠',
     ],
   },
   {
@@ -86,8 +102,9 @@ export const sections: Section[] = [
       '包含块确定规则:最近的 position 非 static 的祖先元素;如果没有,则为初始包含块(initial containing block)',
       'top、right、bottom、left 属性指定盒子相对于包含块的偏移',
       '如果 top/bottom 或 left/right 同时指定,且 height/width 为 auto,则尺寸由偏移值计算',
-      '绝对定位元素会生成块级盒子',
-      'CSS3 position: sticky 在元素滚动到指定位置前表现为 relative,之后表现为 fixed',
+      '绝对定位元素会生成块级盒子(display 的行内值被转换为对应的块值)',
+      '绝对定位盒子为其常规流子元素和绝对定位(非 fixed)后代建立新的包含块',
+      'CSS3 引入内缩修正包含块(inset-modified containing block):由 inset 属性从包含块向内收缩定义的区域,决定绝对定位盒子的可用空间和对齐参照',
     ],
   },
   {
@@ -103,7 +120,8 @@ export const sections: Section[] = [
       '层叠上下文嵌套:子元素的 z-index 只在父层叠上下文内比较',
       '同一层叠上下文内的绘制顺序(从后到前):背景和边框 → 负 z-index 子层叠上下文 → 块级后代 → 浮动元素 → 行内后代 → z-index: 0 或 auto 的定位后代 → 正 z-index 子层叠上下文',
       '建立层叠上下文的条件(CSS2):根元素、z-index 非 auto 的定位元素',
-      'CSS3 扩展:opacity < 1、transform/filter/perspective 等属性也会建立层叠上下文',
+      'CSS3 扩展:opacity < 1、transform/filter/perspective、will-change、contain: paint/layout 等属性也会建立层叠上下文',
+      '浮动元素的内容按仿佛建立了新层叠上下文的方式堆叠,但浮动元素实际参与父层叠上下文;浮动元素渲染在非定位流内块之前、流内行内内容之后',
     ],
   },
   {
@@ -118,8 +136,10 @@ export const sections: Section[] = [
       'vertical-align 控制行内盒子在行盒中的垂直对齐:baseline(基线对齐)、top、bottom、middle、text-top、text-bottom、sub、super 或长度/百分比',
       '行内盒子宽度总和小于行盒宽度时,水平分布由 text-align 决定',
       '行内盒子宽度总和大于行盒宽度时,会拆分为多个行内盒子分布在多个行盒中',
+      '原子行内级盒子(atomic inline-level box):inline-block、inline-table 及替换行内元素作为不可分割的整体参与 IFC,不能在内部断行',
       '空白符处理由 white-space 属性控制',
       '双向文本(bidirectional text)布局由 direction 和 unicode-bidi 属性控制',
+      '不包含文本、保留空白、非零 margin/padding/border 的行内元素、流内内容,且不以保留换行符结尾的行盒视为零高度行盒,不影响其内部元素的定位',
     ],
   },
 ];
@@ -287,6 +307,20 @@ export const propertyTerms: Record<string, PropertyEntry> = {
     css2Url: `${VIS}#propdef-vertical-align`,
     css3Url: 'https://www.w3.org/TR/css-inline-3/#propdef-vertical-align',
     sectionRef: 'visual-formatting#inline-formatting',
+  },
+
+  // ── inset (CSS3 shorthand) ──
+  'inset': {
+    zh: '内缩简写',
+    value: '<\'top\'>{1,4}',
+    initial: 'auto',
+    appliesTo: '定位元素(position 非 static)',
+    inherited: false,
+    percentages: '相对于包含块对应方向的尺寸',
+    computedValue: '各子属性的计算值',
+    css2Url: `${VIS}#propdef-top`,
+    css3Url: `${POSITION3}#propdef-inset`,
+    sectionRef: 'visual-formatting#absolute-positioning',
   },
 
   // ── line-height ──
@@ -461,5 +495,70 @@ export const glossaryTerms: Record<string, GlossaryEntry> = {
     zh: '内缩',
     description: '定位属性的简写(top/right/bottom/left),也指 CSS Shapes 中的 inset() 函数。在逻辑属性中表示内缩偏移。',
     sectionRef: 'visual-formatting#positioning',
+  },
+  'anonymous box': {
+    zh: '匿名盒子',
+    description:
+      '没有对应元素的盒子,由格式化模型在需要时自动生成。分为匿名块盒子和匿名行内盒子。匿名盒子继承包含它的非匿名盒子的可继承属性,不可继承属性取初始值。百分比值解析时跳过匿名盒子,参照最近的非匿名祖先。',
+    sectionRef: 'visual-formatting#normal-flow',
+    css2Url: 'https://www.w3.org/TR/CSS22/visuren.html#anonymous-block-level',
+    specUrl: 'https://www.w3.org/TR/css-display-3/#anonymous',
+  },
+  'flow-root': {
+    zh: '流根',
+    description:
+      'display: flow-root 使元素生成块级盒子并建立新的块格式化上下文(BFC)。这是 CSS3 引入的最直接的 BFC 触发方式,无需借助 overflow: hidden 等副作用属性。',
+    sectionRef: 'visual-formatting#display',
+    specUrl: 'https://www.w3.org/TR/css-display-3/#valdef-display-flow-root',
+  },
+  'display:contents': {
+    zh: '内容显示',
+    description:
+      'display: contents 使元素本身不生成任何盒子,但其子元素和伪元素仍正常生成盒子。效果类似于将子节点直接提升到父级位置。对替换元素(img、input 等)计算为 display: none。',
+    sectionRef: 'visual-formatting#display',
+    specUrl: 'https://www.w3.org/TR/css-display-3/#valdef-display-contents',
+  },
+  'sticky positioning': {
+    zh: '粘性定位',
+    description:
+      'position: sticky 的定位方案。元素在常规流中布局,但当用户滚动时,其位置自动调整以保持在最近滚动容器的可视区域(scrollport)内,约束范围不超出其包含块。inset 属性(top/bottom/left/right)指定触发粘性行为的阈值。',
+    sectionRef: 'visual-formatting#positioning-schemes',
+    specUrl: 'https://www.w3.org/TR/css-position-3/#sticky-position',
+  },
+  'viewport': {
+    zh: '视口',
+    description:
+      '用户代理提供的可视区域(窗口或屏幕上的其他查看区域)。连续媒体中每个画布最多一个视口。当视口小于画布时应提供滚动机制。视口尺寸变化时用户代理可能重新布局文档。',
+    sectionRef: 'visual-formatting#intro',
+    css2Url: 'https://www.w3.org/TR/CSS22/visuren.html#viewport',
+  },
+  'canvas': {
+    zh: '画布',
+    description:
+      '文档渲染的无限表面。文档在画布上呈现后,通过视口(viewport)展示给用户。一个画布最多对应一个视口,但用户代理可渲染到多个画布。',
+    sectionRef: 'visual-formatting#intro',
+    css2Url: 'https://www.w3.org/TR/CSS22/intro.html#canvas',
+  },
+  'run-in': {
+    zh: '游离盒子',
+    description:
+      'display: run-in 生成的盒子。如果后面紧跟一个不建立新 BFC 的块盒子,游离盒子会合并到该块盒子的开头作为行内内容。否则生成匿名块盒子包裹自身和后续行内内容。CSS 2.2 将 run-in 推迟到 CSS3 定义。',
+    sectionRef: 'visual-formatting#display',
+    specUrl: 'https://www.w3.org/TR/css-display-3/#valdef-display-run-in',
+  },
+  'margin collapsing': {
+    zh: '外边距折叠',
+    description:
+      '在块格式化上下文中,相邻块级盒子的垂直外边距(margin)会合并为一个外边距,取两者中的较大值(负值时取绝对值较大者)。浮动盒子、绝对定位盒子、inline-block 元素的 margin 不会与相邻元素折叠。建立 BFC 的元素不会与其子元素发生 margin 折叠。',
+    sectionRef: 'visual-formatting#normal-flow',
+    css2Url: 'https://www.w3.org/TR/CSS22/box.html#collapsing-margins',
+  },
+  'atomic inline-level box': {
+    zh: '原子行内级盒子',
+    description:
+      '不可分割的行内级盒子,作为单个不透明整体参与行内格式化上下文。包括替换行内元素(如 img)、inline-block 和 inline-table 元素。与行内盒子(inline box)不同,原子行内级盒子不能跨行拆分。',
+    sectionRef: 'visual-formatting#inline-formatting',
+    css2Url: 'https://www.w3.org/TR/CSS22/visuren.html#inline-boxes',
+    specUrl: 'https://www.w3.org/TR/css-display-3/#atomic-inline',
   },
 };

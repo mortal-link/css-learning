@@ -7,6 +7,7 @@
  * 数据来源：CSS2.2 规范属性定义表
  */
 
+import { propertyTerms as cascadeProperties } from './chapters/cascade';
 import { propertyTerms as boxModelProperties } from './chapters/box-model';
 import { propertyTerms as commonProperties } from './chapters/common';
 import { propertyTerms as visualFormattingProperties } from './chapters/visual-formatting';
@@ -43,6 +44,7 @@ export interface PropertyEntry {
 }
 
 export const properties: Record<string, PropertyEntry> = {
+  ...cascadeProperties,
   ...boxModelProperties,
   ...commonProperties,
   ...visualFormattingProperties,
