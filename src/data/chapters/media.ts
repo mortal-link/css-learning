@@ -6,7 +6,7 @@ export const sections: Section[] = [
     id: 'intro',
     number: '1',
     title: { zh: '媒体查询简介', en: 'Introduction to Media Queries' },
-    summary: 'CSS 媒体查询允许根据设备特性(如屏幕尺寸、分辨率、颜色能力等)应用不同的样式规则,是响应式设计的核心技术。',
+    summary: { zh: 'CSS 媒体查询允许根据设备特性(如屏幕尺寸、分辨率、颜色能力等)应用不同的样式规则,是响应式设计的核心技术。', en: 'CSS media queries allow applying different style rules based on device characteristics (such as screen size, resolution, color capabilities, etc.), and are the core technology of responsive design.' },
     keyPoints: [
       '媒体查询使得同一份 HTML 文档可以在不同设备上呈现不同外观',
       'CSS2 引入了媒体类型(media types)的概念,如 screen、print',
@@ -18,7 +18,7 @@ export const sections: Section[] = [
     id: 'media-types',
     number: '2',
     title: { zh: '媒体类型', en: 'Media Types' },
-    summary: '媒体类型定义了样式表适用的输出设备类别。CSS2 定义了多种媒体类型,但 CSS3 中大部分已被废弃,仅保留核心类型。',
+    summary: { zh: '媒体类型定义了样式表适用的输出设备类别。CSS2 定义了多种媒体类型,但 CSS3 中大部分已被废弃,仅保留核心类型。', en: 'Media types define the category of output device for which a style sheet is intended. CSS2 defined multiple media types, but most have been deprecated in CSS3, retaining only core types.' },
     keyPoints: [
       'CSS2 定义的媒体类型:all、screen、print、aural(后改为speech)、braille、handheld、projection、tty、tv、embossed',
       'CSS3 Media Queries Level 4 仅保留:all、screen、print、speech',
@@ -32,7 +32,7 @@ export const sections: Section[] = [
     id: 'media-features',
     number: '3',
     title: { zh: '媒体特性', en: 'Media Features' },
-    summary: '媒体特性描述了用户代理、输出设备或环境的具体特征。CSS3 引入了丰富的媒体特性用于精确控制样式应用条件。',
+    summary: { zh: '媒体特性描述了用户代理、输出设备或环境的具体特征。CSS3 引入了丰富的媒体特性用于精确控制样式应用条件。', en: 'Media features describe specific characteristics of the user agent, output device, or environment. CSS3 introduced rich media features for precise control of style application conditions.' },
     keyPoints: [
       '视口尺寸特性:width、height、min-width、max-width、min-height、max-height',
       '显示特性:aspect-ratio、orientation(portrait/landscape)、resolution、scan',
@@ -48,7 +48,7 @@ export const sections: Section[] = [
     id: 'media-queries',
     number: '4',
     title: { zh: '媒体查询语法', en: 'Media Query Syntax' },
-    summary: '媒体查询使用逻辑运算符组合媒体类型和媒体特性,形成复杂的条件表达式来精确控制样式应用。',
+    summary: { zh: '媒体查询使用逻辑运算符组合媒体类型和媒体特性,形成复杂的条件表达式来精确控制样式应用。', en: 'Media queries use logical operators to combine media types and media features, forming complex conditional expressions for precise control of style application.' },
     keyPoints: [
       '基本语法:@media [not|only] media-type [and (media-feature)] { CSS-rules }',
       '逻辑运算符 and:组合多个条件,所有条件都必须满足',
@@ -65,7 +65,7 @@ export const sections: Section[] = [
     id: 'responsive-design',
     number: '5',
     title: { zh: '响应式设计基础', en: 'Responsive Design Basics' },
-    summary: '响应式网页设计(Responsive Web Design, RWD)使用媒体查询、弹性布局和灵活图片技术,让网页能够适应不同设备和屏幕尺寸。',
+    summary: { zh: '响应式网页设计(Responsive Web Design, RWD)使用媒体查询、弹性布局和灵活图片技术,让网页能够适应不同设备和屏幕尺寸。', en: 'Responsive Web Design (RWD) uses media queries, flexible layouts, and flexible images to enable web pages to adapt to different devices and screen sizes.' },
     keyPoints: [
       'viewport meta 标签:&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;',
       '移动优先(Mobile First):从小屏幕开始设计,使用 min-width 逐步增强',

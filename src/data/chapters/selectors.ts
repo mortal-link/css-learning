@@ -7,8 +7,7 @@ export const sections: Section[] = [
     number: '1',
     title: { zh: '选择器概述', en: 'Selector Overview' },
     specId: 'pattern-matching',
-    summary:
-      '选择器是 CSS 的核心机制——它决定了样式规则会应用到文档中的哪些元素上。一个选择器可以简单到只匹配一个元素类型（如 p），也可以复杂到组合多个条件精确定位某个特定上下文中的元素。理解选择器的分类（简单选择器、复合选择器、复杂选择器）和组合方式（选择器列表），是掌握 CSS 的第一步。浏览器从右向左匹配选择器，这个方向影响着选择器的性能表现。',
+    summary: { zh: '选择器是 CSS 的核心机制——它决定了样式规则会应用到文档中的哪些元素上。一个选择器可以简单到只匹配一个元素类型（如 p），也可以复杂到组合多个条件精确定位某个特定上下文中的元素。理解选择器的分类（简单选择器、复合选择器、复杂选择器）和组合方式（选择器列表），是掌握 CSS 的第一步。浏览器从右向左匹配选择器，这个方向影响着选择器的性能表现。', en: 'Selectors are the core mechanism of CSS—they determine which elements in a document style rules apply to. A selector can be as simple as matching a single element type (like p), or as complex as combining multiple conditions to precisely target an element in a specific context. Understanding selector categories (simple, compound, complex selectors) and combination methods (selector lists) is the first step to mastering CSS. Browsers match selectors from right to left, which affects selector performance.' },
     keyPoints: [
       '选择器的作用：将样式规则关联到文档树中的一个或多个元素',
       '选择器列表（逗号分隔）：h1, h2, h3 表示三个选择器共享同一组声明',
@@ -24,8 +23,7 @@ export const sections: Section[] = [
     number: '2',
     title: { zh: '简单选择器', en: 'Simple Selectors' },
     specId: 'type-selectors',
-    summary:
-      '简单选择器是选择器系统的基石。类型选择器（h1, div, p）匹配特定元素名；通配符（*）匹配所有元素；类选择器（.class）和 ID 选择器（#id）匹配 HTML 属性；属性选择器提供更灵活的属性匹配能力，从精确匹配到子串匹配。这些选择器可以单独使用，也可以组合成复合选择器实现更精确的匹配。',
+    summary: { zh: '简单选择器是选择器系统的基石。类型选择器（h1, div, p）匹配特定元素名；通配符（*）匹配所有元素；类选择器（.class）和 ID 选择器（#id）匹配 HTML 属性；属性选择器提供更灵活的属性匹配能力，从精确匹配到子串匹配。这些选择器可以单独使用，也可以组合成复合选择器实现更精确的匹配。', en: 'Simple selectors are the foundation of the selector system. Type selectors (h1, div, p) match specific element names; the universal selector (*) matches all elements; class selectors (.class) and ID selectors (#id) match HTML attributes; attribute selectors provide flexible attribute matching from exact to substring matches. These selectors can be used alone or combined into compound selectors for more precise matching.' },
     keyPoints: [
       '类型选择器（type selector）：h1、div、p 等，匹配元素名（大小写不敏感）',
       '通配符选择器（universal selector）：* 匹配所有元素，常用于重置样式',
@@ -41,8 +39,7 @@ export const sections: Section[] = [
     number: '3',
     title: { zh: '组合器', en: 'Combinators' },
     specId: 'descendant-selectors',
-    summary:
-      '组合器（combinator）用于连接多个选择器，描述元素之间的关系。CSS 提供了四种组合器：后代（空格）、子代（>）、相邻兄弟（+）、通用兄弟（~）。这些组合器让我们能够根据元素在文档树中的位置关系来匹配元素。理解组合器的语义和浏览器的匹配方向（从右向左），对写出高效的选择器至关重要。',
+    summary: { zh: '组合器（combinator）用于连接多个选择器，描述元素之间的关系。CSS 提供了四种组合器：后代（空格）、子代（>）、相邻兄弟（+）、通用兄弟（~）。这些组合器让我们能够根据元素在文档树中的位置关系来匹配元素。理解组合器的语义和浏览器的匹配方向（从右向左），对写出高效的选择器至关重要。', en: 'Combinators connect multiple selectors to describe relationships between elements. CSS provides four combinators: descendant (space), child (>), adjacent sibling (+), and general sibling (~). These combinators allow matching elements based on their positional relationships in the document tree. Understanding combinator semantics and browser matching direction (right to left) is crucial for writing efficient selectors.' },
     keyPoints: [
       '后代选择器（descendant combinator）：div p 匹配 div 内的所有 p（任意深度）',
       '子代选择器（child combinator）：div > p 只匹配 div 的直接子元素 p',
@@ -58,8 +55,7 @@ export const sections: Section[] = [
     number: '4',
     title: { zh: '伪类', en: 'Pseudo-classes' },
     specId: 'pseudo-elements',
-    summary:
-      '伪类（pseudo-class）用单冒号 : 表示，描述元素的特定状态或在文档树中的特定位置。CSS2 定义了链接伪类（:link、:visited）、用户交互伪类（:hover、:active、:focus）和结构伪类（:first-child）。CSS3 大幅扩展了结构伪类家族，引入了 :nth-child()、:nth-of-type() 等强大的模式匹配能力，以及表单状态伪类（:checked、:disabled、:valid 等）。',
+    summary: { zh: '伪类（pseudo-class）用单冒号 : 表示，描述元素的特定状态或在文档树中的特定位置。CSS2 定义了链接伪类（:link、:visited）、用户交互伪类（:hover、:active、:focus）和结构伪类（:first-child）。CSS3 大幅扩展了结构伪类家族，引入了 :nth-child()、:nth-of-type() 等强大的模式匹配能力，以及表单状态伪类（:checked、:disabled、:valid 等）。', en: 'Pseudo-classes use a single colon (:) to describe specific states of elements or their positions in the document tree. CSS2 defined link pseudo-classes (:link, :visited), user interaction pseudo-classes (:hover, :active, :focus), and structural pseudo-classes (:first-child). CSS3 greatly expanded the structural pseudo-class family, introducing powerful pattern matching with :nth-child(), :nth-of-type(), and form state pseudo-classes (:checked, :disabled, :valid, etc.).' },
     keyPoints: [
       '链接伪类：:link（未访问）、:visited（已访问）、:any-link（任意链接，CSS4）',
       '用户交互伪类：:hover（鼠标悬停）、:active（激活）、:focus（焦点）',
@@ -76,8 +72,7 @@ export const sections: Section[] = [
     number: '5',
     title: { zh: '逻辑伪类', en: 'Logical Pseudo-classes' },
     specId: 'negation',
-    summary:
-      '逻辑伪类是 CSS 选择器系统的高级特性，它们接受选择器列表作为参数，提供逻辑运算能力。:not() 是否定伪类，排除匹配的元素；:is() 匹配列表中任一选择器；:where() 与 :is() 功能相同但特异性为 0；:has() 是"关系选择器"，能根据后代或兄弟元素的存在来匹配父元素。这些伪类极大地提升了选择器的表达能力，减少了重复代码。',
+    summary: { zh: '逻辑伪类是 CSS 选择器系统的高级特性，它们接受选择器列表作为参数，提供逻辑运算能力。:not() 是否定伪类，排除匹配的元素；:is() 匹配列表中任一选择器；:where() 与 :is() 功能相同但特异性为 0；:has() 是"关系选择器"，能根据后代或兄弟元素的存在来匹配父元素。这些伪类极大地提升了选择器的表达能力，减少了重复代码。', en: 'Logical pseudo-classes are advanced features of the CSS selector system that accept selector lists as arguments, providing logical operations. :not() is the negation pseudo-class that excludes matching elements; :is() matches any selector in the list; :where() functions like :is() but with zero specificity; :has() is a "relational selector" that matches parent elements based on the presence of descendant or sibling elements. These pseudo-classes greatly enhance selector expressiveness and reduce code duplication.' },
     keyPoints: [
       ':not(selector) — 否定伪类：p:not(.intro) 匹配所有不含 .intro 类的 p',
       'CSS3 的 :not() 只接受简单选择器，CSS4 扩展为接受选择器列表：:not(.a, .b)',
@@ -96,8 +91,7 @@ export const sections: Section[] = [
     number: '6',
     title: { zh: '伪元素', en: 'Pseudo-elements' },
     specId: 'pseudo-element-selectors',
-    summary:
-      '伪元素（pseudo-element）用双冒号 :: 表示（CSS3 语法），用于选择元素的特定部分或生成不存在于文档树中的内容。CSS2 定义了 ::first-line、::first-letter、::before、::after 四个伪元素。CSS3 统一采用双冒号语法以区分伪类，但为了向后兼容，浏览器仍然接受单冒号写法。现代 CSS 还引入了 ::marker、::placeholder、::selection 等新伪元素。',
+    summary: { zh: '伪元素（pseudo-element）用双冒号 :: 表示（CSS3 语法），用于选择元素的特定部分或生成不存在于文档树中的内容。CSS2 定义了 ::first-line、::first-letter、::before、::after 四个伪元素。CSS3 统一采用双冒号语法以区分伪类，但为了向后兼容，浏览器仍然接受单冒号写法。现代 CSS 还引入了 ::marker、::placeholder、::selection 等新伪元素。', en: 'Pseudo-elements use double colons (::) in CSS3 syntax to select specific parts of elements or generate content that does not exist in the document tree. CSS2 defined four pseudo-elements: ::first-line, ::first-letter, ::before, and ::after. CSS3 standardized the double-colon syntax to distinguish from pseudo-classes, but browsers still accept single-colon syntax for backward compatibility. Modern CSS introduced new pseudo-elements like ::marker, ::placeholder, and ::selection.' },
     keyPoints: [
       '::before 和 ::after — 生成内容伪元素，配合 content 属性在元素前后插入内容',
       '::first-line — 匹配块级元素的首行文本，可设置字体、颜色、背景等',
@@ -115,8 +109,7 @@ export const sections: Section[] = [
     number: '7',
     title: { zh: '特异性计算', en: 'Specificity Calculation' },
     specId: 'specificity',
-    summary:
-      '特异性（specificity）是 CSS 层叠机制的核心组成部分，用于决定当多条规则作用于同一属性时哪条规则胜出。特异性用 (a, b, c) 三元组表示：a 是 ID 选择器数量，b 是类/属性/伪类选择器数量，c 是类型/伪元素选择器数量。比较时从左到右依次比较，a 最高。逻辑伪类（:is()、:not()、:has()）不计入特异性，但它们的参数会；:where() 特异性为 0。',
+    summary: { zh: '特异性（specificity）是 CSS 层叠机制的核心组成部分，用于决定当多条规则作用于同一属性时哪条规则胜出。特异性用 (a, b, c) 三元组表示：a 是 ID 选择器数量，b 是类/属性/伪类选择器数量，c 是类型/伪元素选择器数量。比较时从左到右依次比较，a 最高。逻辑伪类（:is()、:not()、:has()）不计入特异性，但它们的参数会；:where() 特异性为 0。', en: 'Specificity is a core component of the CSS cascade mechanism, determining which rule wins when multiple rules affect the same property. Specificity is represented as a triplet (a, b, c): a is the count of ID selectors, b is the count of class/attribute/pseudo-class selectors, c is the count of type/pseudo-element selectors. Comparison is done left to right, with a being highest. Logical pseudo-classes (:is(), :not(), :has()) do not contribute to specificity, but their arguments do; :where() has zero specificity.' },
     keyPoints: [
       '特异性三元组 (a, b, c)：a = ID 数量，b = class/attr/伪类数量，c = type/伪元素数量',
       'ID 选择器（#id）贡献 (1,0,0)，类选择器（.class）贡献 (0,1,0)，类型选择器（div）贡献 (0,0,1)',
@@ -134,8 +127,7 @@ export const sections: Section[] = [
     id: 'selector-performance',
     number: '8',
     title: { zh: '选择器性能与最佳实践', en: 'Selector Performance & Best Practices' },
-    summary:
-      '选择器的性能影响主要来自浏览器的匹配机制。浏览器从右向左匹配选择器，先找到右侧的"关键选择器"（key selector）对应的所有元素，再逐个检查左侧条件。因此，右侧选择器过于宽泛（如 * 或 div）会导致大量不必要的匹配尝试。不过现代浏览器的选择器引擎已经高度优化，选择器性能很少成为实际瓶颈——可读性和可维护性通常更重要。',
+    summary: { zh: '选择器的性能影响主要来自浏览器的匹配机制。浏览器从右向左匹配选择器，先找到右侧的"关键选择器"（key selector）对应的所有元素，再逐个检查左侧条件。因此，右侧选择器过于宽泛（如 * 或 div）会导致大量不必要的匹配尝试。不过现代浏览器的选择器引擎已经高度优化，选择器性能很少成为实际瓶颈——可读性和可维护性通常更重要。', en: 'Selector performance impact mainly comes from browser matching mechanisms. Browsers match selectors right to left, first finding all elements matching the "key selector" on the right, then checking left-side conditions for each. Thus, overly broad right-side selectors (like * or div) cause many unnecessary matching attempts. However, modern browser selector engines are highly optimized, and selector performance rarely becomes an actual bottleneck—readability and maintainability are usually more important.' },
     keyPoints: [
       '浏览器从右向左匹配：div p.intro 先找所有 .intro 的 p，再向上查找 div 祖先',
       '关键选择器（key selector）是最右侧的选择器，决定了初始匹配范围',

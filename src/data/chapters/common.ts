@@ -2,7 +2,7 @@ import type { GlossaryEntry } from '../glossary';
 import type { PropertyEntry } from '../properties';
 
 // ============================================================
-// 跨章节高频属性（在多个章节的规范原文中被引用）
+// 跨模块高频属性（在多个模块的规范原文中被引用）
 // ============================================================
 
 const CSS22 = 'https://www.w3.org/TR/CSS22';

@@ -7,7 +7,10 @@ export const sections: Section[] = [
     id: 'transforms-2d',
     number: '1',
     title: { zh: '2D 变换', en: '2D Transforms' },
-    summary: 'CSS 2D 变换允许你在二维空间中平移、旋转、缩放和倾斜元素。通过 transform 属性和各种变换函数,你可以改变元素的视觉呈现而不影响文档流。',
+    summary: {
+      zh: 'CSS 2D 变换允许你在二维空间中平移、旋转、缩放和倾斜元素。通过 transform 属性和各种变换函数,你可以改变元素的视觉呈现而不影响文档流。',
+      en: 'CSS 2D transforms allow you to translate, rotate, scale, and skew elements in two-dimensional space. Using the transform property and various transform functions, you can change the visual presentation of elements without affecting document flow.',
+    },
     keyPoints: [
       'transform 属性应用一个或多个变换函数',
       'translate() 平移、rotate() 旋转、scale() 缩放、skew() 倾斜',
@@ -20,7 +23,10 @@ export const sections: Section[] = [
     id: 'transforms-3d',
     number: '2',
     title: { zh: '3D 变换', en: '3D Transforms' },
-    summary: 'CSS 3D 变换扩展了 2D 变换,允许在三维空间中操作元素。perspective 属性定义透视深度,创建 3D 视觉效果。',
+    summary: {
+      zh: 'CSS 3D 变换扩展了 2D 变换,允许在三维空间中操作元素。perspective 属性定义透视深度,创建 3D 视觉效果。',
+      en: 'CSS 3D transforms extend 2D transforms, allowing manipulation of elements in three-dimensional space. The perspective property defines perspective depth, creating 3D visual effects.',
+    },
     keyPoints: [
       'perspective 定义观察者与 z=0 平面的距离',
       'translate3d()、rotate3d()、scale3d() 提供三维变换',
@@ -33,7 +39,10 @@ export const sections: Section[] = [
     id: 'transitions',
     number: '3',
     title: { zh: '过渡', en: 'Transitions' },
-    summary: 'CSS 过渡使属性值的变化在一段时间内平滑地进行,而不是瞬间完成。当元素状态改变时(如 :hover),过渡会自动触发。',
+    summary: {
+      zh: 'CSS 过渡使属性值的变化在一段时间内平滑地进行,而不是瞬间完成。当元素状态改变时(如 :hover),过渡会自动触发。',
+      en: 'CSS transitions allow property value changes to occur smoothly over a period of time, rather than instantaneously. Transitions are automatically triggered when element state changes (such as :hover).',
+    },
     keyPoints: [
       'transition-property 指定要过渡的属性(或使用 all)',
       'transition-duration 设置过渡持续时间',
@@ -47,7 +56,10 @@ export const sections: Section[] = [
     id: 'animations',
     number: '4',
     title: { zh: '动画', en: 'Animations' },
-    summary: 'CSS 动画通过 @keyframes 规则定义动画序列,可以创建复杂的多步动画效果。与过渡不同,动画可以自动播放,不需要状态变化触发。',
+    summary: {
+      zh: 'CSS 动画通过 @keyframes 规则定义动画序列,可以创建复杂的多步动画效果。与过渡不同,动画可以自动播放,不需要状态变化触发。',
+      en: 'CSS animations define animation sequences through @keyframes rules, creating complex multi-step animation effects. Unlike transitions, animations can play automatically without requiring state changes to trigger them.',
+    },
     keyPoints: [
       '@keyframes 规则定义动画的关键帧序列',
       'animation-name 引用 @keyframes 定义的动画名称',
@@ -62,7 +74,10 @@ export const sections: Section[] = [
     id: 'easing',
     number: '5',
     title: { zh: '缓动函数', en: 'Easing Functions' },
-    summary: '缓动函数(timing function)控制动画或过渡的速率变化,决定了动画如何从起始状态过渡到结束状态,创建更自然的运动效果。',
+    summary: {
+      zh: '缓动函数(timing function)控制动画或过渡的速率变化,决定了动画如何从起始状态过渡到结束状态,创建更自然的运动效果。',
+      en: 'Easing functions (timing functions) control the rate of change in animations or transitions, determining how animations transition from start to end states, creating more natural motion effects.',
+    },
     keyPoints: [
       '预定义缓动: ease、linear、ease-in、ease-out、ease-in-out',
       'cubic-bezier(x1, y1, x2, y2) 自定义三次贝塞尔曲线',

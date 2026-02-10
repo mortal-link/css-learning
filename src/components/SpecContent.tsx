@@ -292,7 +292,7 @@ function renderInline(text: string, ctx: InlineContext): React.ReactNode[] {
             text={linkText}
             sectionId={section.id}
             sectionTitle={t(section.title)}
-            sectionSummary={section.summary}
+            sectionSummary={t(section.summary)}
             keyPoints={section.keyPoints}
             demoModuleId={ctx.moduleId}
             demoSectionId={section.id}
@@ -343,7 +343,7 @@ function renderInline(text: string, ctx: InlineContext): React.ReactNode[] {
             }
           }
           if (targetSection) {
-            sectionSummary = targetSection.summary;
+            sectionSummary = t(targetSection.summary);
             keyPoints = targetSection.keyPoints;
             resolvedSectionId = targetSection.id;
           }
@@ -404,7 +404,7 @@ function renderInline(text: string, ctx: InlineContext): React.ReactNode[] {
           if (refMod && refSecId) {
             const refSection = refMod.sections.find((s) => s.id === refSecId);
             if (refSection) {
-              termSummary = refSection.summary;
+              termSummary = t(refSection.summary);
               termKeyPoints = refSection.keyPoints;
             }
           }

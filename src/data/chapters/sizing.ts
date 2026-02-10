@@ -7,7 +7,7 @@ export const sections: Section[] = [
     id: 'containing-block',
     number: '1',
     title: { zh: '包含块', en: 'Containing Block Definition' },
-    summary: '包含块是 CSS 布局中的核心概念，它决定了元素的尺寸和位置的计算基准。',
+    summary: { zh: '包含块是 CSS 布局中的核心概念，它决定了元素的尺寸和位置的计算基准。', en: 'The containing block is a core concept in CSS layout, determining the reference frame for calculating element dimensions and positions.' },
     keyPoints: [
       '包含块的确定规则取决于元素的定位方式',
       'static/relative 定位：最近块级祖先的内容边界',
@@ -21,7 +21,7 @@ export const sections: Section[] = [
     id: 'width-calculation',
     number: '2',
     title: { zh: '宽度计算', en: 'Width Calculation' },
-    summary: 'CSS 中元素的宽度计算规则因元素类型和定位方式而异，理解这些规则对于精确控制布局至关重要。',
+    summary: { zh: 'CSS 中元素的宽度计算规则因元素类型和定位方式而异，理解这些规则对于精确控制布局至关重要。', en: 'Width calculation rules in CSS vary by element type and positioning method, and understanding these rules is crucial for precise layout control.' },
     keyPoints: [
       '行内非替换元素的 width 属性不适用',
       '块级元素的水平尺寸必须满足包含块宽度等式',
@@ -36,7 +36,7 @@ export const sections: Section[] = [
     id: 'height-calculation',
     number: '3',
     title: { zh: '高度计算', en: 'Height Calculation' },
-    summary: 'CSS 中元素的高度计算规则与宽度计算类似，但在处理 auto 值和百分比值时有重要区别。',
+    summary: { zh: 'CSS 中元素的高度计算规则与宽度计算类似，但在处理 auto 值和百分比值时有重要区别。', en: 'Height calculation rules in CSS are similar to width calculation, but have important differences when handling auto values and percentage values.' },
     keyPoints: [
       '行内非替换元素的高度由 line-height 决定',
       'auto height 取决于子元素的内容高度',
@@ -50,7 +50,7 @@ export const sections: Section[] = [
     id: 'alignment',
     number: '4',
     title: { zh: '盒对齐', en: 'Box Alignment' },
-    summary: 'CSS Box Alignment Module Level 3 提供了统一的对齐属性，适用于 Flexbox、Grid、Block 等多种布局模式。',
+    summary: { zh: 'CSS Box Alignment Module Level 3 提供了统一的对齐属性，适用于 Flexbox、Grid、Block 等多种布局模式。', en: 'CSS Box Alignment Module Level 3 provides unified alignment properties applicable to multiple layout modes including Flexbox, Grid, and Block.' },
     keyPoints: [
       'justify-content: 主轴方向的空间分配',
       'align-items: 交叉轴方向的默认对齐',
@@ -63,7 +63,7 @@ export const sections: Section[] = [
     id: 'intrinsic-sizing',
     number: '5',
     title: { zh: '内在尺寸', en: 'Intrinsic Sizing' },
-    summary: 'CSS3 引入了基于内容的尺寸关键字和宽高比控制，使得响应式设计更加灵活和强大。',
+    summary: { zh: 'CSS3 引入了基于内容的尺寸关键字和宽高比控制，使得响应式设计更加灵活和强大。', en: 'CSS3 introduced content-based sizing keywords and aspect ratio control, making responsive design more flexible and powerful.' },
     keyPoints: [
       'min-content: 不溢出的最小可能尺寸',
       'max-content: 不换行时的尺寸',
@@ -144,6 +144,42 @@ export const glossaryTerms: Record<string, GlossaryEntry> = {
       '盒对齐是 CSS Box Alignment Module Level 3 提供的一套统一的对齐属性系统，适用于 Flexbox、Grid、Block 和 Table 等多种布局模式。核心属性包括：justify-content（主轴分布）、align-items（交叉轴对齐）、align-self（单个元素对齐）、align-content（多行分布）。',
     specUrl: 'https://www.w3.org/TR/css-align-3/',
     sectionRef: 'sizing#alignment',
+  },
+  'definite': {
+    zh: '确定的',
+    description:
+      '尺寸值已确定(非 auto、非内容依赖)的状态。确定尺寸可以直接计算,无需依赖内容或布局。',
+    sectionRef: 'sizing#sizing-model',
+  },
+  'content-based minimum size': {
+    zh: '基于内容的最小尺寸',
+    description:
+      'Flex/Grid 项目的自动最小尺寸,确保项目不会缩小到无法显示其内容。可通过 min-width: 0 覆盖。',
+    sectionRef: 'sizing#sizing-model',
+  },
+  'specified size suggestion': {
+    zh: '指定尺寸建议',
+    description:
+      '尺寸算法中由 width/height 属性显式指定的目标尺寸。在 Flex/Grid 布局中作为弹性计算的参考输入。',
+    sectionRef: 'sizing#sizing-model',
+  },
+  'transferred size suggestion': {
+    zh: '传递尺寸建议',
+    description:
+      '通过宽高比(aspect-ratio)从另一轴传递过来的尺寸建议。用于保持元素的固有比例。',
+    sectionRef: 'sizing#sizing-model',
+  },
+  'content size suggestion': {
+    zh: '内容尺寸建议',
+    description:
+      '由元素内容本身决定的尺寸建议,即 min-content 或 max-content 尺寸。',
+    sectionRef: 'sizing#sizing-model',
+  },
+  'stretch': {
+    zh: '拉伸',
+    description:
+      '对齐属性的值之一。使项目在交叉轴方向拉伸填满容器(减去 margin)。Flexbox 交叉轴的默认对齐方式。',
+    sectionRef: 'sizing#sizing-model',
   },
 };
 

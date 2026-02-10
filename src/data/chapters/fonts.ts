@@ -8,8 +8,10 @@ export const sections: Section[] = [
     number: '1',
     title: { zh: '简介', en: 'Introduction to Fonts' },
     specId: 'intro',
-    summary:
-      '字体是 CSS 视觉呈现的核心组成部分。CSS 提供了丰富的字体控制能力，从字体族选择到字体变体。',
+    summary: {
+      zh: '字体是 CSS 视觉呈现的核心组成部分。CSS 提供了丰富的字体控制能力，从字体族选择到字体变体。',
+      en: 'Fonts are a core component of CSS visual presentation. CSS provides rich font control capabilities, from font family selection to font variants.',
+    },
     keyPoints: [
       '字体属性控制文本的视觉呈现',
       'CSS2 定义了基本字体属性（font-family、font-style、font-weight、font-size 等）',
@@ -22,8 +24,10 @@ export const sections: Section[] = [
     number: '2',
     title: { zh: '字体族选择', en: 'Font Family Selection' },
     specId: 'font-family-prop',
-    summary:
-      'font-family 属性指定元素使用的字体列表。浏览器按顺序查找可用字体，最后回退到通用字体族。',
+    summary: {
+      zh: 'font-family 属性指定元素使用的字体列表。浏览器按顺序查找可用字体，最后回退到通用字体族。',
+      en: 'The font-family property specifies a list of fonts for an element. The browser searches for available fonts in order, ultimately falling back to a generic font family.',
+    },
     keyPoints: [
       'font-family 支持字体名列表，按优先级从高到低排列',
       '字体名包含空格或特殊字符时需要用引号包裹',
@@ -38,8 +42,10 @@ export const sections: Section[] = [
     number: '3',
     title: { zh: '字体属性', en: 'Font Properties' },
     specId: 'font-styling',
-    summary:
-      'CSS 提供了一组属性来控制字体的风格、变体、粗细和大小。font 简写属性可以同时设置多个字体属性。',
+    summary: {
+      zh: 'CSS 提供了一组属性来控制字体的风格、变体、粗细和大小。font 简写属性可以同时设置多个字体属性。',
+      en: 'CSS provides a set of properties to control font style, variant, weight, and size. The font shorthand property can set multiple font properties simultaneously.',
+    },
     keyPoints: [
       'font-style：控制字体风格（normal、italic、oblique）',
       'font-variant：控制小型大写字母（normal、small-caps，CSS3 大幅扩展）',
@@ -55,8 +61,10 @@ export const sections: Section[] = [
     number: '4',
     title: { zh: '@font-face', en: 'Web Fonts' },
     specId: 'font-face-rule',
-    summary:
-      '@font-face 规则允许开发者加载自定义字体，使网页不再局限于用户系统字体。',
+    summary: {
+      zh: '@font-face 规则允许开发者加载自定义字体，使网页不再局限于用户系统字体。',
+      en: 'The @font-face rule allows developers to load custom fonts, freeing web pages from being limited to user system fonts.',
+    },
     keyPoints: [
       '@font-face 定义一个字体族名称和字体资源的映射',
       'src 描述符指定字体文件位置：url()（网络）、local()（本地系统）',
@@ -72,8 +80,10 @@ export const sections: Section[] = [
     number: '5',
     title: { zh: '可变字体', en: 'Variable Fonts' },
     specId: 'font-variation-settings-def',
-    summary:
-      'CSS3 引入的可变字体技术允许一个字体文件包含多个变体（粗细、宽度、倾斜等），通过插值实现精细控制。',
+    summary: {
+      zh: 'CSS3 引入的可变字体技术允许一个字体文件包含多个变体（粗细、宽度、倾斜等），通过插值实现精细控制。',
+      en: 'Variable font technology introduced in CSS3 allows a single font file to contain multiple variations (weight, width, slant, etc.), enabling fine-grained control through interpolation.',
+    },
     keyPoints: [
       '可变字体使用 font-variation-settings 属性控制变体轴',
       '注册轴：wght（粗细）、wdth（宽度）、slnt（倾斜）、ital（斜体）、opsz（光学尺寸）',

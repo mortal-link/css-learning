@@ -5,7 +5,7 @@ import type { PropertyEntry } from '../properties';
 const CSS22 = 'https://www.w3.org/TR/CSS22';
 
 // ============================================================
-// 章节数据
+// 小节数据
 // ============================================================
 
 export const sections: Section[] = [
@@ -14,8 +14,7 @@ export const sections: Section[] = [
     number: '1',
     title: { zh: '溢出处理', en: 'Overflow' },
     specId: 'overflow',
-    summary:
-      'overflow 属性控制当内容超出元素盒子时的表现方式。可以选择显示、隐藏、添加滚动条或自动处理溢出内容。',
+    summary: { zh: 'overflow 属性控制当内容超出元素盒子时的表现方式。可以选择显示、隐藏、添加滚动条或自动处理溢出内容。', en: 'The overflow property controls how content behaves when it exceeds the element box. Options include displaying, hiding, adding scrollbars, or automatically handling overflowing content.' },
     keyPoints: [
       'visible: 内容可见，溢出部分不裁剪（默认值）',
       'hidden: 溢出内容被裁剪，不可见且不可滚动',
@@ -31,8 +30,7 @@ export const sections: Section[] = [
     number: '2',
     title: { zh: '裁剪', en: 'Clipping' },
     specId: 'clipping',
-    summary:
-      'CSS2 的 clip 属性允许裁剪绝对定位元素的可见区域，但已被 CSS3 的 clip-path 属性取代。clip-path 提供更强大的裁剪能力，支持多种形状和路径。',
+    summary: { zh: 'CSS2 的 clip 属性允许裁剪绝对定位元素的可见区域，但已被 CSS3 的 clip-path 属性取代。clip-path 提供更强大的裁剪能力，支持多种形状和路径。', en: 'The CSS2 clip property allows clipping the visible region of absolutely positioned elements, but has been replaced by the CSS3 clip-path property. clip-path provides more powerful clipping capabilities, supporting various shapes and paths.' },
     keyPoints: [
       'CSS2 clip: rect() 仅适用于绝对定位元素，已被废弃',
       'CSS3 clip-path 支持基本形状：circle()、ellipse()、polygon()、inset()',
@@ -47,8 +45,7 @@ export const sections: Section[] = [
     number: '3',
     title: { zh: '可见性', en: 'Visibility' },
     specId: 'visibility',
-    summary:
-      'visibility 属性控制元素的可见性，但不改变布局。与 display: none 不同，visibility: hidden 的元素仍然占据空间。',
+    summary: { zh: 'visibility 属性控制元素的可见性，但不改变布局。与 display: none 不同，visibility: hidden 的元素仍然占据空间。', en: 'The visibility property controls element visibility without changing layout. Unlike display: none, elements with visibility: hidden still occupy space.' },
     keyPoints: [
       'visible: 元素可见（默认值）',
       'hidden: 元素不可见，但仍占据空间，影响布局',
@@ -64,8 +61,7 @@ export const sections: Section[] = [
     number: '4',
     title: { zh: '不透明度', en: 'Opacity' },
     specId: 'opacity',
-    summary:
-      'CSS3 opacity 属性控制元素及其所有子元素的不透明度。opacity 值为 0-1 之间的数字，0 表示完全透明，1 表示完全不透明。',
+    summary: { zh: 'CSS3 opacity 属性控制元素及其所有子元素的不透明度。opacity 值为 0-1 之间的数字，0 表示完全透明，1 表示完全不透明。', en: 'The CSS3 opacity property controls the opacity of an element and all its children. The opacity value is a number between 0 (fully transparent) and 1 (fully opaque).' },
     keyPoints: [
       'opacity 取值范围：0（完全透明）到 1（完全不透明）',
       'opacity 应用于整个元素及其所有子元素',
@@ -81,8 +77,7 @@ export const sections: Section[] = [
     number: '5',
     title: { zh: '滤镜与混合模式', en: 'Filters & Blend Modes' },
     specId: 'filters',
-    summary:
-      'CSS3 filter 属性提供了丰富的图像滤镜效果，如模糊、亮度、对比度等。backdrop-filter 可以对元素背后的内容应用滤镜。mix-blend-mode 和 background-blend-mode 控制元素和背景的混合模式。',
+    summary: { zh: 'CSS3 filter 属性提供了丰富的图像滤镜效果，如模糊、亮度、对比度等。backdrop-filter 可以对元素背后的内容应用滤镜。mix-blend-mode 和 background-blend-mode 控制元素和背景的混合模式。', en: 'The CSS3 filter property provides rich image filter effects such as blur, brightness, and contrast. backdrop-filter applies filters to content behind an element. mix-blend-mode and background-blend-mode control blending modes for elements and backgrounds.' },
     keyPoints: [
       'filter 函数：blur()、brightness()、contrast()、drop-shadow()、grayscale()、hue-rotate()、invert()、opacity()、saturate()、sepia()',
       'filter 可以组合多个函数，按顺序应用',

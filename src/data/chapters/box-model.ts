@@ -8,8 +8,10 @@ export const sections: Section[] = [
     number: '1',
     title: { zh: '简介', en: 'Introduction' },
     specId: 'intro',
-    summary:
-      'CSS 将元素树转换为一组盒子,每个盒子有矩形的内容区域,以及可选的 padding、border 和 margin 区域。',
+    summary: {
+      zh: 'CSS 将元素树转换为一组盒子,每个盒子有矩形的内容区域,以及可选的 padding、border 和 margin 区域。',
+      en: 'CSS transforms the element tree into a set of boxes, each with a rectangular content area and optional padding, border, and margin areas.',
+    },
     keyPoints: [
       '元素树(element tree)被转换为盒子树(box tree)',
       '每个盒子有 content、padding、border、margin 四个区域',
@@ -22,8 +24,10 @@ export const sections: Section[] = [
     number: '2',
     title: { zh: '盒模型', en: 'The CSS Box Model' },
     specId: 'box-model',
-    summary:
-      '每个盒子有 content area 及可选的 padding、border、margin 区域。各区域大小由对应属性控制,margin 可以为负值。',
+    summary: {
+      zh: '每个盒子有 content area 及可选的 padding、border、margin 区域。各区域大小由对应属性控制,margin 可以为负值。',
+      en: 'Each box has a content area and optional padding, border, and margin areas. Each area size is controlled by corresponding properties; margin can be negative.',
+    },
     keyPoints: [
       'content、padding、border 的背景由 background 属性控制',
       'margin 始终是透明的',
@@ -37,8 +41,10 @@ export const sections: Section[] = [
     number: '3',
     title: { zh: '外边距', en: 'Margins' },
     specId: 'margins',
-    summary:
-      'Margin 在 border edge 外围提供盒子之间的间距。支持 margin-top/right/bottom/left 和 margin 简写。',
+    summary: {
+      zh: 'Margin 在 border edge 外围提供盒子之间的间距。支持 margin-top/right/bottom/left 和 margin 简写。',
+      en: 'Margin provides spacing between boxes outside the border edge. Supports margin-top/right/bottom/left and margin shorthand.',
+    },
     keyPoints: [
       'margin 初始值为 0,不可继承',
       '允许负值(但可能有实现限制)',
@@ -53,8 +59,10 @@ export const sections: Section[] = [
     number: '4',
     title: { zh: '内边距', en: 'Padding' },
     specId: 'paddings',
-    summary:
-      'Padding 在 content edge 和 padding edge 之间提供间距。支持 padding-top/right/bottom/left 和 padding 简写。',
+    summary: {
+      zh: 'Padding 在 content edge 和 padding edge 之间提供间距。支持 padding-top/right/bottom/left 和 padding 简写。',
+      en: 'Padding provides spacing between content edge and padding edge. Supports padding-top/right/bottom/left and padding shorthand.',
+    },
     keyPoints: [
       'padding 初始值为 0,不可继承',
       '不允许负值',
@@ -68,8 +76,10 @@ export const sections: Section[] = [
     number: '5',
     title: { zh: '边框', en: 'Borders' },
     specId: 'borders',
-    summary:
-      'Border 填充 border area,用于可视化标记盒子的边缘。边框属性包括宽度、样式和颜色,定义在 css-backgrounds-3 中。',
+    summary: {
+      zh: 'Border 填充 border area,用于可视化标记盒子的边缘。边框属性包括宽度、样式和颜色,定义在 css-backgrounds-3 中。',
+      en: 'Border fills the border area, used to visually mark the edges of boxes. Border properties including width, style, and color are defined in css-backgrounds-3.',
+    },
     keyPoints: [
       '边框属性(width、style、color)定义在 CSS Backgrounds and Borders 模块中',
       '逻辑方向的边框属性定义在 css-logical-1 中',
@@ -498,5 +508,80 @@ export const glossaryTerms: Record<string, GlossaryEntry> = {
     zh: '外边距折叠',
     description: '垂直方向上相邻的 margin 会合并为一个(取较大值),而非叠加。这是 block layout 的特殊行为。',
     sectionRef: 'box-model#margins',
+  },
+  'content edge': {
+    zh: '内容边缘',
+    description: '内容区域的边界,即 content area 的外边缘。',
+    sectionRef: 'box-model#box-model',
+  },
+  'padding edge': {
+    zh: '内边距边缘',
+    description: '内边距区域的外边界,即 padding area 的外边缘。也称为内边距框的边。',
+    sectionRef: 'box-model#paddings',
+  },
+  'border edge': {
+    zh: '边框边缘',
+    description: '边框区域的外边界,即 border area 的外边缘。',
+    sectionRef: 'box-model#borders',
+  },
+  'margin edge': {
+    zh: '外边距边缘',
+    description: '外边距区域的外边界,即 margin area 的外边缘,也是盒子占用空间的最外层。',
+    sectionRef: 'box-model#margins',
+  },
+  'inner edge': {
+    zh: '内边缘',
+    description: '内容区域的边界,等同于 content edge。',
+    sectionRef: 'box-model#box-model',
+  },
+  'outer edge': {
+    zh: '外边缘',
+    description: '外边距区域的边界,等同于 margin edge,是盒子在布局中占据空间的最外层。',
+    sectionRef: 'box-model#margins',
+  },
+  'content box': {
+    zh: '内容框',
+    description: '由 content edge 围成的矩形区域,包含元素的实际内容。box-sizing: content-box 的参考框。',
+    sectionRef: 'box-model#box-model',
+  },
+  'padding box': {
+    zh: '内边距框',
+    description: '由 padding edge 围成的矩形区域,包含内容和内边距。background-origin 的默认参考框。',
+    sectionRef: 'box-model#paddings',
+  },
+  'border box': {
+    zh: '边框框',
+    description: '由 border edge 围成的矩形区域。box-sizing: border-box 的参考框,也是 background-clip 的默认裁剪区域。',
+    sectionRef: 'box-model#borders',
+  },
+  'margin box': {
+    zh: '外边距框',
+    description: '由 margin edge 围成的矩形区域。盒子在流式布局中实际占据的完整空间。',
+    sectionRef: 'box-model#margins',
+  },
+  'content-box': {
+    zh: '内容框(值)',
+    description: 'box-sizing 属性的值之一。宽高只包含内容区域,padding 和 border 额外增加尺寸。CSS2 的默认行为。',
+    sectionRef: 'box-model#box-model',
+  },
+  'border-box': {
+    zh: '边框框(值)',
+    description: 'box-sizing 属性的值之一。宽高包含内容、内边距和边框,让尺寸计算更直观。',
+    sectionRef: 'box-model#box-model',
+  },
+  'margin properties': {
+    zh: '外边距属性',
+    description: 'margin-top、margin-right、margin-bottom、margin-left 及简写 margin。控制盒子外部的空间。',
+    sectionRef: 'box-model#margins',
+  },
+  'padding properties': {
+    zh: '内边距属性',
+    description: 'padding-top、padding-right、padding-bottom、padding-left 及简写 padding。控制内容与边框之间的空间。',
+    sectionRef: 'box-model#paddings',
+  },
+  'border properties': {
+    zh: '边框属性',
+    description: 'border-width、border-style、border-color 及相关简写属性。控制盒子边框的外观。',
+    sectionRef: 'box-model#borders',
   },
 };

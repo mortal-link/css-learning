@@ -1,7 +1,8 @@
 'use client';
 
-import { ExternalLink, BookOpen, ArrowRight, Sparkles } from 'lucide-react';
+import { ExternalLink, BookOpen, ArrowRight, Sparkles, Check, X, BookMarked } from 'lucide-react';
 import Link from 'next/link';
+import { useMemo } from 'react';
 import {
   Popover,
   PopoverContent,
@@ -11,6 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { DemoSlot } from '@/components/demos/DemoSlot';
 import { getDemoComponent } from '@/components/demos/index';
+import { glossary } from '@/data/glossary';
 import type { GlossaryEntry } from '@/data/glossary';
 import type { PropertyEntry } from '@/data/properties';
 
@@ -100,6 +102,10 @@ export function SpecLink(props: SpecLinkProps) {
   }
 }
 
+// ── Shared: popover content wrapper with animation ──
+
+const popoverClassName = 'p-0 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95';
+
 // ── Shared: section content preview ──
 
 function SectionPreview({
@@ -165,16 +171,30 @@ function SpecVersionLinks({
   siteHref,
   css2Url,
   css3Url,
+  glossaryHref,
+  glossaryLabel,
 }: {
   siteHref?: string;
   css2Url?: string;
   css3Url?: string;
+  glossaryHref?: string;
+  glossaryLabel?: string;
 }) {
-  const hasAny = siteHref || css2Url || css3Url;
+  const hasAny = siteHref || css2Url || css3Url || glossaryHref;
   if (!hasAny) return null;
 
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 border-t border-border mt-2">
+      {glossaryHref && (
+        <Link
+          href={glossaryHref}
+          className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+        >
+          <BookMarked className="w-3 h-3" />
+          {glossaryLabel || '在术语表中查看'}
+          <ArrowRight className="w-3 h-3" />
+        </Link>
+      )}
       {siteHref && (
         <Link
           href={siteHref}
@@ -211,12 +231,61 @@ function SpecVersionLinks({
   );
 }
 
+// ── Shared: syntax-highlighted property value ──
+
+function SyntaxValue({ value }: { value: string }) {
+  // Highlight data types like <length>, <color>, etc. and keywords like inherit, auto
+  const parts = value.split(/(<[^>]+>)/g);
+  return (
+    <span className="font-mono text-foreground/90 break-all">
+      {parts.map((part, i) =>
+        part.startsWith('<') && part.endsWith('>') ? (
+          <span key={i} className="text-blue-600 dark:text-blue-400">{part}</span>
+        ) : (
+          <span key={i}>
+            {part.split(/\b(inherit|initial|unset|revert|auto|none|normal|hidden|visible|scroll|fixed|absolute|relative|static)\b/g).map((seg, j) =>
+              /^(inherit|initial|unset|revert|auto|none|normal|hidden|visible|scroll|fixed|absolute|relative|static)$/.test(seg) ? (
+                <span key={j} className="text-purple-600 dark:text-purple-400">{seg}</span>
+              ) : seg
+            )}
+          </span>
+        )
+      )}
+    </span>
+  );
+}
+
+// ── Shared: find related terms from same module ──
+
+function useRelatedTerms(termText: string, sectionRef?: string, maxTerms = 3): Array<{ key: string; zh: string }> {
+  return useMemo(() => {
+    if (!sectionRef) return [];
+    const moduleId = sectionRef.split('#')[0];
+    if (!moduleId) return [];
+
+    const related: Array<{ key: string; zh: string }> = [];
+    const termTextLower = termText.toLowerCase();
+
+    for (const [key, entry] of Object.entries(glossary)) {
+      if (key === termTextLower) continue;
+      const entryModuleId = entry.sectionRef?.split('#')[0];
+      if (entryModuleId === moduleId) {
+        related.push({ key, zh: entry.zh });
+        if (related.length >= maxTerms) break;
+      }
+    }
+    return related;
+  }, [termText, sectionRef, maxTerms]);
+}
+
 // ── Term Popover ──
 // 颜色：显眼的 primary 实底背景标记，表示有丰富的弹窗内容
 
 function TermPopover({ text, entry, sectionSummary, keyPoints, demoModuleId, demoSectionId }: TermLinkProps) {
   const [moduleId, sectionId] = entry.sectionRef?.split('#') ?? [];
   const siteHref = moduleId && sectionId ? `/modules/${moduleId}#${sectionId}` : undefined;
+  const termKey = text.toLowerCase().trim();
+  const relatedTerms = useRelatedTerms(text, entry.sectionRef);
 
   return (
     <Popover>
@@ -225,17 +294,29 @@ function TermPopover({ text, entry, sectionSummary, keyPoints, demoModuleId, dem
           {text}
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-[40rem] p-0" align="start">
+      <PopoverContent className={`w-[40rem] max-w-[calc(100vw-2rem)] ${popoverClassName}`} align="start">
         <ScrollArea className="max-h-[70vh]">
           <div className="p-4 space-y-3">
             {/* 术语标题 */}
             <div>
               <div className="font-semibold text-sm text-foreground">{text}</div>
-              <div className="text-xs text-muted-foreground">{entry.zh}</div>
+              <div className="text-sm font-medium text-foreground/80 mt-0.5">{entry.zh}</div>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               {entry.description}
             </p>
+
+            {/* 相关术语 */}
+            {relatedTerms.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                <span className="text-xs text-muted-foreground">相关：</span>
+                {relatedTerms.map((rt) => (
+                  <span key={rt.key} className="text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                    {rt.key} ({rt.zh})
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* Section 内容预览 */}
             {(sectionSummary || (keyPoints && keyPoints.length > 0)) && (
@@ -253,6 +334,8 @@ function TermPopover({ text, entry, sectionSummary, keyPoints, demoModuleId, dem
               siteHref={siteHref}
               css2Url={entry.css2Url}
               css3Url={entry.specUrl}
+              glossaryHref={`/glossary#term-${encodeURIComponent(termKey)}`}
+              glossaryLabel="在术语表中查看"
             />
           </div>
         </ScrollArea>
@@ -262,7 +345,7 @@ function TermPopover({ text, entry, sectionSummary, keyPoints, demoModuleId, dem
 }
 
 // ── Relative Link Popover (CSS2 cross-chapter links) ──
-// 颜色：蓝色调，表示跨章节站内导航
+// 颜色：蓝色调，表示跨模块站内导航
 
 function RelativePopover({ text, moduleId, moduleTitle, anchor, sectionSummary, keyPoints, css2Url, css3Url, demoModuleId, demoSectionId }: RelativeLinkProps) {
   const siteHref = `/modules/${moduleId}${anchor ? `#${anchor}` : ''}`;
@@ -279,7 +362,7 @@ function RelativePopover({ text, moduleId, moduleTitle, anchor, sectionSummary, 
           {text}
         </button>
       </PopoverTrigger>
-      <PopoverContent className={`${hasRichContent ? 'w-[40rem]' : 'w-96'} p-0`} align="start">
+      <PopoverContent className={`${hasRichContent ? 'w-[40rem]' : 'w-96'} max-w-[calc(100vw-2rem)] ${popoverClassName}`} align="start">
         <ScrollArea className={hasRichContent ? 'max-h-[70vh]' : ''}>
           <div className="p-4 space-y-3">
             <div className="font-semibold text-sm text-foreground">{moduleTitle}</div>
@@ -298,7 +381,7 @@ function RelativePopover({ text, moduleId, moduleTitle, anchor, sectionSummary, 
 }
 
 // ── Internal Anchor Popover (same-page section link) ──
-// 颜色：紫色调，表示页内章节导航
+// 颜色：紫色调，表示页内小节导航
 
 function InternalPopover({ text, sectionId, sectionTitle, sectionSummary, keyPoints, demoModuleId, demoSectionId }: InternalLinkProps) {
   const hasRichContent = sectionSummary || (keyPoints && keyPoints.length > 0);
@@ -314,7 +397,7 @@ function InternalPopover({ text, sectionId, sectionTitle, sectionSummary, keyPoi
           {text}
         </button>
       </PopoverTrigger>
-      <PopoverContent className={`${hasRichContent ? 'w-[40rem]' : 'w-96'} p-0`} align="start">
+      <PopoverContent className={`${hasRichContent ? 'w-[40rem]' : 'w-96'} max-w-[calc(100vw-2rem)] ${popoverClassName}`} align="start">
         <ScrollArea className={hasRichContent ? 'max-h-[70vh]' : ''}>
           <div className="p-4 space-y-3">
             <div className="font-semibold text-sm text-foreground">{sectionTitle}</div>
@@ -385,6 +468,7 @@ function ExternalRelativeLink({ text, url }: ExternalUrlLinkProps) {
 function PropertyPopover({ text, entry }: PropertyLinkProps) {
   const [moduleId, sectionId] = entry.sectionRef?.split('#') ?? [];
   const siteHref = moduleId && sectionId ? `/modules/${moduleId}#${sectionId}` : undefined;
+  const propKey = text.toLowerCase().trim().replace(/^'|'$/g, '');
 
   return (
     <Popover>
@@ -393,19 +477,19 @@ function PropertyPopover({ text, entry }: PropertyLinkProps) {
           {text}
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-96 p-0" align="start">
+      <PopoverContent className={`w-96 max-w-[calc(100vw-2rem)] ${popoverClassName}`} align="start">
         <ScrollArea className="max-h-[70vh]">
           <div className="p-4 space-y-3">
             {/* 属性标题 */}
             <div>
               <div className="font-mono font-semibold text-sm text-foreground">{text}</div>
-              <div className="text-xs text-muted-foreground">{entry.zh}</div>
+              <div className="text-sm font-medium text-foreground/80 mt-0.5">{entry.zh}</div>
             </div>
 
             {/* 属性元数据表格 */}
             <div className="grid grid-cols-[5.5rem_1fr] gap-y-1.5 gap-x-2 text-xs">
               <span className="text-muted-foreground font-medium">值语法</span>
-              <span className="font-mono text-foreground/90 break-all">{entry.value}</span>
+              <SyntaxValue value={entry.value} />
 
               <span className="text-muted-foreground font-medium">初始值</span>
               <span className="text-foreground/90">{entry.initial}</span>
@@ -414,8 +498,12 @@ function PropertyPopover({ text, entry }: PropertyLinkProps) {
               <span className="text-foreground/90">{entry.appliesTo}</span>
 
               <span className="text-muted-foreground font-medium">是否继承</span>
-              <span className={entry.inherited ? 'text-green-600 dark:text-green-400' : 'text-foreground/90'}>
-                {entry.inherited ? '是' : '否'}
+              <span className="inline-flex items-center gap-1">
+                {entry.inherited ? (
+                  <Check className="w-3.5 h-3.5 text-green-600 dark:text-green-400" />
+                ) : (
+                  <X className="w-3.5 h-3.5 text-muted-foreground" />
+                )}
               </span>
 
               {entry.percentages !== null && (
@@ -434,6 +522,8 @@ function PropertyPopover({ text, entry }: PropertyLinkProps) {
               siteHref={siteHref}
               css2Url={entry.css2Url}
               css3Url={entry.css3Url}
+              glossaryHref={`/glossary?tab=properties#prop-${encodeURIComponent(propKey)}`}
+              glossaryLabel="在属性表中查看"
             />
           </div>
         </ScrollArea>

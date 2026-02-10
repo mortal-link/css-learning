@@ -8,7 +8,10 @@ export const sections: Section[] = [
     number: '1',
     title: { zh: '颜色值', en: 'Color Values' },
     specId: 'color-values',
-    summary: 'CSS 支持多种颜色值格式,包括命名颜色、十六进制、RGB/HSL 函数和现代颜色空间。',
+    summary: {
+      zh: 'CSS 支持多种颜色值格式,包括命名颜色、十六进制、RGB/HSL 函数和现代颜色空间。',
+      en: 'CSS supports multiple color value formats, including named colors, hexadecimal, RGB/HSL functions, and modern color spaces.',
+    },
     keyPoints: [
       '命名颜色、十六进制和 RGB 是 CSS2 的基础颜色格式',
       'HSL、LAB、LCH、OKLCH 等是 CSS3 扩展的颜色空间',
@@ -22,7 +25,10 @@ export const sections: Section[] = [
     number: '2',
     title: { zh: '前景与背景', en: 'Foreground & Background' },
     specId: 'colors',
-    summary: 'color 属性控制文本前景色,background 系列属性控制背景的颜色、图像、定位和层叠。',
+    summary: {
+      zh: 'color 属性控制文本前景色,background 系列属性控制背景的颜色、图像、定位和层叠。',
+      en: 'The color property controls text foreground color, while background properties control the color, image, positioning, and layering of backgrounds.',
+    },
     keyPoints: [
       'color 属性设置文本前景色,可被子元素继承',
       'currentColor 可用于统一多个属性的颜色',
@@ -36,7 +42,10 @@ export const sections: Section[] = [
     number: '3',
     title: { zh: '渐变', en: 'Gradients' },
     specId: 'gradients',
-    summary: 'CSS3 提供线性、径向和圆锥三种渐变函数,用于创建平滑的颜色过渡效果。',
+    summary: {
+      zh: 'CSS3 提供线性、径向和圆锥三种渐变函数,用于创建平滑的颜色过渡效果。',
+      en: 'CSS3 provides three types of gradient functions—linear, radial, and conic—for creating smooth color transition effects.',
+    },
     keyPoints: [
       'linear-gradient 沿直线方向创建渐变',
       'radial-gradient 从中心点向外辐射创建渐变',
@@ -50,7 +59,10 @@ export const sections: Section[] = [
     number: '4',
     title: { zh: '边框装饰', en: 'Border Decoration' },
     specId: 'border-radius',
-    summary: 'CSS3 为边框增加了圆角、阴影和图像边框等装饰效果,以及不影响布局的轮廓属性。',
+    summary: {
+      zh: 'CSS3 为边框增加了圆角、阴影和图像边框等装饰效果,以及不影响布局的轮廓属性。',
+      en: 'CSS3 adds decorative effects to borders including rounded corners, shadows, and border images, as well as outline properties that do not affect layout.',
+    },
     keyPoints: [
       'border-radius 创建圆角,可单独控制每个角',
       'box-shadow 添加外阴影或内阴影效果',
@@ -64,7 +76,10 @@ export const sections: Section[] = [
     number: '5',
     title: { zh: '阴影与效果', en: 'Shadows & Effects' },
     specId: 'box-shadow',
-    summary: '综合运用颜色、背景、渐变和阴影属性,创建丰富的视觉效果和层次感。',
+    summary: {
+      zh: '综合运用颜色、背景、渐变和阴影属性,创建丰富的视觉效果和层次感。',
+      en: 'Combine color, background, gradient, and shadow properties to create rich visual effects and depth.',
+    },
     keyPoints: [
       '多重 box-shadow 可叠加创建复杂阴影效果',
       'inset 关键字创建内阴影',
@@ -125,6 +140,12 @@ export const glossaryTerms: Record<string, GlossaryEntry> = {
     zh: '边框圆角',
     description: 'CSS3 属性,使元素边框盒的角变圆。每个角可以独立控制,并且可以有不同的水平和垂直半径以创建椭圆角。在正方形元素上将 border-radius 设置为 50% 可创建完美的圆形。',
     sectionRef: 'colors-backgrounds#borders-decoration',
+  },
+  'alpha': {
+    zh: '透明度通道',
+    description: '颜色的第四个分量,控制透明度。0 为完全透明,1 为完全不透明。在 rgba()、hsla() 及现代颜色函数中使用。',
+    sectionRef: 'colors-backgrounds#color-values',
+    specUrl: 'https://www.w3.org/TR/css-color-4/#transparency',
   }
 };
 

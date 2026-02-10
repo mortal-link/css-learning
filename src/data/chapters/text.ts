@@ -8,8 +8,10 @@ export const sections: Section[] = [
     number: '1',
     title: { zh: '缩进与对齐', en: 'Indentation and Alignment' },
     specId: 'text-indent-align',
-    summary:
-      'text-indent 控制块容器首行的缩进量,text-align 控制行内内容的水平对齐方式。CSS3 新增 text-align-last 和 text-justify 提供更精细的对齐控制。',
+    summary: {
+      zh: 'text-indent 控制块容器首行的缩进量,text-align 控制行内内容的水平对齐方式。CSS3 新增 text-align-last 和 text-justify 提供更精细的对齐控制。',
+      en: 'text-indent controls the indentation of the first line of a block container, while text-align controls the horizontal alignment of inline content. CSS3 adds text-align-last and text-justify for finer alignment control.',
+    },
     keyPoints: [
       'text-indent 可使用长度或百分比,支持负值实现悬挂缩进',
       'text-align 支持 left/right/center/justify 四种基本对齐',
@@ -23,8 +25,10 @@ export const sections: Section[] = [
     number: '2',
     title: { zh: '文本装饰', en: 'Text Decoration' },
     specId: 'decoration',
-    summary:
-      'text-decoration 为文本添加下划线、上划线、删除线等装饰线。CSS3 将其拆分为多个子属性,支持装饰线的颜色、样式、粗细等精细控制。',
+    summary: {
+      zh: 'text-decoration 为文本添加下划线、上划线、删除线等装饰线。CSS3 将其拆分为多个子属性,支持装饰线的颜色、样式、粗细等精细控制。',
+      en: 'text-decoration adds decorative lines such as underlines, overlines, and strikethroughs to text. CSS3 splits it into multiple sub-properties, supporting fine control over line color, style, thickness, and more.',
+    },
     keyPoints: [
       'CSS2: text-decoration 支持 underline/overline/line-through/blink',
       'CSS3: 拆分为 text-decoration-line/color/style/thickness 子属性',
@@ -38,8 +42,10 @@ export const sections: Section[] = [
     number: '3',
     title: { zh: '变换与间距', en: 'Transform and Spacing' },
     specId: 'transform-spacing',
-    summary:
-      'text-transform 控制文本大小写转换,letter-spacing 和 word-spacing 控制字符和单词间距。CSS3 新增断行和连字符控制。',
+    summary: {
+      zh: 'text-transform 控制文本大小写转换,letter-spacing 和 word-spacing 控制字符和单词间距。CSS3 新增断行和连字符控制。',
+      en: 'text-transform controls text case conversion, while letter-spacing and word-spacing control character and word spacing. CSS3 adds line breaking and hyphenation control.',
+    },
     keyPoints: [
       'text-transform: capitalize/uppercase/lowercase/none',
       'letter-spacing 控制字符间距,word-spacing 控制单词间距',
@@ -53,8 +59,10 @@ export const sections: Section[] = [
     number: '4',
     title: { zh: '空白处理', en: 'White Space Handling' },
     specId: 'white-space',
-    summary:
-      'white-space 属性控制如何处理元素内的空白字符和换行。CSS3 提供更细粒度的 white-space-collapse 和 text-wrap 属性。',
+    summary: {
+      zh: 'white-space 属性控制如何处理元素内的空白字符和换行。CSS3 提供更细粒度的 white-space-collapse 和 text-wrap 属性。',
+      en: 'The white-space property controls how whitespace characters and line breaks within an element are handled. CSS3 provides finer-grained white-space-collapse and text-wrap properties.',
+    },
     keyPoints: [
       'normal: 合并空白,自动换行',
       'pre: 保留空白和换行,不自动换行',
@@ -69,8 +77,10 @@ export const sections: Section[] = [
     number: '5',
     title: { zh: '书写模式', en: 'Writing Modes' },
     specId: 'writing-modes',
-    summary:
-      'CSS3 书写模式模块定义了文本的排版方向和布局流。支持横排、竖排以及从右到左的书写系统,并提供逻辑属性映射到物理属性的机制。',
+    summary: {
+      zh: 'CSS3 书写模式模块定义了文本的排版方向和布局流。支持横排、竖排以及从右到左的书写系统,并提供逻辑属性映射到物理属性的机制。',
+      en: 'The CSS3 Writing Modes module defines text layout direction and flow. It supports horizontal and vertical layout, as well as right-to-left writing systems, and provides a mechanism for mapping logical properties to physical properties.',
+    },
     keyPoints: [
       'writing-mode 控制块流方向和行内方向(横排/竖排)',
       'text-orientation 控制字符在垂直文本中的方向',

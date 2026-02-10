@@ -7,8 +7,10 @@ export const sections: Section[] = [
     id: 'container-queries',
     number: '1',
     title: { zh: '容器查询', en: 'Container Queries' },
-    summary:
-      '容器查询允许根据父容器的尺寸（而非视口尺寸）应用样式，实现真正的组件级响应式设计。',
+    summary: {
+      zh: '容器查询允许根据父容器的尺寸（而非视口尺寸）应用样式，实现真正的组件级响应式设计。',
+      en: 'Container queries allow applying styles based on parent container dimensions (rather than viewport size), enabling true component-level responsive design.',
+    },
     keyPoints: [
       '@container 规则定义基于容器尺寸的查询条件',
       'container-type 将元素声明为查询容器（size | inline-size）',
@@ -21,8 +23,10 @@ export const sections: Section[] = [
     id: 'css-nesting',
     number: '2',
     title: { zh: 'CSS 嵌套', en: 'CSS Nesting' },
-    summary:
-      '原生 CSS 嵌套语法允许在规则内部嵌套其他规则，类似于 Sass/Less 预处理器，减少选择器重复。',
+    summary: {
+      zh: '原生 CSS 嵌套语法允许在规则内部嵌套其他规则，类似于 Sass/Less 预处理器，减少选择器重复。',
+      en: 'Native CSS nesting syntax allows nesting rules within other rules, similar to Sass/Less preprocessors, reducing selector repetition.',
+    },
     keyPoints: [
       '& 选择器代表父选择器，用于嵌套和组合',
       '可以嵌套规则、媒体查询、容器查询等',
@@ -35,8 +39,10 @@ export const sections: Section[] = [
     id: 'cascade-layers',
     number: '3',
     title: { zh: '级联层', en: 'Cascade Layers' },
-    summary:
-      '@layer 规则定义级联层，提供显式的样式优先级分组机制，使大型项目的样式管理更加可控。',
+    summary: {
+      zh: '@layer 规则定义级联层，提供显式的样式优先级分组机制，使大型项目的样式管理更加可控。',
+      en: 'The @layer rule defines cascade layers, providing an explicit style priority grouping mechanism that makes style management in large projects more controllable.',
+    },
     keyPoints: [
       '@layer 定义命名的级联层，控制样式优先级顺序',
       '层的声明顺序决定优先级，后声明的层优先级更高',
@@ -49,8 +55,10 @@ export const sections: Section[] = [
     id: 'scope',
     number: '4',
     title: { zh: '作用域', en: 'CSS Scoping' },
-    summary:
-      '@scope 规则限制选择器的作用范围，实现样式隔离和"就近优先"的级联逻辑。',
+    summary: {
+      zh: '@scope 规则限制选择器的作用范围，实现样式隔离和"就近优先"的级联逻辑。',
+      en: 'The @scope rule limits the scope of selectors, achieving style isolation and "proximity priority" cascade logic.',
+    },
     keyPoints: [
       '@scope 定义样式的作用域根（scope root）',
       'to 子句定义作用域边界，排除内部区域（donut scope）',
@@ -63,8 +71,10 @@ export const sections: Section[] = [
     id: 'content-visibility',
     number: '5',
     title: { zh: '内容可见性与性能', en: 'Content Visibility & Performance' },
-    summary:
-      'content-visibility 和 contain 属性通过延迟渲染和包含优化，显著提升页面性能。',
+    summary: {
+      zh: 'content-visibility 和 contain 属性通过延迟渲染和包含优化，显著提升页面性能。',
+      en: 'The content-visibility and contain properties significantly improve page performance through deferred rendering and containment optimization.',
+    },
     keyPoints: [
       'content-visibility: auto 延迟渲染视口外的内容',
       'contain 属性将元素与文档其余部分隔离，优化渲染范围',
@@ -76,7 +86,7 @@ export const sections: Section[] = [
 ];
 
 export const anchors: Record<string, string> = {
-  // Modern CSS 没有对应的 CSS2 章节，anchors 为空
+  // Modern CSS 没有对应的 CSS2 章号，anchors 为空
 };
 
 // ============================================================
@@ -251,5 +261,62 @@ export const glossaryTerms: Record<string, GlossaryEntry> = {
       '在 @scope 规则中，距离作用域根更近的规则优先级更高，无论特异性如何。这是一种基于 DOM 距离的级联机制。',
     sectionRef: 'modern#scope',
     specUrl: SCOPE,
+  },
+  'grid': {
+    zh: '网格',
+    description:
+      'CSS Grid 布局系统,通过 display: grid 创建二维网格容器,使用行和列来组织子元素的布局。',
+    sectionRef: 'modern#grid-layout',
+    specUrl: 'https://www.w3.org/TR/css-grid-2/',
+  },
+  'row': {
+    zh: '行',
+    description:
+      '网格布局中的水平轨道。grid-template-rows 定义显式行,内容溢出时会产生隐式行。',
+    sectionRef: 'modern#grid-layout',
+  },
+  'column': {
+    zh: '列',
+    description:
+      '网格布局中的垂直轨道。grid-template-columns 定义显式列。也指 column-count/column-width 的多列布局。',
+    sectionRef: 'modern#grid-layout',
+  },
+  'columns': {
+    zh: '多列',
+    description:
+      'CSS 多列布局(Multi-column Layout),通过 column-count 或 column-width 将内容分成多列显示。',
+    sectionRef: 'modern#grid-layout',
+  },
+  'flex-start': {
+    zh: '弹性起点',
+    description:
+      'Flex 对齐值。项目在主轴/交叉轴的起始端对齐。对于 LTR 布局的主轴,起点在左侧。',
+    sectionRef: 'modern#flexbox',
+    specUrl: 'https://www.w3.org/TR/css-flexbox-1/',
+  },
+  'flex-end': {
+    zh: '弹性终点',
+    description:
+      'Flex 对齐值。项目在主轴/交叉轴的末尾端对齐。对于 LTR 布局的主轴,终点在右侧。',
+    sectionRef: 'modern#flexbox',
+    specUrl: 'https://www.w3.org/TR/css-flexbox-1/',
+  },
+  'start': {
+    zh: '起点',
+    description:
+      '逻辑对齐值。根据书写方向和布局方向确定的起始位置,是 flex-start 的通用替代。',
+    sectionRef: 'modern#flexbox',
+  },
+  'end': {
+    zh: '终点',
+    description:
+      '逻辑对齐值。根据书写方向和布局方向确定的结束位置,是 flex-end 的通用替代。',
+    sectionRef: 'modern#flexbox',
+  },
+  'center': {
+    zh: '居中',
+    description:
+      '对齐属性的值之一。将项目在对应轴方向居中放置。常用于 justify-content、align-items 等属性。',
+    sectionRef: 'modern#flexbox',
   },
 };

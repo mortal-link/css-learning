@@ -7,8 +7,10 @@ export const sections: Section[] = [
     number: '1',
     title: { zh: 'CSS 是什么', en: 'What is CSS?' },
     specId: 'html-tutorial',
-    summary:
-      'CSS（Cascading Style Sheets，层叠样式表）是一种样式语言，用于描述结构化文档（如 HTML、XML）的视觉呈现。它的核心设计理念是将文档的内容结构与视觉表现分离——HTML 负责「说什么」，CSS 负责「怎么看起来」。CSS 通过选择器定位元素，通过属性-值对（如 color: red）声明样式规则，并通过层叠机制解决多个来源的样式冲突。样式表有三个来源：作者样式表（网站开发者编写）、用户样式表（浏览网页的用户提供）、用户代理样式表（浏览器内置的默认样式）。CSS 可以内嵌在 HTML 的 <style> 标签中，也可以通过 <link> 引用外部样式表文件。',
+    summary: {
+      zh: 'CSS（Cascading Style Sheets，层叠样式表）是一种样式语言，用于描述结构化文档（如 HTML、XML）的视觉呈现。它的核心设计理念是将文档的内容结构与视觉表现分离——HTML 负责「说什么」，CSS 负责「怎么看起来」。CSS 通过选择器定位元素，通过属性-值对（如 color: red）声明样式规则，并通过层叠机制解决多个来源的样式冲突。样式表有三个来源：作者样式表（网站开发者编写）、用户样式表（浏览网页的用户提供）、用户代理样式表（浏览器内置的默认样式）。CSS 可以内嵌在 HTML 的 <style> 标签中，也可以通过 <link> 引用外部样式表文件。',
+      en: 'CSS (Cascading Style Sheets) is a style language used to describe the visual presentation of structured documents (such as HTML and XML). Its core design principle is to separate document content structure from visual presentation—HTML handles "what to say," while CSS handles "how it looks." CSS uses selectors to target elements, declares style rules through property-value pairs (like color: red), and resolves conflicts from multiple sources through the cascade mechanism. Style sheets come from three sources: author style sheets (written by website developers), user style sheets (provided by people browsing the web), and user agent style sheets (browser default styles). CSS can be embedded in HTML via <style> tags or referenced from external style sheet files via <link>.',
+    },
     keyPoints: [
       'CSS 将文档结构与视觉呈现分离，让同一份 HTML 可以用不同样式表呈现不同外观',
       '样式规则由「选择器 + 声明块」组成，例如 h1 { color: red; font-size: 2em; }',
@@ -23,8 +25,10 @@ export const sections: Section[] = [
     number: '2',
     title: { zh: '设计原则', en: 'Design Principles' },
     specId: 'design-principles',
-    summary:
-      'CSS 的设计遵循一套核心原则，这些原则确保了 CSS 能够持续演进而不破坏现有内容。最重要的是「前向兼容」——浏览器遇到不认识的 CSS 语法时会跳过而非报错，这让新特性可以安全添加而不影响旧浏览器。「层叠机制」让来自多个来源的样式规则可以共存并有序解决冲突。「继承机制」减少重复声明，让样式自然传播。「用户控制」原则确保用户可以覆盖作者样式以满足无障碍需求（如强制高对比度）。CSS 还强调平台独立性、网络性能、简洁性和灵活性——既要足够简单让人类阅读和编写，又要足够强大支持丰富的视觉表现。',
+    summary: {
+      zh: 'CSS 的设计遵循一套核心原则，这些原则确保了 CSS 能够持续演进而不破坏现有内容。最重要的是「前向兼容」——浏览器遇到不认识的 CSS 语法时会跳过而非报错，这让新特性可以安全添加而不影响旧浏览器。「层叠机制」让来自多个来源的样式规则可以共存并有序解决冲突。「继承机制」减少重复声明，让样式自然传播。「用户控制」原则确保用户可以覆盖作者样式以满足无障碍需求（如强制高对比度）。CSS 还强调平台独立性、网络性能、简洁性和灵活性——既要足够简单让人类阅读和编写，又要足够强大支持丰富的视觉表现。',
+      en: 'CSS design follows a set of core principles that ensure CSS can continue to evolve without breaking existing content. Most important is "forward compatibility"—browsers skip unrecognized CSS syntax rather than throwing errors, allowing new features to be safely added without affecting older browsers. The "cascade mechanism" allows style rules from multiple sources to coexist and resolve conflicts in an orderly manner. The "inheritance mechanism" reduces repetitive declarations by allowing styles to propagate naturally. The "user control" principle ensures users can override author styles to meet accessibility needs (such as enforcing high contrast). CSS also emphasizes platform independence, network performance, simplicity, and flexibility—being simple enough for humans to read and write, yet powerful enough to support rich visual presentation.',
+    },
     keyPoints: [
       '前向兼容：CSS2 浏览器能理解 CSS1，CSS1 浏览器会忽略 CSS2 的新特性而不会崩溃',
       '后向兼容：旧浏览器忽略不认识的属性/值，新浏览器仍支持旧语法（除非明确废弃）',
@@ -41,8 +45,10 @@ export const sections: Section[] = [
     number: '3',
     title: { zh: '处理模型', en: 'Processing Model' },
     specId: 'processing-model',
-    summary:
-      'CSS 的处理模型描述了浏览器如何从源文档到最终渲染的完整流程。第一步，解析源文档（HTML/XML）生成文档树（document tree），树中的每个节点是一个元素。第二步，根据目标媒体类型（屏幕/打印/语音等）获取所有适用的样式表。第三步，为文档树中的每个元素的每个属性计算值（通过层叠、继承、初始值确定）。第四步，应用格式化算法生成格式化结构（formatting structure）——它类似文档树但可能不同（如 display: none 的元素不生成盒子，列表元素会生成额外的项目符号）。第五步，将格式化结构渲染到 Canvas（渲染表面）。Canvas 是抽象的无限平面，实际渲染发生在有限区域内（屏幕视口、打印页面等）。',
+    summary: {
+      zh: 'CSS 的处理模型描述了浏览器如何从源文档到最终渲染的完整流程。第一步，解析源文档（HTML/XML）生成文档树（document tree），树中的每个节点是一个元素。第二步，根据目标媒体类型（屏幕/打印/语音等）获取所有适用的样式表。第三步，为文档树中的每个元素的每个属性计算值（通过层叠、继承、初始值确定）。第四步，应用格式化算法生成格式化结构（formatting structure）——它类似文档树但可能不同（如 display: none 的元素不生成盒子，列表元素会生成额外的项目符号）。第五步，将格式化结构渲染到 Canvas（渲染表面）。Canvas 是抽象的无限平面，实际渲染发生在有限区域内（屏幕视口、打印页面等）。',
+      en: 'The CSS processing model describes the complete flow from source document to final rendering. First, parse the source document (HTML/XML) to generate a document tree, where each node is an element. Second, retrieve all applicable style sheets based on the target media type (screen/print/speech, etc.). Third, compute values for each property of each element in the document tree (determined through cascading, inheritance, and initial values). Fourth, apply formatting algorithms to generate the formatting structure—similar to but potentially different from the document tree (elements with display: none generate no boxes, list elements generate additional markers). Fifth, render the formatting structure to the Canvas (rendering surface). The Canvas is an abstract infinite plane, with actual rendering occurring in a finite area (screen viewport, print page, etc.).',
+    },
     keyPoints: [
       '处理流程：解析文档 → 获取样式表 → 计算属性值 → 生成格式化结构 → 渲染到 Canvas',
       '文档树（document tree）：源文档解析后的元素层次结构，每个元素是一个节点',
@@ -58,8 +64,10 @@ export const sections: Section[] = [
     number: '4',
     title: { zh: 'CSS 的演进', en: 'CSS Evolution' },
     specId: 'css2.2-v-css2',
-    summary:
-      'CSS 的演进经历了从单体规范到模块化的转变。CSS1（1996）定义了基础样式属性，CSS2（1998）大幅扩展了功能（定位、媒体类型、表格），但实现复杂导致浏览器差异大。CSS2.1（2011）是 CSS2 的勘误版，移除了未实现的特性，修正了与实际浏览器行为不一致的定义。CSS2.2 在 CSS2.1 基础上进一步修正错误。CSS3 不再是单一规范——它被拆分为独立的模块（Selectors、Values、Cascade、Flexbox、Grid 等），每个模块独立演进、独立发版。这种模块化设计让新特性可以更快标准化，不必等待整个规范完成。CSS Snapshot（如 CSS 2023、CSS 2024）是对某个时间点所有稳定 CSS 特性的快照汇总。规范成熟度分级：WD（工作草案）→ CR（候选推荐）→ PR（提议推荐）→ REC（正式推荐）。',
+    summary: {
+      zh: 'CSS 的演进经历了从单体规范到模块化的转变。CSS1（1996）定义了基础样式属性，CSS2（1998）大幅扩展了功能（定位、媒体类型、表格），但实现复杂导致浏览器差异大。CSS2.1（2011）是 CSS2 的勘误版，移除了未实现的特性，修正了与实际浏览器行为不一致的定义。CSS2.2 在 CSS2.1 基础上进一步修正错误。CSS3 不再是单一规范——它被拆分为独立的模块（Selectors、Values、Cascade、Flexbox、Grid 等），每个模块独立演进、独立发版。这种模块化设计让新特性可以更快标准化，不必等待整个规范完成。CSS Snapshot（如 CSS 2023、CSS 2024）是对某个时间点所有稳定 CSS 特性的快照汇总。规范成熟度分级：WD（工作草案）→ CR（候选推荐）→ PR（提议推荐）→ REC（正式推荐）。',
+      en: 'CSS evolution has undergone a transformation from monolithic specifications to modularization. CSS1 (1996) defined basic style properties, CSS2 (1998) greatly expanded functionality (positioning, media types, tables), but implementation complexity led to significant browser differences. CSS2.1 (2011) is an errata version of CSS2 that removed unimplemented features and corrected definitions inconsistent with actual browser behavior. CSS2.2 further corrects errors building on CSS2.1. CSS3 is no longer a single specification—it has been split into independent modules (Selectors, Values, Cascade, Flexbox, Grid, etc.), each evolving and releasing independently. This modular design allows new features to be standardized faster without waiting for the entire specification to be complete. CSS Snapshots (like CSS 2023, CSS 2024) are snapshot summaries of all stable CSS features at a given point in time. Specification maturity levels: WD (Working Draft) → CR (Candidate Recommendation) → PR (Proposed Recommendation) → REC (Recommendation).',
+    },
     keyPoints: [
       'CSS1 (1996) → CSS2 (1998) → CSS2.1 (2011) → CSS2.2 (2017)',
       'CSS2.1 移除了 CSS2 中未被浏览器实现的特性，修正与实际行为不符的定义',
@@ -75,8 +83,10 @@ export const sections: Section[] = [
     number: '5',
     title: { zh: '如何阅读 CSS 规范', en: 'Reading CSS Specifications' },
     specId: 'reading',
-    summary:
-      'CSS 规范是 CSS 的权威定义，但对初学者不够友好。规范的主要读者是浏览器开发者和 CSS 作者。学会阅读规范可以让你理解属性的精确行为、解决二手资料的模糊性、预判浏览器差异。规范通常包括：介绍章节（设计理念）、语法定义（如何解析）、属性定义（每个属性的取值和计算规则）、算法描述（如何计算布局）。属性定义表格是规范的核心部分，包含属性名、合法值、初始值、适用元素、是否继承、百分比如何计算、计算值如何得出。值定义语法用符号描述属性接受什么值（如 <length> | auto 表示长度或 auto 关键字）。规范区分「规范性」内容（必须实现）和「信息性」内容（示例、注释）。实用建议：从 MDN 等二手资料入手，遇到疑问再查规范；关注属性定义表格和值语法；浏览器行为与规范不符时，优先以规范为准判断是否为 bug。',
+    summary: {
+      zh: 'CSS 规范是 CSS 的权威定义，但对初学者不够友好。规范的主要读者是浏览器开发者和 CSS 作者。学会阅读规范可以让你理解属性的精确行为、解决二手资料的模糊性、预判浏览器差异。规范通常包括：介绍章节（设计理念）、语法定义（如何解析）、属性定义（每个属性的取值和计算规则）、算法描述（如何计算布局）。属性定义表格是规范的核心部分，包含属性名、合法值、初始值、适用元素、是否继承、百分比如何计算、计算值如何得出。值定义语法用符号描述属性接受什么值（如 <length> | auto 表示长度或 auto 关键字）。规范区分「规范性」内容（必须实现）和「信息性」内容（示例、注释）。实用建议：从 MDN 等二手资料入手，遇到疑问再查规范；关注属性定义表格和值语法；浏览器行为与规范不符时，优先以规范为准判断是否为 bug。',
+      en: 'CSS specifications are the authoritative definition of CSS, but are not beginner-friendly. The primary readers of specifications are browser developers and CSS authors. Learning to read specifications allows you to understand precise property behavior, resolve ambiguities in secondary materials, and anticipate browser differences. Specifications typically include: introduction sections (design philosophy), syntax definitions (how to parse), property definitions (valid values and computation rules for each property), and algorithm descriptions (how to calculate layout). Property definition tables are the core part of specifications, containing property name, legal values, initial value, applicable elements, whether inherited, how percentages are calculated, and how computed values are derived. Value definition syntax uses symbols to describe what values a property accepts (e.g., <length> | auto means a length or the auto keyword). Specifications distinguish between "normative" content (must be implemented) and "informative" content (examples, notes). Practical advice: start with secondary materials like MDN, consult specifications when in doubt; focus on property definition tables and value syntax; when browser behavior differs from specifications, prioritize the specification to determine if it is a bug.',
+    },
     keyPoints: [
       '规范读者：浏览器开发者（实现）和 CSS 作者（理解精确行为）',
       '规范结构：介绍 → 语法定义 → 属性定义 → 算法描述 → 附录',
@@ -92,8 +102,10 @@ export const sections: Section[] = [
     number: '6',
     title: { zh: '核心术语', en: 'Core Terminology' },
     specId: 'defs',
-    summary:
-      'CSS 有一套严谨的术语体系，理解这些术语是阅读规范的基础。属性（property）是 CSS 控制渲染的参数，如 color、margin。值（value）是属性被赋予的数据，如 red、10px。声明（declaration）是属性-值对，如 color: red。规则集（rule set）由选择器和声明块组成，如 h1 { color: red; }。样式表（style sheet）是一系列规则集和 at-rule 的集合。选择器（selector）定位文档树中的元素。元素（element）是文档的语法构成单元（如 HTML 的 <p>）。盒子（box）是 CSS 格式化模型中的渲染单元——一个元素可能生成零个、一个或多个盒子。替换元素（replaced element）的内容在 CSS 格式化模型之外（如 <img>、<video>），非替换元素的内容由 CSS 渲染（如 <p>、<div>）。文档树（document tree）是源文档解析后的元素层次结构。',
+    summary: {
+      zh: 'CSS 有一套严谨的术语体系，理解这些术语是阅读规范的基础。属性（property）是 CSS 控制渲染的参数，如 color、margin。值（value）是属性被赋予的数据，如 red、10px。声明（declaration）是属性-值对，如 color: red。规则集（rule set）由选择器和声明块组成，如 h1 { color: red; }。样式表（style sheet）是一系列规则集和 at-rule 的集合。选择器（selector）定位文档树中的元素。元素（element）是文档的语法构成单元（如 HTML 的 <p>）。盒子（box）是 CSS 格式化模型中的渲染单元——一个元素可能生成零个、一个或多个盒子。替换元素（replaced element）的内容在 CSS 格式化模型之外（如 <img>、<video>），非替换元素的内容由 CSS 渲染（如 <p>、<div>）。文档树（document tree）是源文档解析后的元素层次结构。',
+      en: 'CSS has a rigorous terminology system; understanding these terms is fundamental to reading specifications. A property is a parameter CSS uses to control rendering, such as color or margin. A value is the data assigned to a property, such as red or 10px. A declaration is a property-value pair, such as color: red. A rule set consists of a selector and a declaration block, such as h1 { color: red; }. A style sheet is a collection of rule sets and at-rules. A selector targets elements in the document tree. An element is a syntactic unit of a document (such as <p> in HTML). A box is a rendering unit in the CSS formatting model—an element may generate zero, one, or multiple boxes. A replaced element has content outside the CSS formatting model (such as <img>, <video>), while a non-replaced element has content rendered by CSS (such as <p>, <div>). The document tree is the hierarchical structure of elements after parsing the source document.',
+    },
     keyPoints: [
       '属性（property）：CSS 的渲染参数，如 color、display、margin',
       '值（value）：属性被赋予的数据，如 red、block、10px',

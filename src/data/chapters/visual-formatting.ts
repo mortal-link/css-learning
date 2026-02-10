@@ -7,8 +7,7 @@ export const sections: Section[] = [
     id: 'intro',
     number: '1',
     title: { zh: '简介', en: 'Introduction to the visual formatting model' },
-    summary:
-      'CSS 视觉格式化模型定义了盒子如何根据文档树生成并布局。模型基于包含块(containing block)的概念,但不指定格式化的每个方面。',
+    summary: { zh: 'CSS 视觉格式化模型定义了盒子如何根据文档树生成并布局。模型基于包含块(containing block)的概念,但不指定格式化的每个方面。', en: 'The CSS visual formatting model defines how boxes are generated and laid out based on the document tree. The model is based on the concept of containing blocks, but does not specify every aspect of formatting.' },
     keyPoints: [
       '每个元素根据盒模型生成零个或多个盒子',
       '盒子的布局由以下因素决定:盒子尺寸和类型、定位方案(常规流/浮动/绝对定位)、文档树中元素之间的关系、外部信息(视口大小、图片固有尺寸等)',
@@ -20,8 +19,7 @@ export const sections: Section[] = [
     id: 'display',
     number: '2',
     title: { zh: 'display 属性', en: 'Controlling box generation' },
-    summary:
-      'display 属性决定元素生成的盒子类型。CSS 2.2 定义了 block、inline、inline-block、none、list-item 等值;CSS3 将其扩展为二维系统(外部显示类型 + 内部显示类型)。',
+    summary: { zh: 'display 属性决定元素生成的盒子类型。CSS 2.2 定义了 block、inline、inline-block、none、list-item 等值;CSS3 将其扩展为二维系统(外部显示类型 + 内部显示类型)。', en: 'The display property determines the type of box an element generates. CSS 2.2 defined values like block, inline, inline-block, none, and list-item; CSS3 extended it into a two-dimensional system (outer display type + inner display type).' },
     keyPoints: [
       'block: 生成块级盒子(block-level box),参与块格式化上下文(BFC)',
       'inline: 生成行内盒子(inline box),参与行内格式化上下文(IFC)',
@@ -36,8 +34,7 @@ export const sections: Section[] = [
     id: 'positioning-schemes',
     number: '3',
     title: { zh: '定位方案', en: 'Positioning schemes' },
-    summary:
-      'CSS 2.2 中有三种定位方案:常规流(Normal flow)、浮动(Floats)和绝对定位(Absolute positioning)。盒子根据 position、float 和 display 属性参与不同的定位方案。',
+    summary: { zh: 'CSS 2.2 中有三种定位方案:常规流(Normal flow)、浮动(Floats)和绝对定位(Absolute positioning)。盒子根据 position、float 和 display 属性参与不同的定位方案。', en: 'CSS 2.2 has three positioning schemes: Normal flow, Floats, and Absolute positioning. Boxes participate in different positioning schemes based on the position, float, and display properties.' },
     keyPoints: [
       'Normal flow: 包括块级盒子的块格式化(block formatting)、行内级盒子的行内格式化(inline formatting)以及相对定位(relative positioning)',
       'Floats: 盒子先按常规流布局,然后从流中取出并向左或向右移动',
@@ -50,8 +47,7 @@ export const sections: Section[] = [
     id: 'normal-flow',
     number: '4',
     title: { zh: '常规流', en: 'Normal flow' },
-    summary:
-      '常规流中的盒子属于某个格式化上下文(formatting context),可以是块格式化上下文(BFC)或行内格式化上下文(IFC)。块级盒子参与 BFC,行内级盒子参与 IFC。',
+    summary: { zh: '常规流中的盒子属于某个格式化上下文(formatting context),可以是块格式化上下文(BFC)或行内格式化上下文(IFC)。块级盒子参与 BFC,行内级盒子参与 IFC。', en: 'Boxes in normal flow belong to a formatting context, which can be a block formatting context (BFC) or an inline formatting context (IFC). Block-level boxes participate in BFC, and inline-level boxes participate in IFC.' },
     keyPoints: [
       '块格式化上下文(BFC):块级盒子在其中垂直排列,相邻 margin 会折叠',
       '行内格式化上下文(IFC):行内盒子在其中水平排列,形成行盒(line box)',
@@ -66,8 +62,7 @@ export const sections: Section[] = [
     id: 'floats',
     number: '5',
     title: { zh: '浮动', en: 'Floats' },
-    summary:
-      '浮动盒子通过 float 属性从常规流中移出,向左或向右移动直到碰到包含块边缘或另一个浮动盒子。浮动盒子不在常规流中,但仍然影响行盒的布局。',
+    summary: { zh: '浮动盒子通过 float 属性从常规流中移出,向左或向右移动直到碰到包含块边缘或另一个浮动盒子。浮动盒子不在常规流中,但仍然影响行盒的布局。', en: 'Floated boxes are removed from normal flow via the float property and moved left or right until they touch the containing block edge or another floated box. Floated boxes are not in normal flow but still affect the layout of line boxes.' },
     keyPoints: [
       'float: left 或 right 使盒子成为浮动盒子,脱离常规流',
       '浮动盒子向左/右移动,直到其外边缘碰到包含块边缘或另一个浮动盒子的外边缘',
@@ -83,8 +78,7 @@ export const sections: Section[] = [
     id: 'absolute-positioning',
     number: '6',
     title: { zh: '绝对定位', en: 'Absolute positioning' },
-    summary:
-      '绝对定位模型中,盒子从常规流中完全移除,相对于包含块定位。包含块由最近的 positioned 祖先元素(position 非 static)确定。',
+    summary: { zh: '绝对定位模型中,盒子从常规流中完全移除,相对于包含块定位。包含块由最近的 positioned 祖先元素(position 非 static)确定。', en: 'In the absolute positioning model, boxes are completely removed from normal flow and positioned relative to a containing block. The containing block is determined by the nearest positioned ancestor element (position other than static).' },
     keyPoints: [
       'position: absolute 使盒子脱离常规流,相对于包含块定位',
       'position: fixed 是绝对定位的特例,包含块始终是视口(viewport)',
@@ -100,8 +94,7 @@ export const sections: Section[] = [
     id: 'stacking-context',
     number: '7',
     title: { zh: '层叠上下文与绘制顺序', en: 'Layered presentation' },
-    summary:
-      'CSS 假设画布是无限的,但实际渲染时需要确定绘制顺序。层叠上下文(stacking context)定义了元素在 Z 轴的绘制顺序,z-index 属性控制盒子在层叠上下文中的层级。',
+    summary: { zh: 'CSS 假设画布是无限的,但实际渲染时需要确定绘制顺序。层叠上下文(stacking context)定义了元素在 Z 轴的绘制顺序,z-index 属性控制盒子在层叠上下文中的层级。', en: 'CSS assumes an infinite canvas, but the rendering order must be determined during actual rendering. The stacking context defines the rendering order of elements on the Z-axis, and the z-index property controls the level of boxes within the stacking context.' },
     keyPoints: [
       '层叠上下文是三维概念,盒子在 Z 轴上分层绘制',
       'z-index 只对定位元素(position 非 static)有效,控制其在当前层叠上下文中的层级',
@@ -117,8 +110,7 @@ export const sections: Section[] = [
     id: 'inline-formatting',
     number: '8',
     title: { zh: '行内格式化详解', en: 'Inline formatting context details' },
-    summary:
-      '行内格式化上下文(IFC)中,盒子从包含块顶部开始水平排列。行盒(line box)的高度由 line-height 和 vertical-align 共同决定,足以包含所有盒子。',
+    summary: { zh: '行内格式化上下文(IFC)中,盒子从包含块顶部开始水平排列。行盒(line box)的高度由 line-height 和 vertical-align 共同决定,足以包含所有盒子。', en: 'In an inline formatting context (IFC), boxes are arranged horizontally starting from the top of the containing block. The height of a line box is determined by line-height and vertical-align, sufficient to contain all boxes.' },
     keyPoints: [
       '行盒(line box):IFC 中每一行形成的矩形区域,从包含块的一边延伸到另一边',
       '行盒高度计算:由 line-height 属性和 vertical-align 属性决定,足以包含该行所有盒子',
@@ -424,5 +416,50 @@ export const glossaryTerms: Record<string, GlossaryEntry> = {
       '内容不由 CSS 格式化模型控制的元素,如 img、input、textarea、select、object 等。替换元素有固有尺寸(intrinsic dimensions),如图片的原始宽高。',
     sectionRef: 'visual-formatting#intro',
     css2Url: 'https://www.w3.org/TR/CSS22/conform.html#replaced-element',
+  },
+  'block-start': {
+    zh: '块起始方向',
+    description: '逻辑方向,在水平书写模式下等于 top。代替物理方向 top/bottom,支持不同书写模式。',
+    sectionRef: 'visual-formatting#block-formatting',
+  },
+  'block-end': {
+    zh: '块结束方向',
+    description: '逻辑方向,在水平书写模式下等于 bottom。与 block-start 相对。',
+    sectionRef: 'visual-formatting#block-formatting',
+  },
+  'inline-start': {
+    zh: '行内起始方向',
+    description: '逻辑方向,在 LTR 水平书写模式下等于 left。文本流开始的一侧。',
+    sectionRef: 'visual-formatting#inline-formatting',
+  },
+  'inline-end': {
+    zh: '行内结束方向',
+    description: '逻辑方向,在 LTR 水平书写模式下等于 right。文本流结束的一侧。',
+    sectionRef: 'visual-formatting#inline-formatting',
+  },
+  'inline': {
+    zh: '行内方向',
+    description: '与文本书写方向平行的轴。在水平书写模式中是水平方向。逻辑属性中用于替代 left/right。',
+    sectionRef: 'visual-formatting#inline-formatting',
+  },
+  'block-level': {
+    zh: '块级',
+    description: '参与块级格式化上下文的元素或框。block-level element 的简称,由 display 值为 block、list-item、table 等产生。',
+    sectionRef: 'visual-formatting#block-formatting',
+  },
+  'inline-level': {
+    zh: '行内级',
+    description: '参与行内格式化上下文的元素或框。inline-level element 的简称,由 display 值为 inline、inline-block、inline-table 等产生。',
+    sectionRef: 'visual-formatting#inline-formatting',
+  },
+  'static-position rectangle': {
+    zh: '静态位置矩形',
+    description: 'position: static 时元素在正常流中本应占据的位置矩形。用于确定 absolute 定位元素在未指定偏移时的默认位置。',
+    sectionRef: 'visual-formatting#positioning',
+  },
+  'inset': {
+    zh: '内缩',
+    description: '定位属性的简写(top/right/bottom/left),也指 CSS Shapes 中的 inset() 函数。在逻辑属性中表示内缩偏移。',
+    sectionRef: 'visual-formatting#positioning',
   },
 };
