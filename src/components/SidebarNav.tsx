@@ -2,16 +2,31 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { stages, getStageModules } from '@/data/modules';
 import { cn } from '@/lib/utils';
-import { t } from '@/lib/i18n';
-import { UI } from '@/lib/strings';
+import { useLocaleContext } from '@/contexts/LocaleContext';
 
 export function SidebarNav() {
   const pathname = usePathname();
   const match = pathname.match(/\/modules\/([^/]+)/);
   const currentSlug = match ? match[1] : undefined;
+  const currentLinkRef = useRef<HTMLAnchorElement>(null);
+  const { t } = useLocaleContext();
+
+  // 自动滚动到当前模块
+  useEffect(() => {
+    if (currentLinkRef.current) {
+      // 使用 setTimeout 确保 DOM 完全渲染后再滚动
+      setTimeout(() => {
+        currentLinkRef.current?.scrollIntoView({
+          block: 'center',
+          behavior: 'smooth'
+        });
+      }, 100);
+    }
+  }, [currentSlug]);
 
   return (
     <ScrollArea className="h-full">
@@ -27,7 +42,7 @@ export function SidebarNav() {
           )}
         >
           <span className="text-xs text-muted-foreground w-6">🏠</span>
-          <span>{t(UI.home)}</span>
+          <span>{t('ui.home')}</span>
         </Link>
 
         {stages.map((stage, stageIndex) => {
@@ -38,11 +53,11 @@ export function SidebarNav() {
               <div className="flex items-center gap-2 mb-2 px-2">
                 <stage.icon className="w-3.5 h-3.5 text-muted-foreground" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {t(UI.stagePrefix)} {stageIndex + 1}: {t(stage.title)}
+                  {t('ui.stagePrefix')} {stageIndex + 1}: {t(stage.title)}
                 </span>
               </div>
 
-              {/* 章节列表 */}
+              {/* 模块列表 */}
               <div className="space-y-0.5 ml-1">
                 {stageModules.map((mod) => {
                   const isActive = mod.id === currentSlug;
@@ -50,11 +65,13 @@ export function SidebarNav() {
                   return (
                     <div key={mod.id}>
                       <Link
+                        ref={isActive ? currentLinkRef : null}
                         href={`/modules/${mod.id}`}
+                        data-current={isActive || undefined}
                         className={cn(
-                          'flex items-center gap-2 px-2 py-1.5 text-sm rounded-md transition-colors',
+                          'flex items-center gap-2 px-2 py-1.5 text-sm rounded-md transition-colors relative',
                           isActive
-                            ? 'bg-accent text-accent-foreground font-medium'
+                            ? 'bg-primary/10 text-primary font-medium border-l-2 border-primary'
                             : 'hover:bg-accent/50',
                           isLocked && !isActive && 'opacity-50'
                         )}

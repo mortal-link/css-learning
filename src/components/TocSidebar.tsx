@@ -2,8 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { t } from '@/lib/i18n';
-import { UI } from '@/lib/strings';
+import { useLocaleContext } from '@/contexts/LocaleContext';
 
 export interface TocItem {
   id: string;
@@ -18,6 +17,7 @@ interface TocSidebarProps {
 export function TocSidebar({ items }: TocSidebarProps) {
   const [activeId, setActiveId] = useState<string>('');
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const { t } = useLocaleContext();
 
   useEffect(() => {
     if (items.length === 0) return;
@@ -54,7 +54,7 @@ export function TocSidebar({ items }: TocSidebarProps) {
   return (
     <nav className="space-y-1">
       <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-        {t(UI.toc)}
+        {t('ui.toc')}
       </div>
       {items.map((item) => (
         <a

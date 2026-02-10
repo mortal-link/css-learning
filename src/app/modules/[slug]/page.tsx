@@ -15,17 +15,17 @@ import {
   FileText,
   Lock,
 } from 'lucide-react';
-import { getModule, getAllModuleSlugs, getAdjacentModules, getCSS2SpecNames, CSS2_CHAPTER_MAP } from '@/data/modules';
+import { getModule, getAllModuleSlugs, getAdjacentModules, getCSS2SpecNames, CSS2_CHAPTER_MAP, stages } from '@/data/modules';
 import { getSpecContent, getCSS2SectionList } from '@/lib/specs';
 import { DemoSlot } from '@/components/demos/DemoSlot';
 import { hasDemo } from '@/components/demos/has-demo';
 import { SpecContent } from '@/components/SpecContent';
 import { SidebarNav } from '@/components/SidebarNav';
 import { TocSidebar } from '@/components/TocSidebar';
+import { MobileTocSheet } from '@/components/MobileTocSheet';
 import type { TocItem } from '@/components/TocSidebar';
 import { BookMarked } from 'lucide-react';
 import { t } from '@/lib/i18n';
-import { UI } from '@/lib/strings';
 import type { CSS2Section } from '@/lib/specs';
 
 export function generateStaticParams() {
@@ -55,13 +55,16 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
     .map((specName) => ({ specName, content: getSpecContent(specName) }))
     .filter((s) => s.content !== null);
 
-  // 当没有人工整理的 sections 时，用 CSS2 原文子章节作为 fallback
+  // 当没有人工整理的 sections 时，用 CSS2 原文子节作为 fallback
   const css2Sections: CSS2Section[] = !hasSections ? getCSS2SectionList(css2SpecNames) : [];
 
   // Build TOC items
   const tocItems: TocItem[] = hasSections
     ? mod.sections.map((s) => ({ id: s.id, title: t(s.title, 'en'), number: s.number }))
     : css2Sections.map((s) => ({ id: s.id, title: s.heading }));
+
+  // Find the stage for breadcrumb
+  const stage = stages.find((s) => s.moduleIds.includes(mod.id));
 
   return (
     <div className="mx-auto max-w-[90rem] xl:grid xl:grid-cols-[16rem_1fr_14rem] xl:gap-6 px-6">
@@ -75,22 +78,45 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
       {/* Center — main content */}
       <article className="min-w-0 max-w-4xl mx-auto w-full py-10">
       <div className="space-y-8">
+        {/* Breadcrumb Navigation */}
+        <nav aria-label="Breadcrumb" className="mb-4">
+          <ol className="flex items-center gap-2 text-sm text-muted-foreground">
+            <li>
+              <Link href="/" className="hover:text-foreground transition-colors">
+                {t('ui.home')}
+              </Link>
+            </li>
+            {stage && (
+              <>
+                <li>/</li>
+                <li>
+                  <span className="hover:text-foreground transition-colors">
+                    {t('ui.stagePrefix')} {stages.indexOf(stage) + 1}: {t(stage.title)}
+                  </span>
+                </li>
+              </>
+            )}
+            <li>/</li>
+            <li className="text-foreground font-medium">{t(mod.title)}</li>
+          </ol>
+        </nav>
+
         {/* Module Header */}
         <div>
           <div className="flex items-center gap-3 mb-4">
             <Badge variant="outline">Chapter {String(mod.number).padStart(2, '0')} / {totalModules}</Badge>
-            {mod.status === 'current' && <Badge>{t(UI.currentlyLearning)}</Badge>}
-            {mod.status === 'completed' && <Badge variant="secondary">{t(UI.completed)}</Badge>}
+            {mod.status === 'current' && <Badge>{t('ui.currentlyLearning')}</Badge>}
+            {mod.status === 'completed' && <Badge variant="secondary">{t('ui.completed')}</Badge>}
             {mod.status === 'locked' && (
               <Badge variant="secondary">
                 <Lock className="w-3 h-3 mr-1" />
-                {t(UI.comingSoon)}
+                {t('ui.comingSoon')}
               </Badge>
             )}
           </div>
           <h1 className="text-3xl font-bold mb-2">{t(mod.title, 'en')}</h1>
           <p className="text-lg text-muted-foreground">
-            {t(mod.title)} — {mod.description}
+            {t(mod.title)} — {t(mod.description)}
           </p>
           <div className="flex flex-wrap gap-2 mt-4">
             {mod.specs.map((spec) => (
@@ -105,7 +131,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              {t(UI.viewCss3Spec)} <ExternalLink className="w-3 h-3" />
+              {t('ui.viewCss3Spec')} <ExternalLink className="w-3 h-3" />
             </a>
             {mod.css2Chapters?.map((ch) => {
               const info = CSS2_CHAPTER_MAP[ch];
@@ -131,11 +157,11 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
                 <Lightbulb className="w-4 h-4 text-primary" />
-                {mod.keyConcept.title}
+                {t(mod.keyConcept.title)}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">{mod.keyConcept.content}</p>
+              <p className="text-muted-foreground">{t(mod.keyConcept.content)}</p>
             </CardContent>
           </Card>
         )}
@@ -147,9 +173,9 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
               <CardContent className="py-4">
                 <div className="flex items-center gap-2 mb-1">
                   <BookMarked className="w-4 h-4 text-primary" />
-                  <span className="font-medium text-sm">{t(UI.css2SectionsTitle)}</span>
+                  <span className="font-medium text-sm">{t('ui.css2SectionsTitle')}</span>
                 </div>
-                <p className="text-sm text-muted-foreground">{t(UI.css2SectionsDesc)}</p>
+                <p className="text-sm text-muted-foreground">{t('ui.css2SectionsDesc')}</p>
               </CardContent>
             </Card>
             {css2Sections.map((sec) => (
@@ -170,13 +196,13 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
           <Card className="border-dashed">
             <CardContent className="py-16 text-center">
               <Lock className="w-10 h-10 mx-auto mb-4 text-muted-foreground" />
-              <h2 className="text-xl font-semibold mb-2">{t(UI.contentDeveloping)}</h2>
+              <h2 className="text-xl font-semibold mb-2">{t('ui.contentDeveloping')}</h2>
               <p className="text-muted-foreground max-w-md mx-auto">
-                {t(UI.contentDevDescription)}
+                {t('ui.contentDevDescription')}
               </p>
               <Button asChild className="mt-6">
                 <Link href="/modules/cascade">
-                  {t(UI.goToCascade)}
+                  {t('ui.goToCascade')}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -196,7 +222,14 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                         {section.number}
                       </span>
                       <div>
-                        <CardTitle className="text-lg">{t(section.title, 'en')}</CardTitle>
+                        <div className="flex items-center gap-2">
+                          <CardTitle className="text-lg">{t(section.title, 'en')}</CardTitle>
+                          {hasDemo(mod.id, section.id) && (
+                            <Badge variant="secondary" className="text-xs bg-primary/10 text-primary px-1.5 py-0.5">
+                              Demo
+                            </Badge>
+                          )}
+                        </div>
                         <CardDescription>{t(section.title)}</CardDescription>
                       </div>
                     </div>
@@ -205,21 +238,21 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-foreground transition-colors"
-                      title="查看规范原文"
+                      title={t('ui.viewSpec')}
                     >
                       <ExternalLink className="w-4 h-4" />
                     </a>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">{section.summary}</p>
+                  <p className="text-muted-foreground">{t(section.summary)}</p>
 
-                  <Accordion type="single" collapsible className="w-full">
+                  <Accordion type="multiple" className="w-full" defaultValue={hasDemo(mod.id, section.id) ? ["key-points", "demo"] : ["key-points"]}>
                     <AccordionItem value="key-points" className="border-none">
                       <AccordionTrigger className="py-2 text-sm hover:no-underline">
                         <span className="flex items-center gap-2">
                           <BookOpen className="w-4 h-4" />
-                          {t(UI.keyPointsSummary)}
+                          {t('ui.keyPointsSummary')}
                         </span>
                       </AccordionTrigger>
                       <AccordionContent>
@@ -239,7 +272,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                         <AccordionTrigger className="py-2 text-sm hover:no-underline">
                           <span className="flex items-center gap-2">
                             <Code className="w-4 h-4" />
-                            {t(UI.interactiveDemo)}
+                            {t('ui.interactiveDemo')}
                           </span>
                         </AccordionTrigger>
                         <AccordionContent>
@@ -266,7 +299,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                         <div className="border-t pt-4">
                           <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
                             <BookMarked className="w-4 h-4" />
-                            {t(UI.specTabCss2)}
+                            {t('ui.specTabCss2')}
                           </div>
                           <SpecContent content={css2Section.content} moduleId={mod.id} />
                         </div>
@@ -277,7 +310,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                         <div className="border-t pt-4">
                           <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
                             <FileText className="w-4 h-4" />
-                            {t(UI.specTabCss3)}
+                            {t('ui.specTabCss3')}
                           </div>
                           <SpecContent content={css3Section.content} moduleId={mod.id} />
                         </div>
@@ -291,11 +324,11 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                           <TabsList className="h-8">
                             <TabsTrigger value="css2" className="text-xs gap-1.5">
                               <BookMarked className="w-3.5 h-3.5" />
-                              {t(UI.specTabCss2)}
+                              {t('ui.specTabCss2')}
                             </TabsTrigger>
                             <TabsTrigger value="css3" className="text-xs gap-1.5">
                               <FileText className="w-3.5 h-3.5" />
-                              {t(UI.specTabCss3)}
+                              {t('ui.specTabCss3')}
                             </TabsTrigger>
                           </TabsList>
                           <TabsContent value="css2" className="mt-3">
@@ -334,10 +367,13 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
               </Link>
             </Button>
           ) : (
-            <div className="text-sm text-muted-foreground">{t(UI.isLastChapter)}</div>
+            <div className="text-sm text-muted-foreground">{t('ui.isLastChapter')}</div>
           )}
         </div>
       </div>
+
+      {/* Mobile TOC Button (visible only on mobile) */}
+      {tocItems.length > 0 && <MobileTocSheet items={tocItems} />}
       </article>
 
       {/* Right Sidebar — table of contents (desktop only) */}

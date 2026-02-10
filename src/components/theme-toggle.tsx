@@ -4,18 +4,18 @@ import * as React from 'react';
 import { Moon, Sun, Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/theme-provider';
-import { t } from '@/lib/i18n';
-import { UI } from '@/lib/strings';
+import { useLocaleContext } from '@/contexts/LocaleContext';
 
 export function ThemeToggle() {
   const { theme, setTheme, colorTheme, setColorTheme } = useTheme();
   const [showColorPicker, setShowColorPicker] = React.useState(false);
+  const { t } = useLocaleContext();
 
   const colorThemes = [
-    { id: 'default', name: t(UI.colorDefault), color: 'bg-blue-500' },
-    { id: 'forest', name: t(UI.colorForest), color: 'bg-green-500' },
-    { id: 'ocean', name: t(UI.colorOcean), color: 'bg-cyan-500' },
-    { id: 'sunset', name: t(UI.colorSunset), color: 'bg-orange-500' },
+    { id: 'default', name: t('ui.colorDefault'), color: 'bg-blue-500' },
+    { id: 'forest', name: t('ui.colorForest'), color: 'bg-green-500' },
+    { id: 'ocean', name: t('ui.colorOcean'), color: 'bg-cyan-500' },
+    { id: 'sunset', name: t('ui.colorSunset'), color: 'bg-orange-500' },
   ] as const;
 
   return (
@@ -29,9 +29,9 @@ export function ThemeToggle() {
           className="h-9 w-9"
         >
           <Palette className="h-4 w-4" />
-          <span className="sr-only">{t(UI.selectThemeColor)}</span>
+          <span className="sr-only">{t('ui.selectThemeColor')}</span>
         </Button>
-        
+
         {showColorPicker && (
           <div className="absolute right-0 top-full mt-2 p-2 bg-popover border rounded-lg shadow-lg z-50 min-w-[120px]">
             {colorThemes.map((ct) => (
@@ -62,7 +62,7 @@ export function ThemeToggle() {
       >
         <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
         <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        <span className="sr-only">{t(UI.toggleTheme)}</span>
+        <span className="sr-only">{t('ui.toggleTheme')}</span>
       </Button>
     </div>
   );

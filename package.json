@@ -12,7 +12,8 @@
     "spec:extract": "node scripts/extract-content.js",
     "spec:render": "node scripts/render-module.js",
     "css2:fetch": "node scripts/fetch-css2.js",
-    "css2:extract": "node scripts/extract-css2.js"
+    "css2:extract": "node scripts/extract-css2.js",
+    "validate:i18n": "node scripts/validate-locales.js"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",

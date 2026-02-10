@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import type { Locale } from '@/lib/i18n';
 
 // ============================================================
-// 类型定义
+// Types
 // ============================================================
 
 export interface SpecMeta {
@@ -32,46 +33,63 @@ export interface SpecContent {
 }
 
 // ============================================================
-// 读取函数
+// Helpers
 // ============================================================
 
 const specsDir = path.join(process.cwd(), 'specs');
 
-/** 读取规范的元数据（章节结构） */
-export function getSpecMeta(specName: string): SpecMeta | null {
-  const filePath = path.join(specsDir, `${specName}.json`);
+function resolveSpecPath(filename: string, locale?: Locale): string {
+  if (locale) {
+    const localePath = path.join(specsDir, locale, filename);
+    if (fs.existsSync(localePath)) return localePath;
+  }
+  // Fallback to en
+  const enPath = path.join(specsDir, 'en', filename);
+  if (fs.existsSync(enPath)) return enPath;
+  // Legacy fallback: root level (shouldn't happen after migration)
+  return path.join(specsDir, filename);
+}
+
+// ============================================================
+// Read functions
+// ============================================================
+
+/** Read spec metadata (section structure) */
+export function getSpecMeta(specName: string, locale?: Locale): SpecMeta | null {
+  const filePath = resolveSpecPath(`${specName}.json`, locale);
   if (!fs.existsSync(filePath)) return null;
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 
-/** 读取规范的提取内容 */
-export function getSpecContent(specName: string): SpecContent | null {
-  const filePath = path.join(specsDir, `${specName}-content.json`);
+/** Read extracted spec content */
+export function getSpecContent(specName: string, locale?: Locale): SpecContent | null {
+  const filePath = resolveSpecPath(`${specName}-content.json`, locale);
   if (!fs.existsSync(filePath)) return null;
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 
-/** 获取所有已提取内容的规范名列表 */
+/** Get list of all extracted spec names */
 export function getExtractedSpecNames(): string[] {
-  if (!fs.existsSync(specsDir)) return [];
+  const enDir = path.join(specsDir, 'en');
+  if (!fs.existsSync(enDir)) return [];
   return fs
-    .readdirSync(specsDir)
+    .readdirSync(enDir)
     .filter((f) => f.endsWith('-content.json'))
     .map((f) => f.replace('-content.json', ''));
 }
 
-/** CSS2 子章节（用于无人工 sections 的章节 fallback 展示） */
+/** CSS2 section (used as fallback display for modules without curated sections) */
 export interface CSS2Section {
   id: string;
   heading: string;
   content: string;
 }
 
-/** 获取某个模块关联的所有 CSS2 子章节列表（有序） */
-export function getCSS2SectionList(specNames: string[]): CSS2Section[] {
+/** Get all CSS2 sub-sections for given spec names (ordered) */
+export function getCSS2SectionList(specNames: string[], locale?: Locale): CSS2Section[] {
   const sections: CSS2Section[] = [];
   for (const specName of specNames) {
-    const spec = getSpecContent(specName);
+    const spec = getSpecContent(specName, locale);
     if (!spec) continue;
     for (const [id, sec] of Object.entries(spec.sections)) {
       sections.push({ id, heading: sec.heading, content: sec.content });
@@ -80,17 +98,17 @@ export function getCSS2SectionList(specNames: string[]): CSS2Section[] {
   return sections;
 }
 
-/** CSS2 子章节摘要（仅 id + heading，用于侧边栏） */
+/** CSS2 section heading summary (id + heading only, for sidebar) */
 export interface CSS2SectionHeading {
   id: string;
   heading: string;
 }
 
-/** 获取指定 specNames 关联的 CSS2 子章节标题列表（仅 id + heading） */
-export function getCSS2SectionHeadings(specNames: string[]): CSS2SectionHeading[] {
+/** Get CSS2 section headings for given spec names */
+export function getCSS2SectionHeadings(specNames: string[], locale?: Locale): CSS2SectionHeading[] {
   const headings: CSS2SectionHeading[] = [];
   for (const specName of specNames) {
-    const spec = getSpecContent(specName);
+    const spec = getSpecContent(specName, locale);
     if (!spec) continue;
     for (const [id, sec] of Object.entries(spec.sections)) {
       headings.push({ id, heading: sec.heading });
