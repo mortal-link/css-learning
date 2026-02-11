@@ -15,6 +15,8 @@ import { glossaryTerms as mediaTerms } from './chapters/media';
 import { glossaryTerms as boxModelTerms } from './chapters/box-model';
 import { glossaryTerms as commonTerms } from './chapters/common';
 import { glossaryTerms as visualFormattingTerms } from './chapters/visual-formatting';
+import { glossaryTerms as flexboxTerms } from './chapters/flexbox';
+import { glossaryTerms as gridTerms } from './chapters/grid';
 import { glossaryTerms as visualEffectsTerms } from './chapters/visual-effects';
 import { glossaryTerms as sizingTerms } from './chapters/sizing';
 import { glossaryTerms as fontsTerms } from './chapters/fonts';
@@ -23,6 +25,8 @@ import { glossaryTerms as generatedContentTerms } from './chapters/generated-con
 import { glossaryTerms as colorsBackgroundsTerms } from './chapters/colors-backgrounds';
 import { glossaryTerms as transformsTerms } from './chapters/transforms';
 import { glossaryTerms as modernTerms } from './chapters/modern';
+import { glossaryTerms as multicolTerms } from './chapters/multicol';
+import { glossaryTerms as tablesTerms } from './chapters/tables';
 
 export interface GlossaryEntry {
   /** 中文翻译 */
@@ -46,6 +50,8 @@ export const glossary: Record<string, GlossaryEntry> = {
   ...boxModelTerms,
   ...commonTerms,
   ...visualFormattingTerms,
+  ...flexboxTerms,
+  ...gridTerms,
   ...visualEffectsTerms,
   ...sizingTerms,
   ...fontsTerms,
@@ -54,6 +60,8 @@ export const glossary: Record<string, GlossaryEntry> = {
   ...colorsBackgroundsTerms,
   ...transformsTerms,
   ...modernTerms,
+  ...multicolTerms,
+  ...tablesTerms,
 };
 
 export function lookupGlossary(term: string): GlossaryEntry | null {

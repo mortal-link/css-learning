@@ -11,6 +11,8 @@ import { propertyTerms as cascadeProperties } from './chapters/cascade';
 import { propertyTerms as boxModelProperties } from './chapters/box-model';
 import { propertyTerms as commonProperties } from './chapters/common';
 import { propertyTerms as visualFormattingProperties } from './chapters/visual-formatting';
+import { propertyTerms as flexboxProperties } from './chapters/flexbox';
+import { propertyTerms as gridProperties } from './chapters/grid';
 import { propertyTerms as visualEffectsProperties } from './chapters/visual-effects';
 import { propertyTerms as sizingProperties } from './chapters/sizing';
 import { propertyTerms as fontsProperties } from './chapters/fonts';
@@ -19,6 +21,8 @@ import { propertyTerms as generatedContentProperties } from './chapters/generate
 import { propertyTerms as colorsBackgroundsProperties } from './chapters/colors-backgrounds';
 import { propertyTerms as transformsProperties } from './chapters/transforms';
 import { propertyTerms as modernProperties } from './chapters/modern';
+import { propertyTerms as multicolProperties } from './chapters/multicol';
+import { propertyTerms as tablesProperties } from './chapters/tables';
 
 export interface PropertyEntry {
   /** 中文属性名 */
@@ -48,6 +52,8 @@ export const properties: Record<string, PropertyEntry> = {
   ...boxModelProperties,
   ...commonProperties,
   ...visualFormattingProperties,
+  ...flexboxProperties,
+  ...gridProperties,
   ...visualEffectsProperties,
   ...sizingProperties,
   ...fontsProperties,
@@ -56,6 +62,8 @@ export const properties: Record<string, PropertyEntry> = {
   ...colorsBackgroundsProperties,
   ...transformsProperties,
   ...modernProperties,
+  ...multicolProperties,
+  ...tablesProperties,
 };
 
 /**

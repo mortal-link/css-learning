@@ -1,0 +1,465 @@
+import type { Section, TutorialBlock } from '../modules';
+import type { GlossaryEntry } from '../glossary';
+import type { PropertyEntry } from '../properties';
+
+export const sections: Section[] = [
+  {
+    id: 'multicol-basics',
+    number: '1',
+    title: { zh: '多列容器与列定义', en: 'Multi-column Containers & Column Definition' },
+    summary: {
+      zh: '通过 column-count 或 column-width 创建多列容器，内容自动流入匿名列盒。列数和列宽由伪算法根据可用空间计算。',
+      en: 'Create multi-column containers with column-count or column-width, content flows automatically into anonymous column boxes. Column count and width are calculated by a pseudo-algorithm based on available space.',
+    },
+    keyPoints: [
+      'column-count 或 column-width 非 auto 时，元素成为多列容器',
+      '多列容器的子元素内容流入匿名列盒（column box）',
+      '列盒建立独立的块级格式化上下文（BFC）',
+      'column-count 指定列数，column-width 指定理想列宽',
+      'columns 简写属性同时设置 column-count 和 column-width',
+      '当两个属性都非 auto 时，column-count 定义最大列数，column-width 定义最小列宽',
+      '伪算法根据可用宽度 U、column-gap、column-width、column-count 计算实际列数 N 和列宽 W',
+      '列盒不能设置背景、内边距、外边距或边框——它们是匿名盒',
+      '多列容器建立新的多列格式化上下文（multi-column formatting context）',
+      '列盒在内联方向和块方向都有固定尺寸，所有列盒的列宽和列高相等',
+      '浮动元素在其出现的列盒内浮动，不会跨列浮动',
+      '多列容器可以嵌套，支持多列容器内部再创建多列布局',
+    ],
+    tutorial: [
+      { type: 'heading', text: '什么是多列布局？' },
+      { type: 'paragraph', text: 'CSS 多列布局（Multi-column Layout）允许你将块级容器的内容分成多列显示，就像报纸或杂志的排版那样。内容会在列之间自动流动——当第一列装满后，内容会继续填充到第二列，依此类推。这种布局非常适合展示大段文本内容，既能充分利用宽屏空间，又能保持每行文字的可读性（避免单行过长）。' },
+      { type: 'code', code: '/* 创建三列布局 */\n.article {\n  column-count: 3;\n}\n\n/* 或者指定列宽，让浏览器自动计算列数 */\n.article {\n  column-width: 200px;\n}', lang: 'css', caption: '两种创建多列布局的方式' },
+      { type: 'heading', text: '如何创建多列容器' },
+      { type: 'paragraph', text: '通过设置 `column-count` 或 `column-width` 属性（值不为 `auto`），元素就会成为**多列容器**（multi-column container）。多列容器内的内容不再作为单个连续块显示，而是自动分割到多个**列盒**（column box）中。列盒是匿名盒——你无法直接选中或为它们设置样式，它们由浏览器自动生成。' },
+      { type: 'example', title: '指定列数', code: '.news {\n  column-count: 2;  /* 固定分为 2 列 */\n}', lang: 'css', explanation: '无论容器多宽，内容始终分为两列。列宽会根据可用空间自动调整。' },
+      { type: 'example', title: '指定列宽', code: '.news {\n  column-width: 250px;  /* 每列理想宽度 250px */\n}', lang: 'css', explanation: '浏览器会根据容器宽度自动计算列数。容器 500px 时显示 2 列，800px 时显示 3 列。' },
+      { type: 'heading', text: 'columns 简写属性' },
+      { type: 'paragraph', text: '`columns` 是 `column-count` 和 `column-width` 的简写属性，允许你同时设置两个值。当两个属性都指定时，`column-count` 定义**最大列数**，`column-width` 定义**最小列宽**——浏览器会在这两个约束下计算实际的列数和列宽。' },
+      { type: 'code', code: '/* 简写语法：值的顺序无关紧要 */\n.article {\n  columns: 3 200px;  /* 最多 3 列，每列至少 200px */\n}\n\n/* 等同于 */\n.article {\n  column-count: 3;\n  column-width: 200px;\n}\n\n/* 只设置一个值 */\n.article {\n  columns: auto 200px;  /* 列数自动，列宽 200px */\n  columns: 3;           /* 3 列，列宽自动 */\n}', lang: 'css', caption: 'columns 简写的使用方式' },
+      { type: 'heading', text: '列数和列宽的计算算法' },
+      { type: 'paragraph', text: '当你同时指定 `column-count` 和 `column-width` 时，浏览器需要根据可用宽度、列间距等因素计算实际的列数 N 和列宽 W。CSS 规范定义了一个**伪算法**来完成这个计算。核心原则是：`column-count` 是**上限**（不超过这个列数），`column-width` 是**下限**（列宽不小于这个值）。' },
+      { type: 'code', code: '/* 计算示例 */\n.container {\n  width: 800px;\n  columns: 4 150px;     /* 最多 4 列，每列至少 150px */\n  column-gap: 20px;     /* 列间距 20px */\n}\n\n/*\n可用宽度 U = 800px\n如果分 4 列：需要 3 个间距 = 60px，列宽 = (800-60)/4 = 185px ✓\n如果分 5 列：需要 4 个间距 = 80px，列宽 = (800-80)/5 = 144px ✗ (小于 150px)\n最终结果：N = 4 列，W = 185px\n*/', lang: 'css', caption: '列数和列宽的计算示例' },
+      { type: 'tip', text: '如果只指定 `column-count`，列宽会根据可用空间均分。如果只指定 `column-width`，列数会尽可能多（只要每列宽度不小于指定值）。' },
+      { type: 'heading', text: '列盒的特性' },
+      { type: 'paragraph', text: '列盒（column box）是**匿名盒**——它们由浏览器自动生成，你无法直接在 HTML 中创建或用选择器选中。列盒有以下重要特性：' },
+      { type: 'list', items: [
+        '列盒建立独立的**块级格式化上下文**（BFC），内部的 margin 不会与外部折叠',
+        '列盒不能设置背景、内边距、外边距或边框——这些样式只能设置在多列容器上',
+        '同一多列容器的所有列盒**列宽相等**，**列高也相等**（受 column-fill 影响）',
+        '浮动元素在其所在的列盒内浮动，不会跨列浮动',
+        '列盒在内联方向和块方向都有固定尺寸'
+      ] },
+      { type: 'heading', text: '多列格式化上下文' },
+      { type: 'paragraph', text: '多列容器建立**多列格式化上下文**（multi-column formatting context）。在这个上下文中，内容被分配到多个列盒，每个列盒再建立自己的 BFC。这种嵌套的格式化上下文结构确保了内容正确地流动和布局。' },
+      { type: 'example', title: '浮动元素在列盒内', code: '.multicol {\n  column-count: 2;\n}\n.multicol img {\n  float: left;  /* 图片在其所在的列盒内左浮动 */\n  width: 80px;\n}', lang: 'css', explanation: '浮动图片不会跨越列边界——如果图片在第一列，它只会影响第一列的布局。' },
+      { type: 'warning', text: '列盒是匿名的，意味着你不能用 CSS 选择器直接选中它们。如果你需要为每列设置不同的样式（如交替背景色），多列布局无法做到——考虑使用 Grid 或 Flexbox 替代。' },
+      { type: 'heading', text: '嵌套的多列布局' },
+      { type: 'paragraph', text: '多列容器可以嵌套——你可以在多列容器内部再创建多列布局。内层的多列容器会成为外层列盒中的普通块级元素，它的内容会再次分列。这种嵌套虽然可行，但会增加布局的复杂度，实际使用较少。' },
+      { type: 'code', code: '.outer {\n  column-count: 2;  /* 外层 2 列 */\n}\n\n.inner {\n  column-count: 2;  /* 内层也是 2 列 */\n  margin: 20px 0;\n}\n\n/* 如果 .inner 在外层第一列中，它的内容会再分为 2 个子列 */', lang: 'css', caption: '嵌套的多列布局' },
+      { type: 'list', items: [
+        '通过 column-count 或 column-width 创建多列容器',
+        '内容自动流入匿名的列盒（column box）',
+        'columns 简写可同时设置列数上限和列宽下限',
+        '列盒建立独立的 BFC，但不能直接设置样式',
+        '多列容器建立多列格式化上下文，支持嵌套'
+      ] },
+      { type: 'tip', text: '多列布局最适合文本密集型内容（如文章、新闻）。对于需要精确控制每列内容的场景（如卡片网格），Grid 布局是更好的选择。' },
+    ] as TutorialBlock[],
+  },
+  {
+    id: 'column-gaps-rules',
+    number: '2',
+    title: { zh: '列间距与列规则', en: 'Column Gaps & Column Rules' },
+    summary: {
+      zh: 'column-gap 定义列之间的间距，column-rule 在间距中心绘制装饰线。列规则不占空间，类似 outline。',
+      en: 'column-gap defines spacing between columns, column-rule draws decorative lines in the gap center. Column rules do not take up space, similar to outline.',
+    },
+    keyPoints: [
+      'column-gap 设置相邻列盒之间的间距，与 Grid/Flexbox 共享此属性',
+      'column-gap 的初始值为 normal，在多列布局中计算为 1em',
+      '列间距出现在列盒之间，不出现在边缘列与容器边缘之间',
+      'column-rule-width、column-rule-style、column-rule-color 分别控制列规则的宽度、样式和颜色',
+      'column-rule 简写属性设置列规则的所有子属性，语法类似 border',
+      '列规则绘制在列间距的中心，即使规则宽度超过间距宽度也不影响布局',
+      '列规则不占据空间，类似 outline 而非 border',
+      '列规则仅在列间距大于 0 且列数大于 1 时显示',
+      '所有列规则在同一个多列容器中宽度、样式和颜色相等',
+      '列规则的高度等于多列容器内容盒的使用高度',
+    ],
+    tutorial: [
+      { type: 'heading', text: '列间距的作用' },
+      { type: 'paragraph', text: '默认情况下，多列容器的列盒是紧挨着排列的，没有间距。`column-gap` 属性用于在相邻列盒之间添加空白间距，就像报纸或杂志中列与列之间的留白。这个属性不仅用于多列布局，还可以用于 Grid 和 Flexbox 布局。' },
+      { type: 'code', code: '.article {\n  column-count: 3;\n  column-gap: 40px;  /* 列之间间距 40px */\n}\n\n/* 使用 normal 关键字（默认值） */\n.article {\n  column-count: 3;\n  column-gap: normal;  /* 在多列布局中计算为 1em */\n}', lang: 'css', caption: 'column-gap 设置列间距' },
+      { type: 'tip', text: '`column-gap: normal` 在多列布局中的默认计算值是 `1em`（相对于多列容器的字体大小）。在 Grid 和 Flexbox 中，`normal` 的计算值是 `0`。' },
+      { type: 'paragraph', text: '列间距只出现在**列盒之间**，不会出现在第一列之前或最后一列之后。也就是说，如果有 3 列，就只有 2 个列间距。列间距参与列宽的计算——可用宽度需要减去所有列间距后再分配给列盒。' },
+      { type: 'heading', text: '列规则：装饰性的分隔线' },
+      { type: 'paragraph', text: '`column-rule` 属性用于在列间距的中心绘制装饰性的分隔线，类似报纸中列与列之间的细线。它是三个子属性的简写：`column-rule-width`（宽度）、`column-rule-style`（样式）、`column-rule-color`（颜色）。语法与 `border` 非常相似。' },
+      { type: 'code', code: '.newspaper {\n  column-count: 3;\n  column-gap: 40px;\n  column-rule: 2px solid #ccc;  /* 2px 实线灰色分隔线 */\n}\n\n/* 等同于 */\n.newspaper {\n  column-count: 3;\n  column-gap: 40px;\n  column-rule-width: 2px;\n  column-rule-style: solid;\n  column-rule-color: #ccc;\n}', lang: 'css', caption: 'column-rule 简写语法' },
+      { type: 'example', title: '不同样式的列规则', code: '.dashed {\n  column-rule: 1px dashed #999;\n}\n\n.double {\n  column-rule: 4px double #333;\n}\n\n.gradient {\n  column-rule: 3px solid;\n  column-rule-color: currentColor;  /* 继承文本颜色 */\n}', lang: 'css', explanation: 'column-rule-style 支持所有 border-style 的值（solid、dashed、dotted、double 等）。' },
+      { type: 'heading', text: '列规则的特殊性质' },
+      { type: 'paragraph', text: '列规则与 `border` 看起来相似，但行为更像 `outline`——**列规则不占据空间**。即使列规则的宽度超过列间距的宽度，也不会影响列盒的位置或列宽的计算。列规则会绘制在列间距的中心位置，如果规则过宽，可能会与相邻列的内容重叠。' },
+      { type: 'warning', text: '列规则不参与布局计算。如果你设置 `column-gap: 10px; column-rule: 20px solid`，规则的 20px 宽度会溢出到列内容区域，可能造成视觉重叠。' },
+      { type: 'list', items: [
+        '列规则绘制在列间距的**中心位置**',
+        '列规则**不占据空间**，类似 outline',
+        '列规则宽度超过间距宽度时，会向两侧溢出',
+        '列规则不参与列宽计算'
+      ] },
+      { type: 'heading', text: '列规则的显示条件' },
+      { type: 'paragraph', text: '列规则只在特定条件下才会显示。首先，列间距必须大于 0（即 `column-gap > 0`），因为规则绘制在间距中心——没有间距就没有中心位置。其次，列数必须大于 1（即至少有 2 列），因为单列容器没有列与列之间的间距。' },
+      { type: 'code', code: '/* 不会显示列规则 */\n.no-rule-1 {\n  column-count: 2;\n  column-gap: 0;          /* 间距为 0，无处绘制规则 */\n  column-rule: 2px solid;\n}\n\n.no-rule-2 {\n  column-count: 1;        /* 只有 1 列，没有列间 */\n  column-gap: 20px;\n  column-rule: 2px solid;\n}\n\n/* 会显示列规则 */\n.has-rule {\n  column-count: 2;        /* 至少 2 列 */\n  column-gap: 20px;       /* 间距大于 0 */\n  column-rule: 2px solid;\n}', lang: 'css', caption: '列规则的显示条件' },
+      { type: 'heading', text: '列规则的一致性' },
+      { type: 'paragraph', text: '同一个多列容器中的所有列规则宽度、样式和颜色**完全相同**——你无法为不同的列间设置不同的规则样式。列规则的高度等于多列容器内容盒的使用高度（used height），即列盒的实际高度。' },
+      { type: 'example', title: '实战：报纸风格的文章布局', code: '.article {\n  column-count: 3;\n  column-gap: 30px;\n  column-rule: 1px solid #ddd;\n  font-size: 16px;\n  line-height: 1.6;\n  text-align: justify;  /* 两端对齐，更像报纸 */\n}\n\n.article h2 {\n  column-span: all;  /* 标题跨越所有列 */\n  margin: 20px 0;\n}', lang: 'css', explanation: '这是典型的报纸风格多列布局：3 列文本，列间有细线分隔，标题跨越所有列。' },
+      { type: 'tip', text: '如果需要更复杂的列间装饰（如渐变背景、不同颜色的规则），可以考虑使用 Grid 布局代替多列布局，因为 Grid 可以精确控制每个列容器。' },
+    ] as TutorialBlock[],
+  },
+  {
+    id: 'column-spanning',
+    number: '3',
+    title: { zh: '列跨越与填充', en: 'Column Spanning & Filling' },
+    summary: {
+      zh: 'column-span: all 使元素跨越所有列，分割多列容器为多个多列行。column-fill 控制内容在列间的分布方式。',
+      en: 'column-span: all makes an element span across all columns, dividing the multi-column container into multiple multicol lines. column-fill controls how content is distributed among columns.',
+    },
+    keyPoints: [
+      'column-span: all 使元素跨越所有列，成为跨列元素（spanning element）',
+      '跨列元素将多列容器分割为多个多列行（multi-column line）',
+      '跨列元素前后的内容分别流入不同的多列行',
+      'column-span: none（默认）使元素不跨列，参与正常的多列流',
+      'column-span 对绝对定位元素或不在多列容器内的元素无效',
+      'column-fill: balance（默认）尽可能平衡所有列的高度',
+      'column-fill: auto 按顺序填充列，内容可能分布不均',
+      'column-fill: balance-all 跨越强制断点平衡所有列（包括分片容器）',
+      '列平衡考虑强制断点（break-before/break-after）、widows 和 orphans 属性',
+      '多列行表现为块级盒，建立独立的格式化上下文',
+    ],
+    tutorial: [
+      { type: 'heading', text: '跨列元素的作用' },
+      { type: 'paragraph', text: '在多列布局中，内容默认会在列之间流动——当一列装满后，内容自动流到下一列。但有时你需要某个元素（如标题、图片或引用块）**横跨所有列**，而不是被限制在单个列内。这时就需要使用 `column-span: all`。' },
+      { type: 'code', code: '.article {\n  column-count: 3;\n}\n\n.article h2 {\n  column-span: all;  /* 标题跨越所有 3 列 */\n  background: #f5f5f5;\n  padding: 10px;\n}\n\n.article p {\n  column-span: none;  /* 默认值，段落正常流入列中 */\n}', lang: 'css', caption: 'column-span 的基本用法' },
+      { type: 'heading', text: '跨列元素如何分割多列容器' },
+      { type: 'paragraph', text: '当一个元素设置了 `column-span: all`，它会**将多列容器分割为多个多列行**（multi-column line）。跨列元素之前的内容流入一个多列行，跨列元素本身作为单独的块级盒存在（不在列盒中），跨列元素之后的内容流入另一个新的多列行。' },
+      { type: 'example', title: '多列行的分割', code: '<div class="container">\n  <p>段落 1（流入第一个多列行）</p>\n  <p>段落 2（流入第一个多列行）</p>\n  <h2>跨列标题（分割点）</h2>\n  <p>段落 3（流入第二个多列行）</p>\n  <p>段落 4（流入第二个多列行）</p>\n</div>\n\n<style>\n.container { column-count: 2; }\n.container h2 { column-span: all; }\n</style>', lang: 'html', explanation: '段落 1 和 2 在第一个多列行中分为 2 列，h2 横跨整行，段落 3 和 4 在第二个多列行中再次分为 2 列。' },
+      { type: 'tip', text: '跨列元素不在列盒中——它是多列容器的直接子元素，宽度等于多列容器的内容宽度（忽略列间距）。' },
+      { type: 'heading', text: 'column-span 的限制' },
+      { type: 'paragraph', text: '`column-span` 只有两个值：`none`（默认，不跨列）和 `all`（跨越所有列）。你无法指定跨越特定数量的列（如"跨 2 列"），这与 Grid 布局不同。此外，`column-span` 对浮动元素、绝对定位元素以及不在多列容器内的元素无效。' },
+      { type: 'warning', text: '`column-span` 不支持部分跨越（如"跨 2 列"）。如果需要复杂的跨列布局，考虑使用 Grid 布局的 `grid-column` 属性。' },
+      { type: 'heading', text: '列填充：内容如何分布' },
+      { type: 'paragraph', text: '`column-fill` 属性控制内容在各列之间的分布方式。默认值 `balance` 会尽可能让所有列的高度相等（列平衡）。这在视觉上更美观，但需要浏览器计算如何分配内容。`auto` 则按顺序填充列——先填满第一列，再填第二列，依此类推。' },
+      { type: 'code', code: '/* 默认：平衡所有列的高度 */\n.article {\n  column-count: 3;\n  column-fill: balance;  /* 默认值 */\n}\n\n/* 按顺序填充列 */\n.article {\n  column-count: 3;\n  column-fill: auto;  /* 先填满第一列，再填第二列 */\n  height: 500px;      /* auto 需要明确高度才有意义 */\n}', lang: 'css', caption: 'column-fill 的两种模式' },
+      { type: 'paragraph', text: '`column-fill: balance` 会考虑**强制断点**（如 `break-before: column`）、`widows` 和 `orphans` 属性，尽可能在这些约束下平衡列高。`balance-all` 是更激进的平衡模式，它会跨越强制断点进行平衡（用于分页媒体）。' },
+      { type: 'heading', text: 'column-fill: auto 的实际应用' },
+      { type: 'paragraph', text: '`auto` 模式在多列容器有明确高度时才有实际意义。此时内容会**按顺序填充列**——第一列填满后溢出到第二列，第二列填满后溢出到第三列。如果多列容器高度是自动的（由内容撑开），`auto` 和 `balance` 的效果相同（所有内容都会显示，列高自动调整）。' },
+      { type: 'example', title: '固定高度的多列容器', code: '.scroll-columns {\n  column-count: 3;\n  column-fill: auto;\n  height: 400px;       /* 固定高度 */\n  overflow: auto;      /* 超出高度显示滚动条 */\n}\n\n/* 内容会按顺序填充 3 列\n   如果 400px 装不下所有内容，会出现横向滚动条 */', lang: 'css', explanation: '这种布局适合创建"虚拟页面"效果——用户可以横向滚动查看更多列。' },
+      { type: 'heading', text: '列平衡算法' },
+      { type: 'paragraph', text: '`balance` 模式下的列平衡是个复杂的算法。浏览器需要考虑：(1) 内容的自然断点（段落、标题），(2) 强制断点（`break-before`/`break-after`），(3) 避免断点（`break-inside: avoid`），(4) widows 和 orphans 设置（段落首尾最小行数）。目标是让所有列高度尽可能接近，同时不违反这些约束。' },
+      { type: 'list', items: [
+        '`balance`（默认）：平衡所有列的高度',
+        '`auto`：按顺序填充列，需要容器有明确高度',
+        '`balance-all`：跨越强制断点平衡（主要用于分页媒体）',
+        '列平衡考虑强制断点、`break-inside: avoid`、widows/orphans 等约束'
+      ] },
+      { type: 'example', title: '实战：文章标题跨列布局', code: '.magazine {\n  column-count: 3;\n  column-gap: 30px;\n  column-rule: 1px solid #ddd;\n  column-fill: balance;\n}\n\n.magazine h1 {\n  column-span: all;\n  font-size: 2.5em;\n  margin: 0 0 20px;\n  border-bottom: 3px solid #333;\n}\n\n.magazine h2 {\n  column-span: all;  /* 二级标题也跨列 */\n  background: #f0f0f0;\n  padding: 10px;\n  margin: 20px 0;\n}', lang: 'css', explanation: '杂志风格布局：大标题和二级标题跨越所有列，正文内容在 3 列中平衡分布。' },
+      { type: 'tip', text: '如果多列容器内有多个跨列元素，每个跨列元素都会创建新的多列行。这意味着内容会被分割成多个独立的多列段落，每段分别进行列平衡。' },
+    ] as TutorialBlock[],
+  },
+  {
+    id: 'multicol-overflow',
+    number: '4',
+    title: { zh: '多列溢出与分片', en: 'Multi-column Overflow & Fragmentation' },
+    summary: {
+      zh: '内联方向溢出被裁剪或显示，块方向溢出分片到下一列。break-* 属性控制列中的分片行为。',
+      en: 'Inline-direction overflow is clipped or shown, block-direction overflow fragments to the next column. break-* properties control fragmentation behavior in columns.',
+    },
+    keyPoints: [
+      '内联方向溢出列盒的内容根据 overflow 属性处理（裁剪或显示滚动条）',
+      '块方向溢出列盒的内容自动分片（fragment）到下一列',
+      '多列容器是分片容器（fragmentation container），列盒是分片',
+      'break-before、break-after 控制元素前后是否插入列断点',
+      'break-inside 控制元素内部是否允许分片',
+      'break-before/after: column 强制在元素前后插入列断点',
+      'break-inside: avoid 避免在元素内部分片，尽量保持元素完整',
+      'widows 和 orphans 属性控制段落分片时首尾行的最小行数',
+      '分页媒体中，列盒永远不会跨页断裂——每页的列高独立计算',
+      '跨列元素也会触发分片，导致上方列高度缩短',
+      '绝对定位的后代元素会影响列平衡和多列容器的块尺寸',
+    ],
+    tutorial: [
+      { type: 'heading', text: '多列布局中的溢出处理' },
+      { type: 'paragraph', text: '在多列布局中，内容可能在两个方向上溢出列盒：**内联方向**（水平方向，对于横向书写模式）和**块方向**（垂直方向）。这两个方向的溢出有完全不同的处理方式。' },
+      { type: 'list', items: [
+        '**内联方向溢出**：内容超出列宽时，根据 `overflow` 属性处理（裁剪、显示滚动条或溢出可见）',
+        '**块方向溢出**：内容超出列高时，自动**分片**（fragment）到下一列——这是多列布局的核心机制'
+      ] },
+      { type: 'heading', text: '分片：内容在列间的流动' },
+      { type: 'paragraph', text: '多列容器是一个**分片容器**（fragmentation container），每个列盒是一个**分片**（fragment）。当内容在块方向上装不下当前列盒时，它会自动断裂并继续流入下一个列盒。这种断裂称为**分片**。分片可能发生在段落中间、列表项之间、甚至是单个元素内部。' },
+      { type: 'code', code: '.article {\n  column-count: 2;\n  column-gap: 20px;\n}\n\n/* 长段落会在第一列装满后自动断裂，\n   剩余内容流入第二列 */', lang: 'css', caption: '分片的自动行为' },
+      { type: 'heading', text: '控制分片：break-before 和 break-after' },
+      { type: 'paragraph', text: '`break-before` 和 `break-after` 属性用于在元素前后**强制插入列断点**。设置 `break-before: column` 会强制元素从新列开始，即使前一列还有剩余空间。这对于标题、章节分隔等场景非常有用。' },
+      { type: 'example', title: '强制标题从新列开始', code: '.article h2 {\n  break-before: column;  /* h2 总是从新列开始 */\n  margin-top: 0;         /* 避免顶部多余空白 */\n}\n\n.article .chapter-end {\n  break-after: column;   /* 章节结束后强制断列 */\n}', lang: 'css', explanation: '这确保每个二级标题都出现在列的顶部，不会出现在列的中间。' },
+      { type: 'tip', text: '`break-before` 和 `break-after` 还支持其他值：`auto`（默认，自动分片）、`avoid`（避免在此处断裂）、`page`（用于分页媒体）、`region`（用于 CSS Regions）。' },
+      { type: 'heading', text: '避免内部分片：break-inside' },
+      { type: 'paragraph', text: '`break-inside: avoid` 告诉浏览器**尽量避免在元素内部分片**——保持元素完整地出现在一个列中。这对于保持卡片、图片、代码块、引用块等元素的完整性非常重要。如果元素太高而无法放入单列，浏览器会忽略这个规则。' },
+      { type: 'code', code: '.card {\n  break-inside: avoid;  /* 卡片不要被拆分到两列 */\n  background: #f5f5f5;\n  padding: 20px;\n  margin-bottom: 20px;\n}\n\n.article figure {\n  break-inside: avoid;  /* 图片和说明文字保持一起 */\n}\n\n.article pre {\n  break-inside: avoid;  /* 代码块不要断裂 */\n}', lang: 'css', caption: '保持元素完整的实用案例' },
+      { type: 'warning', text: '`break-inside: avoid` 是**提示**而非强制要求。如果元素高度超过列高，浏览器必须将其分片，否则内容无法显示。' },
+      { type: 'heading', text: '段落分片：widows 和 orphans' },
+      { type: 'paragraph', text: '当段落被分片到两列时，`widows` 和 `orphans` 属性控制段落首尾的最小行数。`orphans` 是列底部的最小行数（孤行），`widows` 是列顶部的最小行数（寡行）。这两个属性最初用于印刷排版，避免单行文字"孤零零"地出现在列的顶部或底部。' },
+      { type: 'code', code: '.article p {\n  orphans: 3;  /* 列底部至少保留 3 行 */\n  widows: 3;   /* 列顶部至少保留 3 行 */\n}\n\n/* 示例：\n   如果段落有 10 行，第一列只能放下 8 行：\n   - 不设置 widows/orphans：第一列 8 行，第二列 2 行\n   - orphans: 3：第一列只放 7 行（保证底部至少 3 行完整）\n   - widows: 3：第二列至少 3 行（如果不够，会往前调整断点） */', lang: 'css', caption: 'widows 和 orphans 的作用' },
+      { type: 'heading', text: '实战：保持卡片完整' },
+      { type: 'paragraph', text: '在卡片网格布局中使用多列布局时，最常见的问题是卡片被拆分到两列——标题在一列底部，内容在下一列顶部。使用 `break-inside: avoid` 可以完美解决这个问题。' },
+      { type: 'example', title: '卡片网格的分片控制', code: '.grid {\n  column-count: 3;\n  column-gap: 20px;\n}\n\n.card {\n  break-inside: avoid;        /* 关键：保持卡片完整 */\n  background: white;\n  border: 1px solid #ddd;\n  border-radius: 8px;\n  padding: 20px;\n  margin-bottom: 20px;\n}\n\n.card img {\n  width: 100%;\n  display: block;\n}', lang: 'css', explanation: '每张卡片会作为整体出现在一列中，不会被断裂。如果当前列剩余空间不够，整张卡片会移到下一列。' },
+      { type: 'heading', text: '多列布局与分页媒体' },
+      { type: 'paragraph', text: '在分页媒体（如打印或 PDF）中，多列布局有特殊的行为：**列盒永远不会跨页断裂**。每一页的列高独立计算——第一页的 3 列填满后，第二页会重新开始新的 3 列。这意味着在打印时，`column-fill: balance` 只在单页内平衡，不会跨页平衡。' },
+      { type: 'heading', text: '分片与跨列元素的交互' },
+      { type: 'paragraph', text: '当遇到跨列元素（`column-span: all`）时，它会触发一次"强制分片"——当前多列行结束，跨列元素占据整行，之后的内容流入新的多列行。这也会影响列平衡——跨列元素之前的列可能高度较短（未填满）。' },
+      { type: 'code', code: '.article {\n  column-count: 3;\n  column-fill: balance;\n}\n\n.article h2 {\n  column-span: all;\n  /* h2 会触发分片：\n     - h2 之前的内容在 3 列中平衡\n     - h2 占据整行\n     - h2 之后的内容在新的 3 列中重新平衡 */\n}', lang: 'css', caption: '跨列元素作为分片边界' },
+      { type: 'list', items: [
+        '内联方向溢出由 `overflow` 控制，块方向溢出自动分片到下一列',
+        '`break-before: column` 和 `break-after: column` 强制插入列断点',
+        '`break-inside: avoid` 尽量保持元素完整，不在内部分片',
+        '`widows` 和 `orphans` 控制段落分片时首尾的最小行数',
+        '跨列元素会触发分片，分割多列容器为多个多列行'
+      ] },
+      { type: 'tip', text: '对于需要精确控制每个项目位置的布局（如产品网格），Grid 布局比多列布局更合适。多列布局的自动分片机制适合文本密集型内容，但对于离散的项目（卡片、图片）控制力较弱。' },
+    ] as TutorialBlock[],
+  },
+];
+
+export const anchors: Record<string, string> = {
+  // CSS Multi-column Layout 没有对应的 CSS2 章号，anchors 为空
+};
+
+// ============================================================
+// 属性定义
+// ============================================================
+
+const MULTICOL = 'https://www.w3.org/TR/css-multicol-1/';
+
+export const propertyTerms: Record<string, PropertyEntry> = {
+  'column-count': {
+    zh: '列数',
+    value: 'auto | <integer [1,∞]>',
+    initial: 'auto',
+    appliesTo: '块容器（表格包装盒除外）',
+    inherited: false,
+    percentages: null,
+    computedValue: '指定值',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#multicol-basics',
+  },
+  'column-width': {
+    zh: '列宽',
+    value: 'auto | <length [0,∞]>',
+    initial: 'auto',
+    appliesTo: '块容器（表格包装盒除外）',
+    inherited: false,
+    percentages: null,
+    computedValue: 'auto 关键字或绝对长度',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#multicol-basics',
+  },
+  'columns': {
+    zh: '多列（简写）',
+    value: "<'column-width'> || <'column-count'>",
+    initial: '见各子属性',
+    appliesTo: '块容器（表格包装盒除外）',
+    inherited: false,
+    percentages: null,
+    computedValue: '见各子属性',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#multicol-basics',
+  },
+  'column-gap': {
+    zh: '列间距',
+    value: 'normal | <length-percentage [0,∞]>',
+    initial: 'normal',
+    appliesTo: '多列容器、flex 容器、grid 容器',
+    inherited: false,
+    percentages: '相对于内容区域的对应尺寸',
+    computedValue: 'normal 关键字或绝对长度',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#column-gaps-rules',
+  },
+  'column-rule-width': {
+    zh: '列规则宽度',
+    value: '<line-width>',
+    initial: 'medium',
+    appliesTo: '多列容器',
+    inherited: false,
+    percentages: null,
+    computedValue: '绝对长度，如果 column-rule-style 为 none 或 hidden 则为 0',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#column-gaps-rules',
+  },
+  'column-rule-style': {
+    zh: '列规则样式',
+    value: '<line-style>',
+    initial: 'none',
+    appliesTo: '多列容器',
+    inherited: false,
+    percentages: null,
+    computedValue: '指定值',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#column-gaps-rules',
+  },
+  'column-rule-color': {
+    zh: '列规则颜色',
+    value: '<color>',
+    initial: 'currentcolor',
+    appliesTo: '多列容器',
+    inherited: false,
+    percentages: null,
+    computedValue: '计算后的颜色值',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#column-gaps-rules',
+  },
+  'column-rule': {
+    zh: '列规则（简写）',
+    value: "<'column-rule-width'> || <'column-rule-style'> || <'column-rule-color'>",
+    initial: '见各子属性',
+    appliesTo: '多列容器',
+    inherited: false,
+    percentages: null,
+    computedValue: '见各子属性',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#column-gaps-rules',
+  },
+  'column-span': {
+    zh: '列跨越',
+    value: 'none | all',
+    initial: 'none',
+    appliesTo: '在流内的块级元素（浮动和绝对定位元素除外）',
+    inherited: false,
+    percentages: null,
+    computedValue: '指定值',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#column-spanning',
+  },
+  'column-fill': {
+    zh: '列填充',
+    value: 'auto | balance | balance-all',
+    initial: 'balance',
+    appliesTo: '多列容器',
+    inherited: false,
+    percentages: null,
+    computedValue: '指定值',
+    css2Url: '',
+    css3Url: MULTICOL,
+    sectionRef: 'multicol#column-spanning',
+  },
+};
+
+// ============================================================
+// 术语表
+// ============================================================
+
+export const glossaryTerms: Record<string, GlossaryEntry> = {
+  'multi-column container': {
+    zh: '多列容器',
+    description:
+      '设置了 column-count 或 column-width 非 auto 值的块容器元素。多列容器建立多列格式化上下文，其内容流入匿名列盒。',
+    sectionRef: 'multicol#multicol-basics',
+    specUrl: MULTICOL,
+  },
+  'multi-column element': {
+    zh: '多列元素',
+    description:
+      '多列容器的同义词。指通过 column-count 或 column-width 属性启用多列布局的元素。',
+    sectionRef: 'multicol#multicol-basics',
+    specUrl: MULTICOL,
+  },
+  'column box': {
+    zh: '列盒',
+    description:
+      '多列容器生成的匿名盒，内容在其中流动。列盒建立独立的块级格式化上下文，不能设置样式属性。',
+    sectionRef: 'multicol#multicol-basics',
+    specUrl: MULTICOL,
+  },
+  'column width': {
+    zh: '列宽',
+    description:
+      '列盒在内联方向的长度。同一多列行中的所有列盒具有相同的列宽，由 column-width 属性和可用空间共同决定。',
+    sectionRef: 'multicol#multicol-basics',
+    specUrl: MULTICOL,
+  },
+  'column height': {
+    zh: '列高',
+    description:
+      '列盒在块方向的长度。同一多列行中的所有列盒具有相同的列高，受 column-fill、内容量和强制断点影响。',
+    sectionRef: 'multicol#multicol-basics',
+    specUrl: MULTICOL,
+  },
+  'column gap': {
+    zh: '列间距',
+    description:
+      '相邻列盒之间的间距，由 column-gap 属性设置。列规则绘制在列间距的中心位置。',
+    sectionRef: 'multicol#column-gaps-rules',
+    specUrl: MULTICOL,
+  },
+  'column rule': {
+    zh: '列规则',
+    description:
+      '绘制在列间距中心的装饰线，由 column-rule 属性控制。列规则不占据空间，类似 outline。',
+    sectionRef: 'multicol#column-gaps-rules',
+    specUrl: MULTICOL,
+  },
+  'column span': {
+    zh: '列跨越',
+    description:
+      '元素通过 column-span: all 跨越所有列的能力。跨列元素将多列容器分割为多个多列行。',
+    sectionRef: 'multicol#column-spanning',
+    specUrl: MULTICOL,
+  },
+  'spanning element': {
+    zh: '跨列元素',
+    description:
+      '设置了 column-span: all 的元素，跨越所有列并将多列容器分割为多个多列行。跨列元素本身不在列盒中。',
+    sectionRef: 'multicol#column-spanning',
+    specUrl: MULTICOL,
+  },
+  'multi-column spanner': {
+    zh: '多列跨列器',
+    description:
+      'spanning element 的同义词。指通过 column-span: all 跨越所有列的元素。',
+    sectionRef: 'multicol#column-spanning',
+    specUrl: MULTICOL,
+  },
+  'multi-column line': {
+    zh: '多列行',
+    description:
+      '多列容器中一行列盒的集合。跨列元素将多列容器分割为多个多列行，每个多列行建立独立的多列格式化上下文。',
+    sectionRef: 'multicol#column-spanning',
+    specUrl: MULTICOL,
+  },
+  'column balancing': {
+    zh: '列平衡',
+    description:
+      'column-fill: balance 时，浏览器尝试使所有列的高度尽可能相等的机制。考虑强制断点、widows、orphans 等因素。',
+    sectionRef: 'multicol#column-spanning',
+    specUrl: MULTICOL,
+  },
+  'multi-column formatting context': {
+    zh: '多列格式化上下文',
+    description:
+      '多列行建立的格式化上下文，管理列盒的生成和内容流动。每个多列行表现为块级盒并建立独立的格式化上下文。',
+    sectionRef: 'multicol#multicol-basics',
+    specUrl: MULTICOL,
+  },
+  'principal column box': {
+    zh: '主列盒',
+    description:
+      '当某个盒子的内容跨越多个列盒时，第一个包含该盒子的列盒称为主列盒。主要用于确定百分比高度的参考。',
+    sectionRef: 'multicol#multicol-basics',
+    specUrl: MULTICOL,
+  },
+};

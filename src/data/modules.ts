@@ -9,6 +9,8 @@ import { sections as cascadeSections } from './chapters/cascade';
 import { sections as mediaSections } from './chapters/media';
 import { sections as boxModelSections } from './chapters/box-model';
 import { sections as visualFormattingSections } from './chapters/visual-formatting';
+import { sections as flexboxSections } from './chapters/flexbox';
+import { sections as gridSections } from './chapters/grid';
 import { sections as sizingSections } from './chapters/sizing';
 import { sections as fontsSections } from './chapters/fonts';
 import { sections as textSections } from './chapters/text';
@@ -17,11 +19,26 @@ import { sections as generatedContentSections } from './chapters/generated-conte
 import { sections as colorsBackgroundsSections } from './chapters/colors-backgrounds';
 import { sections as transformsSections } from './chapters/transforms';
 import { sections as modernSections } from './chapters/modern';
+import { sections as multicolSections } from './chapters/multicol';
+import { sections as tablesSections } from './chapters/tables';
 // ============================================================
 // 状态类型
 // ============================================================
 
 export type ModuleStatus = 'current' | 'locked' | 'completed';
+
+// ============================================================
+// 教程内容块（TutorialBlock = 结构化教程内容）
+// ============================================================
+
+export type TutorialBlock =
+  | { type: 'heading'; text: string }
+  | { type: 'paragraph'; text: string }
+  | { type: 'code'; code: string; lang: string; caption?: string }
+  | { type: 'tip'; text: string }
+  | { type: 'warning'; text: string }
+  | { type: 'example'; title: string; code: string; lang?: string; explanation: string }
+  | { type: 'list'; items: string[]; ordered?: boolean };
 
 // ============================================================
 // 小节数据（Section = 模块内小节）
@@ -33,6 +50,7 @@ export interface Section {
   title: LocaleText;
   summary: LocaleText;
   keyPoints: string[];
+  tutorial?: TutorialBlock[]; // 结构化教程内容，存在时替代 keyPoints 渲染
   specId?: string; // 对应的 W3C 规范锚点 ID
 }
 
@@ -85,7 +103,7 @@ export const stages: Stage[] = [
     title: { zh: '盒子与布局', en: 'Box & Layout' },
     icon: Layout,
     description: { zh: '从盒模型到完整的布局系统', en: 'From box model to complete layout system' },
-    moduleIds: ['media', 'box-model', 'visual-formatting', 'sizing'],
+    moduleIds: ['media', 'box-model', 'visual-formatting', 'flexbox', 'grid', 'multicol', 'tables', 'sizing'],
   },
   {
     id: 'visual',
@@ -241,9 +259,9 @@ export const modules: Record<string, Module> = {
     id: 'visual-formatting',
     number: 7,
     title: { zh: '视觉格式化模型', en: 'Visual Formatting Model' },
-    description: { zh: 'display、格式化上下文、Normal Flow、浮动、定位、Flexbox、Grid', en: 'display, formatting contexts, Normal Flow, floats, positioning, Flexbox, Grid' },
+    description: { zh: 'display、格式化上下文、Normal Flow、浮动、定位', en: 'display, formatting contexts, Normal Flow, floats, positioning' },
     status: 'current',
-    specs: ['css-display-3', 'css-position-3', 'css-flexbox-1', 'css-grid-1', 'css-grid-2', 'css-multicol-1'],
+    specs: ['css-display-3', 'css-position-3'],
     specUrl: 'https://www.w3.org/TR/css-display-3/',
     css2Chapters: [9],
     keyConcept: {
@@ -254,6 +272,79 @@ export const modules: Record<string, Module> = {
       },
     },
     sections: visualFormattingSections,
+  },
+
+  flexbox: {
+    id: 'flexbox',
+    number: 16,
+    title: { zh: 'Flexbox 弹性布局', en: 'Flexbox Layout' },
+    description: { zh: 'Flex 容器与项目、弹性尺寸计算、主轴与交叉轴对齐', en: 'Flex containers and items, flexible sizing, main and cross axis alignment' },
+    status: 'current' as const,
+    specs: ['css-flexbox-1'],
+    specUrl: 'https://www.w3.org/TR/css-flexbox-1/',
+    keyConcept: {
+      title: { zh: '核心概念', en: 'Core Concept' },
+      content: {
+        zh: 'Flexbox 是一维布局模型，通过 display: flex 创建弹性容器，子元素成为弹性项目。flex-direction 定义主轴方向，flex-grow/shrink/basis 控制项目如何分配空间。justify-content 和 align-items 提供强大的对齐能力，使得居中、等间距等常见布局模式变得简单直接。',
+        en: 'Flexbox is a one-dimensional layout model. Setting display: flex creates a flex container whose children become flex items. flex-direction defines the main axis, while flex-grow/shrink/basis control how items share space. justify-content and align-items provide powerful alignment, making common patterns like centering and equal spacing straightforward.',
+      },
+    },
+    sections: flexboxSections,
+  },
+
+  grid: {
+    id: 'grid',
+    number: 17,
+    title: { zh: 'Grid 网格布局', en: 'Grid Layout' },
+    description: { zh: '二维网格系统、模板定义、项目放置、子网格', en: 'Two-dimensional grid system, template definitions, item placement, subgrid' },
+    status: 'current' as const,
+    specs: ['css-grid-1', 'css-grid-2'],
+    specUrl: 'https://www.w3.org/TR/css-grid-1/',
+    keyConcept: {
+      title: { zh: '核心概念', en: 'Core Concept' },
+      content: {
+        zh: 'CSS Grid 是二维布局系统，通过 display: grid 创建网格容器。grid-template-rows/columns 定义行列轨道，支持 fr 弹性单位、repeat()、minmax() 等强大语法。网格项目可通过 grid-row/column 精确放置到任意单元格或区域。CSS Grid Level 2 引入子网格(subgrid)，允许嵌套网格继承父级轨道尺寸。',
+        en: 'CSS Grid is a two-dimensional layout system. Setting display: grid creates a grid container. grid-template-rows/columns define row and column tracks with powerful syntax including fr flexible units, repeat(), and minmax(). Grid items can be precisely placed into any cell or area via grid-row/column. CSS Grid Level 2 introduces subgrid, allowing nested grids to inherit parent track sizes.',
+      },
+    },
+    sections: gridSections,
+  },
+
+  multicol: {
+    id: 'multicol',
+    number: 18,
+    title: { zh: '多列布局', en: 'Multi-column Layout' },
+    description: { zh: '多列容器、列宽与列数、列间距与列规则、列跨越', en: 'Multi-column containers, column width and count, gaps and rules, column spanning' },
+    status: 'current' as const,
+    specs: ['css-multicol-1'],
+    specUrl: 'https://www.w3.org/TR/css-multicol-1/',
+    keyConcept: {
+      title: { zh: '核心概念', en: 'Core Concept' },
+      content: {
+        zh: '多列布局将块级容器的内容分为多列显示,类似报纸排版。column-count 和 column-width 控制列的数量和宽度,浏览器自动平衡内容在各列之间的分配。column-span 允许元素跨越所有列,column-rule 在列间添加可视分隔线。',
+        en: 'Multi-column layout splits block container content into multiple columns, similar to newspaper layouts. column-count and column-width control column number and width, with browsers automatically balancing content across columns. column-span allows elements to span all columns, and column-rule adds visual separators between columns.',
+      },
+    },
+    sections: multicolSections,
+  },
+
+  tables: {
+    id: 'tables',
+    number: 19,
+    title: { zh: '表格布局', en: 'Table Layout' },
+    description: { zh: 'CSS 表格模型、边框模型、表格布局算法', en: 'CSS table model, border models, table layout algorithms' },
+    status: 'current' as const,
+    specs: [],
+    specUrl: 'https://www.w3.org/TR/CSS22/tables.html',
+    css2Chapters: [17],
+    keyConcept: {
+      title: { zh: '核心概念', en: 'Core Concept' },
+      content: {
+        zh: 'CSS 表格模型基于 HTML 表格结构,通过 display: table 等值将任意元素转换为表格布局。表格有两种边框模型:分离边框(border-collapse: separate)和折叠边框(border-collapse: collapse),各有不同的渲染和冲突解决规则。表格宽度可通过 table-layout: fixed 实现固定布局或默认的自动布局。',
+        en: 'The CSS table model is based on HTML table structure, converting any element into table layout via display: table etc. Tables have two border models: separated (border-collapse: separate) and collapsed (border-collapse: collapse), each with different rendering and conflict resolution rules. Table width can use fixed layout (table-layout: fixed) or the default auto layout.',
+      },
+    },
+    sections: tablesSections,
   },
 
   sizing: {
@@ -285,7 +376,7 @@ export const modules: Record<string, Module> = {
     title: { zh: '视觉效果', en: 'Visual Effects' },
     description: { zh: 'overflow、裁剪、visibility、滤镜、混合模式', en: 'overflow, clipping, visibility, filters, blend modes' },
     status: 'current',
-    specs: ['css-overflow-3', 'css-masking-1', 'filter-effects-1', 'compositing-1'],
+    specs: ['css-overflow-3', 'css-masking-1', 'filter-effects-1', 'compositing-1', 'css-shapes-1'],
     specUrl: 'https://www.w3.org/TR/CSS22/visufx.html',
     css2Chapters: [11],
     keyConcept: {
@@ -404,9 +495,9 @@ export const modules: Record<string, Module> = {
     id: 'modern',
     number: 15,
     title: { zh: '现代 CSS 新特性', en: 'Modern CSS' },
-    description: { zh: '容器查询、CSS 嵌套、@scope、content-visibility', en: 'Container queries, CSS nesting, @scope, content-visibility' },
+    description: { zh: '容器查询、CSS 嵌套、@scope、content-visibility、滚动吸附、CSS UI', en: 'Container queries, CSS nesting, @scope, content-visibility, Scroll Snap, CSS UI' },
     status: 'current',
-    specs: ['css-contain-2', 'css-contain-3', 'css-nesting-1', 'css-cascade-5', 'css-cascade-6'],
+    specs: ['css-contain-2', 'css-contain-3', 'css-nesting-1', 'css-cascade-5', 'css-cascade-6', 'css-scroll-snap-1', 'css-ui-4'],
     specUrl: 'https://www.w3.org/TR/css-contain-3/',
     keyConcept: {
       title: { zh: '核心概念', en: 'Core Concept' },

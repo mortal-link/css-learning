@@ -1,4 +1,4 @@
-import type { Section } from '../modules';
+import type { Section, TutorialBlock } from '../modules';
 import type { GlossaryEntry } from '../glossary';
 import type { PropertyEntry } from '../properties';
 
@@ -17,6 +17,98 @@ export const sections: Section[] = [
       'content 属性控制生成的内容',
       'CSS3 扩展了伪元素系统,新增 ::marker、::placeholder、::selection 等',
       '伪元素使用双冒号(::)语法,以区别于伪类(:)',
+    ],
+    tutorial: [
+      {
+        type: 'heading',
+        text: '什么是伪元素？',
+      },
+      {
+        type: 'paragraph',
+        text: '伪元素是 CSS 创建的抽象元素，它们不存在于 HTML 文档树中，但可以像真实元素一样被样式化。最常用的伪元素是 ::before 和 ::after，它们在元素内容的前后插入生成内容。',
+      },
+      {
+        type: 'code',
+        code: `.quote::before {\n  content: '"';\n  color: #999;\n}\n\n.quote::after {\n  content: '"';\n  color: #999;\n}`,
+        lang: 'css',
+        caption: '使用 ::before 和 ::after 添加装饰性引号',
+      },
+      {
+        type: 'tip',
+        text: 'CSS3 规定伪元素使用双冒号(::)语法，以区别于伪类的单冒号(:)。但为了向后兼容，浏览器仍然支持 :before 和 :after 的单冒号写法。',
+      },
+      {
+        type: 'heading',
+        text: '伪元素的盒模型',
+      },
+      {
+        type: 'paragraph',
+        text: '伪元素生成的内容会创建真实的盒子，可以设置宽度、高度、边距、定位等所有盒模型属性。伪元素默认是行内元素(inline)，但可以通过 display 属性改变。',
+      },
+      {
+        type: 'example',
+        title: '装饰性图标',
+        code: `.icon::before {\n  content: "";\n  display: inline-block;\n  width: 16px;\n  height: 16px;\n  background: url(icon.svg) no-repeat center;\n  margin-right: 8px;\n  vertical-align: middle;\n}`,
+        lang: 'css',
+        explanation: '创建一个空的伪元素，设置为行内块级(inline-block)，添加背景图标。这种技术常用于在文本前添加图标，而无需修改 HTML 结构。',
+      },
+      {
+        type: 'heading',
+        text: 'CSS3 新增的伪元素',
+      },
+      {
+        type: 'list',
+        items: [
+          '::first-line - 选择块级元素的首行文本',
+          '::first-letter - 选择块级元素的首字母',
+          '::marker - 选择列表项的标记盒(CSS Lists Level 3)',
+          '::placeholder - 选择表单输入框的占位符文本',
+          '::selection - 选择用户选中的文本',
+          '::backdrop - 选择全屏模式下的背景',
+        ],
+      },
+      {
+        type: 'code',
+        code: `p::first-line {\n  font-weight: bold;\n  color: #333;\n}\n\np::first-letter {\n  font-size: 2em;\n  float: left;\n  line-height: 1;\n  margin-right: 0.1em;\n}`,
+        lang: 'css',
+        caption: '::first-line 和 ::first-letter 用于杂志风格排版',
+      },
+      {
+        type: 'warning',
+        text: '并非所有 CSS 属性都能应用于所有伪元素。例如，::first-line 只能使用字体、颜色、背景等有限的属性，而 ::before/::after 几乎支持所有属性。',
+      },
+      {
+        type: 'example',
+        title: '自定义选择高亮',
+        code: `::selection {\n  background-color: #ffeb3b;\n  color: #000;\n}\n\n::-moz-selection {\n  background-color: #ffeb3b;\n  color: #000;\n}`,
+        lang: 'css',
+        explanation: '::selection 伪元素允许自定义用户选中文本时的背景色和文字颜色。注意需要同时写 Firefox 的前缀版本(-moz-selection)以确保兼容性。',
+      },
+      {
+        type: 'heading',
+        text: '伪元素与 content 属性',
+      },
+      {
+        type: 'paragraph',
+        text: '::before 和 ::after 伪元素必须配合 content 属性使用，即使不插入任何内容，也需要设置 content: ""。如果省略 content 属性，伪元素将不会生成。',
+      },
+      {
+        type: 'code',
+        code: `.clearfix::after {\n  content: "";\n  display: table;\n  clear: both;\n}`,
+        lang: 'css',
+        caption: '经典的 clearfix 技巧：使用空 content 创建清除浮动的伪元素',
+      },
+      {
+        type: 'tip',
+        text: '伪元素无法通过 JavaScript 直接访问(不在 DOM 树中)，但可以通过改变父元素的类名来间接控制伪元素的样式。',
+      },
+      {
+        type: 'example',
+        title: '纯 CSS 实现彩带标签',
+        code: `.ribbon {\n  position: relative;\n  background: #2196f3;\n  padding: 8px 16px;\n  color: white;\n}\n\n.ribbon::before {\n  content: "";\n  position: absolute;\n  left: 0;\n  bottom: -8px;\n  border-left: 8px solid #1976d2;\n  border-bottom: 8px solid transparent;\n}`,
+        lang: 'css',
+        explanation: '通过绝对定位的伪元素和边框技巧，创建彩带标签的折角效果。伪元素让我们可以实现复杂的装饰效果，而无需添加额外的 HTML 元素。',
+      },
     ],
   },
   {
@@ -37,6 +129,22 @@ export const sections: Section[] = [
       'none 值表示伪元素完全不生成',
       'CSS3 扩展了 image()、element() 等新函数',
     ],
+    tutorial: [
+      { type: 'heading', text: 'content 属性的值类型' },
+      { type: 'paragraph', text: '`content` 属性是 `::before` 和 `::after` 伪元素的灵魂。它支持多种值类型,从简单的字符串到动态的属性引用,甚至计数器。' },
+      { type: 'code', code: '/* 字符串值 */\n.required::after { content: " *"; color: red; }\n\n/* 属性值引用 */\na[href]::after { content: " (" attr(href) ")"; }\n\n/* 图片 */\n.icon::before { content: url(icon.svg); }\n\n/* 计数器 */\nh2::before { content: counter(section) ". "; }\n\n/* 引号 */\nblockquote::before { content: open-quote; }\nblockquote::after { content: close-quote; }\n\n/* 组合多种值 */\n.tooltip::after {\n  content: attr(data-tip) " (" counter(tip) ")";\n}', lang: 'css', caption: 'content 属性支持的各种值' },
+      { type: 'heading', text: 'attr() 函数:读取 HTML 属性' },
+      { type: 'paragraph', text: '`attr()` 函数可以读取元素的 HTML 属性值并插入到生成内容中。这在打印样式或工具提示中非常有用。' },
+      { type: 'example', title: '打印时显示链接 URL', code: '@media print {\n  a[href^="http"]::after {\n    content: " [" attr(href) "]";\n    font-size: 0.8em;\n    color: #666;\n  }\n}', lang: 'css', explanation: '打印网页时,链接的 URL 不可见。使用 `attr(href)` 可以在链接文字后显示完整的 URL。' },
+      { type: 'heading', text: 'content 的特殊值' },
+      { type: 'list', items: [
+        '`content: normal` — 伪元素不生成内容(默认值)',
+        '`content: none` — 伪元素完全不生成,连盒子都没有',
+        '`content: ""` — 生成空盒子,常用于装饰性效果',
+      ] },
+      { type: 'warning', text: '`content: normal` 和 `content: none` 的区别:前者在某些情况下仍可能生成内容(如替换元素),后者**保证**不生成任何东西。对于 `::before`/`::after`,两者效果相同——都不生成伪元素。' },
+      { type: 'tip', text: '`content` 属性生成的文本内容**不会被搜索引擎索引**,也**不会被屏幕阅读器朗读**(行为因浏览器而异)。因此它只适合装饰性内容,不应包含关键信息。' },
+    ] as TutorialBlock[],
   },
   {
     id: 'quotes',
@@ -54,6 +162,14 @@ export const sections: Section[] = [
       '引号样式随语言和文化习惯而异',
       '浏览器会自动追踪引号嵌套深度',
     ],
+    tutorial: [
+      { type: 'heading', text: 'CSS 自动引号系统' },
+      { type: 'paragraph', text: '`quotes` 属性定义每个嵌套层级使用的引号对,配合 `content: open-quote` 和 `close-quote` 可以自动管理多层嵌套的引号——浏览器会自动跟踪当前的嵌套深度。' },
+      { type: 'code', code: '/* 定义两层引号:外层用书名号,内层用双引号 */\nq {\n  quotes: "「" "」" "『" "』";\n}\n\n/* 使用 open-quote/close-quote */\nq::before { content: open-quote; }\nq::after { content: close-quote; }', lang: 'css', caption: '中文引号嵌套' },
+      { type: 'example', title: '多语言引号', code: ':lang(en) > q { quotes: "\\201C" "\\201D" "\\2018" "\\2019"; }\n:lang(fr) > q { quotes: "\\00AB" "\\00BB" "\\201C" "\\201D"; }\n:lang(ja) > q { quotes: "「" "」" "『" "』"; }', lang: 'css', explanation: '不同语言使用不同的引号样式。英文用弯引号,法文用书名号(«»),日文用角引号(「」)。' },
+      { type: 'paragraph', text: '`no-open-quote` 和 `no-close-quote` 可以调整嵌套深度计数器,但不实际插入引号字符。这在你需要手动控制引号显示但仍需保持正确嵌套计数时很有用。' },
+      { type: 'tip', text: '现代浏览器对 `<q>` 元素有内置的引号处理。如果你只需要基础的引号,可能不需要手动设置。但对于复杂的多语言支持或嵌套引号,CSS `quotes` 属性更可控。' },
+    ] as TutorialBlock[],
   },
   {
     id: 'counters',
@@ -72,6 +188,109 @@ export const sections: Section[] = [
       '计数器遵循文档树的结构和层叠规则',
       '一个元素可以同时操作多个计数器',
     ],
+    tutorial: [
+      {
+        type: 'heading',
+        text: '什么是 CSS 计数器？',
+      },
+      {
+        type: 'paragraph',
+        text: 'CSS 计数器是浏览器维护的自动编号系统，可以为章节、标题、列表项等元素自动生成序号。与 HTML 的 `<ol>` 不同，CSS 计数器可以应用于任何元素，并支持复杂的嵌套编号（如 1.2.3）。',
+      },
+      {
+        type: 'code',
+        code: `body {\n  counter-reset: chapter;\n}\n\nh2 {\n  counter-increment: chapter;\n}\n\nh2::before {\n  content: "第 " counter(chapter) " 章 ";\n  color: #666;\n}`,
+        lang: 'css',
+        caption: '为所有 h2 标题自动添加章节编号',
+      },
+      {
+        type: 'heading',
+        text: 'counter-reset: 创建和初始化计数器',
+      },
+      {
+        type: 'paragraph',
+        text: '`counter-reset` 属性创建一个新的计数器或重置已有计数器的值。默认重置为 0，也可以指定初始值。',
+      },
+      {
+        type: 'code',
+        code: `/* 重置为 0（默认） */\n.container {\n  counter-reset: section;\n}\n\n/* 重置为指定值 */\n.chapter {\n  counter-reset: page 10;  /* 从 10 开始 */\n}\n\n/* 同时重置多个计数器 */\n.document {\n  counter-reset: chapter 0 section 0 figure 0;\n}`,
+        lang: 'css',
+        caption: 'counter-reset 的不同用法',
+      },
+      {
+        type: 'heading',
+        text: 'counter-increment: 递增和递减',
+      },
+      {
+        type: 'paragraph',
+        text: '`counter-increment` 属性使计数器的值增加（或减少）。默认每次增加 1，也可以指定增量值（包括负数）。',
+      },
+      {
+        type: 'example',
+        title: '倒计时列表',
+        code: `.countdown {\n  counter-reset: count 10;\n}\n\n.countdown li {\n  counter-increment: count -1;  /* 每次减 1 */\n}\n\n.countdown li::before {\n  content: counter(count) ". ";\n  font-weight: bold;\n}`,
+        lang: 'css',
+        explanation: '通过负数递增值实现倒计时效果，从 10 递减到 1。这在火箭发射倒数、排行榜等场景中很有用。',
+      },
+      {
+        type: 'heading',
+        text: 'counter() 函数: 输出计数器值',
+      },
+      {
+        type: 'paragraph',
+        text: '`counter()` 函数读取计数器的当前值并转换为字符串。第二个可选参数指定数字格式（list-style-type 的值）。',
+      },
+      {
+        type: 'code',
+        code: `/* 十进制数字（默认） */\ncontent: counter(section);  /* 1, 2, 3... */\n\n/* 大写罗马数字 */\ncontent: counter(chapter, upper-roman);  /* I, II, III, IV... */\n\n/* 小写字母 */\ncontent: counter(item, lower-alpha);  /* a, b, c... */\n\n/* 带前后缀 */\ncontent: "(" counter(footnote, decimal) ")";  /* (1), (2), (3)... */\n\n/* 其他格式 */\ncontent: counter(step, upper-alpha);  /* A, B, C... */\ncontent: counter(appendix, lower-roman);  /* i, ii, iii... */`,
+        lang: 'css',
+        caption: 'counter() 支持多种数字格式',
+      },
+      {
+        type: 'heading',
+        text: 'counters() 函数: 嵌套计数器',
+      },
+      {
+        type: 'paragraph',
+        text: '`counters()` 函数用于嵌套计数器，它输出所有层级的计数器值，用分隔符连接。这在多级章节编号（如 1.2.3）中非常有用。',
+      },
+      {
+        type: 'example',
+        title: '多级章节编号',
+        code: `body {\n  counter-reset: h1;\n}\n\nh1 {\n  counter-reset: h2;\n  counter-increment: h1;\n}\n\nh2 {\n  counter-reset: h3;\n  counter-increment: h2;\n}\n\nh3 {\n  counter-increment: h3;\n}\n\nh1::before {\n  content: counter(h1) ". ";\n}\n\nh2::before {\n  content: counters(h2, ".", decimal) " ";  /* 1.1, 1.2... */\n}\n\nh3::before {\n  content: counters(h3, ".", decimal) " ";  /* 1.1.1, 1.1.2... */\n}`,
+        lang: 'css',
+        explanation: '`counters()` 的第二个参数是分隔符（这里是"."），第三个参数是数字格式。嵌套结构会自动追踪所有父级计数器的值。',
+      },
+      {
+        type: 'heading',
+        text: '在一个元素上操作多个计数器',
+      },
+      {
+        type: 'paragraph',
+        text: '一个元素可以同时重置、递增或显示多个计数器。这在复杂的文档结构中很有用，比如同时维护章节号和图表号。',
+      },
+      {
+        type: 'code',
+        code: `.chapter {\n  counter-reset: section 0 figure 0;  /* 重置两个计数器 */\n}\n\n.section {\n  counter-increment: section;  /* 递增章节号 */\n}\n\nfigure {\n  counter-increment: figure;  /* 递增图表号 */\n}\n\nfigure figcaption::before {\n  content: "图 " counter(section) "-" counter(figure) ": ";\n}`,
+        lang: 'css',
+        caption: '同时使用多个计数器实现"图 2-3"格式的编号',
+      },
+      {
+        type: 'tip',
+        text: '计数器的作用域遵循文档树结构。每个 `counter-reset` 都会创建一个新的计数器实例，它的作用域限制在该元素及其后代元素中。这使得嵌套列表和章节编号能够正确工作。',
+      },
+      {
+        type: 'warning',
+        text: '计数器只在元素的 `::before` 或 `::after` 伪元素中通过 `content` 属性输出，不能直接用在普通属性中。如果需要在 JavaScript 中访问计数器值，需要通过 `getComputedStyle()` 读取伪元素的 `content` 值。',
+      },
+      {
+        type: 'example',
+        title: '自定义有序列表编号',
+        code: `.custom-list {\n  counter-reset: item;\n  list-style: none;\n  padding: 0;\n}\n\n.custom-list li {\n  counter-increment: item;\n  padding-left: 2em;\n  position: relative;\n}\n\n.custom-list li::before {\n  content: counter(item);\n  position: absolute;\n  left: 0;\n  width: 1.5em;\n  height: 1.5em;\n  background: #2196f3;\n  color: white;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 0.875em;\n  font-weight: bold;\n}`,
+        lang: 'css',
+        explanation: '通过 CSS 计数器创建自定义样式的有序列表，用圆形背景包裹数字。这比 HTML 的 `<ol>` 有更大的样式自由度。',
+      },
+    ] as TutorialBlock[],
   },
   {
     id: 'lists',
@@ -89,6 +308,130 @@ export const sections: Section[] = [
       'CSS Lists Level 3 引入 ::marker 伪元素,可直接样式化标记盒',
       '标记盒(marker box)是特殊的生成内容',
     ],
+    tutorial: [
+      {
+        type: 'heading',
+        text: 'list-style-type: 标记类型',
+      },
+      {
+        type: 'paragraph',
+        text: '`list-style-type` 属性定义列表项标记的样式。它支持多种预定义的标记类型，从简单的圆点到复杂的数字和字母系统。',
+      },
+      {
+        type: 'code',
+        code: `/* 无序列表标记 */\nul.disc { list-style-type: disc; }       /* 实心圆点 ● */\nul.circle { list-style-type: circle; }   /* 空心圆圈 ○ */\nul.square { list-style-type: square; }   /* 实心方块 ■ */\n\n/* 有序列表标记 */\nol.decimal { list-style-type: decimal; }           /* 1, 2, 3... */\nol.lower-alpha { list-style-type: lower-alpha; }   /* a, b, c... */\nol.upper-alpha { list-style-type: upper-alpha; }   /* A, B, C... */\nol.lower-roman { list-style-type: lower-roman; }   /* i, ii, iii... */\nol.upper-roman { list-style-type: upper-roman; }   /* I, II, III... */\n\n/* 隐藏标记 */\nul.none { list-style-type: none; }`,
+        lang: 'css',
+        caption: '常用的 list-style-type 值',
+      },
+      {
+        type: 'tip',
+        text: 'CSS Lists Level 3 新增了更多标记类型，包括 `disclosure-open`/`disclosure-closed`（展开/折叠箭头）、各种语言的编号系统（如 `cjk-decimal` 中文数字、`hebrew` 希伯来数字等）。',
+      },
+      {
+        type: 'heading',
+        text: 'list-style-image: 自定义图片标记',
+      },
+      {
+        type: 'paragraph',
+        text: '`list-style-image` 允许使用自定义图片作为列表标记。如果图片加载失败，会回退到 `list-style-type` 定义的标记。',
+      },
+      {
+        type: 'code',
+        code: `ul.custom {\n  list-style-image: url('check-icon.svg');\n  list-style-type: disc;  /* 图片加载失败时的后备样式 */\n}\n\n/* 使用 gradient 作为标记 */\nul.gradient {\n  list-style-image: linear-gradient(to right, #667eea, #764ba2);\n}`,
+        lang: 'css',
+        caption: '使用图片或渐变作为列表标记',
+      },
+      {
+        type: 'warning',
+        text: '`list-style-image` 对图片尺寸的控制有限。如果需要精确控制标记的大小、位置和样式，推荐使用 `::marker` 伪元素或 `::before` 伪元素实现。',
+      },
+      {
+        type: 'heading',
+        text: 'list-style-position: 标记位置',
+      },
+      {
+        type: 'paragraph',
+        text: '`list-style-position` 控制标记相对于列表项内容的位置。它有两个值：`outside`（默认）和 `inside`。',
+      },
+      {
+        type: 'example',
+        title: 'outside vs inside',
+        code: `/* outside（默认）: 标记在内容盒之外 */\nul.outside {\n  list-style-position: outside;\n}\n/* 文本换行时，不会换到标记下方 */\n\n/* inside: 标记在内容盒内部 */\nul.inside {\n  list-style-position: inside;\n}\n/* 文本换行时，会换到标记下方，与标记左对齐 */`,
+        lang: 'css',
+        explanation: '`outside` 使标记突出到列表项之外，文本换行时与第一行对齐。`inside` 使标记成为内容的一部分，文本换行时会换到标记下方。大多数情况下 `outside` 的可读性更好。',
+      },
+      {
+        type: 'heading',
+        text: 'list-style 简写属性',
+      },
+      {
+        type: 'paragraph',
+        text: '`list-style` 是简写属性，可以同时设置 `list-style-type`、`list-style-position` 和 `list-style-image`，顺序任意。',
+      },
+      {
+        type: 'code',
+        code: `/* 完整语法 */\nul {\n  list-style: square inside url('icon.svg');\n}\n\n/* 等价于 */\nul {\n  list-style-type: square;\n  list-style-position: inside;\n  list-style-image: url('icon.svg');\n}\n\n/* 常见简写 */\nul { list-style: none; }  /* 移除标记 */\nol { list-style: upper-roman outside; }`,
+        lang: 'css',
+        caption: 'list-style 简写的使用',
+      },
+      {
+        type: 'heading',
+        text: '::marker 伪元素（CSS Lists Level 3）',
+      },
+      {
+        type: 'paragraph',
+        text: 'CSS Lists Level 3 引入 `::marker` 伪元素，允许直接选中和样式化列表项的标记盒。这比传统的 `list-style-*` 属性更灵活。',
+      },
+      {
+        type: 'code',
+        code: `li::marker {\n  color: #2196f3;\n  font-weight: bold;\n  font-size: 1.2em;\n}\n\n/* 自定义标记内容 */\nul > li::marker {\n  content: "✓ ";  /* 使用自定义符号 */\n}\n\n/* 数字标记样式 */\nol > li::marker {\n  content: counter(list-item) ") ";  /* 1) 2) 3) */\n  color: #666;\n}`,
+        lang: 'css',
+        caption: '使用 ::marker 伪元素样式化列表标记',
+      },
+      {
+        type: 'heading',
+        text: '::marker 支持的 CSS 属性',
+      },
+      {
+        type: 'paragraph',
+        text: '`::marker` 伪元素只支持有限的 CSS 属性集合，主要是字体、颜色和 `content` 相关的属性。',
+      },
+      {
+        type: 'list',
+        items: [
+          '**字体属性**: `font-family`, `font-size`, `font-weight`, `font-style` 等',
+          '**颜色**: `color`, `text-shadow`',
+          '**内容**: `content`（可自定义标记内容）',
+          '**动画**: `animation`, `transition`',
+          '**不支持**: `background`, `border`, `padding`, `margin`, `width`, `height` 等盒模型属性',
+        ],
+      },
+      {
+        type: 'tip',
+        text: '如果需要对标记应用盒模型属性（如背景、边框、内边距），应该使用 `list-style: none` 移除默认标记，然后用 `::before` 伪元素创建自定义标记。',
+      },
+      {
+        type: 'heading',
+        text: 'display: list-item 和标记盒',
+      },
+      {
+        type: 'paragraph',
+        text: '任何元素都可以通过 `display: list-item` 获得列表项行为，浏览器会自动为其生成标记盒。这不限于 `<li>` 元素。',
+      },
+      {
+        type: 'code',
+        code: `div.todo-item {\n  display: list-item;\n  list-style-type: square;\n  margin-left: 2em;\n}\n\n/* 标记盒会自动生成 */\ndiv.todo-item::marker {\n  color: #4caf50;\n  font-size: 1.5em;\n}`,
+        lang: 'css',
+        caption: '非 <li> 元素也可以成为列表项',
+      },
+      {
+        type: 'example',
+        title: '带彩色标记的自定义列表',
+        code: `ul.colorful {\n  list-style: none;\n  padding: 0;\n}\n\nul.colorful li {\n  display: list-item;\n  list-style-type: disc;\n  padding-left: 0.5em;\n}\n\nul.colorful li:nth-child(3n+1)::marker {\n  color: #e91e63;  /* 粉色 */\n}\n\nul.colorful li:nth-child(3n+2)::marker {\n  color: #2196f3;  /* 蓝色 */\n}\n\nul.colorful li:nth-child(3n+3)::marker {\n  color: #4caf50;  /* 绿色 */\n}`,
+        lang: 'css',
+        explanation: '使用 `::marker` 伪元素和 `:nth-child()` 选择器，为列表项创建交替颜色的标记。这在 `::marker` 出现之前很难实现，现在只需几行 CSS。',
+      },
+    ] as TutorialBlock[],
   },
 ];
 

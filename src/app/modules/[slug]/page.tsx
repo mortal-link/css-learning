@@ -20,6 +20,7 @@ import { getSpecContent, getCSS2SectionList } from '@/lib/specs';
 import { DemoSlot } from '@/components/demos/DemoSlot';
 import { hasDemo } from '@/components/demos/has-demo';
 import { SpecContent } from '@/components/SpecContent';
+import { TutorialRenderer } from '@/components/TutorialRenderer';
 import { SidebarNav } from '@/components/SidebarNav';
 import { TocSidebar } from '@/components/TocSidebar';
 import { MobileTocSheet } from '@/components/MobileTocSheet';
@@ -42,16 +43,16 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
 
   const { prev, next } = getAdjacentModules(slug);
   const totalModules = getAllModuleSlugs().length;
-  const hasSections = mod.sections.length > 0;
+  const hasSections = (mod.sections || []).length > 0;
 
   // 加载关联规范的原文内容（CSS3）
-  const specContents = mod.specs
+  const specContents = (mod.specs || [])
     .map((specName) => ({ specName, content: getSpecContent(specName) }))
     .filter((s) => s.content !== null);
 
   // 加载关联的 CSS2 原文内容
   const css2SpecNames = getCSS2SpecNames(mod);
-  const css2Contents = css2SpecNames
+  const css2Contents = (css2SpecNames || [])
     .map((specName) => ({ specName, content: getSpecContent(specName) }))
     .filter((s) => s.content !== null);
 
@@ -60,8 +61,8 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
 
   // Build TOC items
   const tocItems: TocItem[] = hasSections
-    ? mod.sections.map((s) => ({ id: s.id, title: t(s.title, 'en'), number: s.number }))
-    : css2Sections.map((s) => ({ id: s.id, title: s.heading }));
+    ? (mod.sections || []).map((s) => ({ id: s.id, title: t(s.title, 'en'), number: s.number }))
+    : (css2Sections || []).map((s) => ({ id: s.id, title: s.heading }));
 
   // Find the stage for breadcrumb
   const stage = stages.find((s) => s.moduleIds.includes(mod.id));
@@ -119,7 +120,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
             {t(mod.title)} — {t(mod.description)}
           </p>
           <div className="flex flex-wrap gap-2 mt-4">
-            {mod.specs.map((spec) => (
+            {(mod.specs || []).map((spec) => (
               <Badge key={spec} variant="secondary">
                 <FileText className="w-3 h-3 mr-1" />
                 {spec}
@@ -133,7 +134,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
             >
               {t('ui.viewCss3Spec')} <ExternalLink className="w-3 h-3" />
             </a>
-            {mod.css2Chapters?.map((ch) => {
+            {(mod.css2Chapters || []).map((ch) => {
               const info = CSS2_CHAPTER_MAP[ch];
               if (!info) return null;
               return (
@@ -167,7 +168,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
         )}
 
         {/* CSS2 Sections Fallback — 无人工 sections 但有 CSS2 原文时展示 */}
-        {!hasSections && css2Sections.length > 0 && (
+        {!hasSections && (css2Sections || []).length > 0 && (
           <div className="space-y-6">
             <Card className="border-primary/20 bg-primary/5">
               <CardContent className="py-4">
@@ -192,7 +193,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
         )}
 
         {/* Locked Placeholder — 无 sections 也无 CSS2 原文 */}
-        {!hasSections && css2Sections.length === 0 && (
+        {!hasSections && (css2Sections || []).length === 0 && (
           <Card className="border-dashed">
             <CardContent className="py-16 text-center">
               <Lock className="w-10 h-10 mx-auto mb-4 text-muted-foreground" />
@@ -213,7 +214,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
         {/* Sections */}
         {hasSections && (
           <div className="space-y-6">
-            {mod.sections.map((section) => (
+            {(mod.sections || []).map((section) => (
               <Card key={section.id} id={section.id} className="scroll-mt-20">
                 <CardHeader>
                   <div className="flex items-center justify-between">
@@ -252,18 +253,22 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                       <AccordionTrigger className="py-2 text-sm hover:no-underline">
                         <span className="flex items-center gap-2">
                           <BookOpen className="w-4 h-4" />
-                          {t('ui.keyPointsSummary')}
+                          {section.tutorial ? t('ui.tutorialContent') : t('ui.keyPointsSummary')}
                         </span>
                       </AccordionTrigger>
                       <AccordionContent>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                          {section.keyPoints.map((point, i) => (
-                            <li key={i} className="flex items-start gap-2">
-                              <span className="text-primary mt-1">•</span>
-                              {point}
-                            </li>
-                          ))}
-                        </ul>
+                        {section.tutorial ? (
+                          <TutorialRenderer blocks={section.tutorial} />
+                        ) : (
+                          <ul className="space-y-2 text-sm text-muted-foreground">
+                            {(section.keyPoints || []).map((point, i) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <span className="text-primary mt-1">•</span>
+                                {point}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
                       </AccordionContent>
                     </AccordionItem>
 
@@ -280,67 +285,61 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                         </AccordionContent>
                       </AccordionItem>
                     )}
+                    {/* 规范原文区域 — 默认折叠 */}
+                    {(() => {
+                      const css2Section = css2Contents
+                        .map((s) => s.content!.sections[section.specId || section.id])
+                        .find(Boolean);
+                      const css3Section = specContents
+                        .map((s) => s.content!.sections[section.specId || section.id])
+                        .find(Boolean);
+
+                      if (!css2Section && !css3Section) return null;
+
+                      return (
+                        <AccordionItem value="spec-text" className="border-none">
+                          <AccordionTrigger className="py-2 text-sm hover:no-underline">
+                            <span className="flex items-center gap-2">
+                              <BookMarked className="w-4 h-4" />
+                              {css2Section && css3Section
+                                ? `${t('ui.specTabCss2')} / ${t('ui.specTabCss3')}`
+                                : css2Section
+                                  ? t('ui.specTabCss2')
+                                  : t('ui.specTabCss3')}
+                            </span>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            {css2Section && !css3Section && (
+                              <SpecContent content={css2Section.content} moduleId={mod.id} />
+                            )}
+                            {!css2Section && css3Section && (
+                              <SpecContent content={css3Section.content} moduleId={mod.id} />
+                            )}
+                            {css2Section && css3Section && (
+                              <Tabs defaultValue="css2">
+                                <TabsList className="h-8">
+                                  <TabsTrigger value="css2" className="text-xs gap-1.5">
+                                    <BookMarked className="w-3.5 h-3.5" />
+                                    {t('ui.specTabCss2')}
+                                  </TabsTrigger>
+                                  <TabsTrigger value="css3" className="text-xs gap-1.5">
+                                    <FileText className="w-3.5 h-3.5" />
+                                    {t('ui.specTabCss3')}
+                                  </TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="css2" className="mt-3">
+                                  <SpecContent content={css2Section.content} moduleId={mod.id} />
+                                </TabsContent>
+                                <TabsContent value="css3" className="mt-3">
+                                  <SpecContent content={css3Section.content} moduleId={mod.id} />
+                                </TabsContent>
+                              </Tabs>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })()}
                   </Accordion>
-
-                  {/* 规范原文区域 — Tabs 平铺展示 */}
-                  {(() => {
-                    const css2Section = css2Contents
-                      .map((s) => s.content!.sections[section.specId || section.id])
-                      .find(Boolean);
-                    const css3Section = specContents
-                      .map((s) => s.content!.sections[section.specId || section.id])
-                      .find(Boolean);
-
-                    if (!css2Section && !css3Section) return null;
-
-                    // 只有一个规范时直接展示，不需要 Tab 栏
-                    if (css2Section && !css3Section) {
-                      return (
-                        <div className="border-t pt-4">
-                          <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
-                            <BookMarked className="w-4 h-4" />
-                            {t('ui.specTabCss2')}
-                          </div>
-                          <SpecContent content={css2Section.content} moduleId={mod.id} />
-                        </div>
-                      );
-                    }
-                    if (!css2Section && css3Section) {
-                      return (
-                        <div className="border-t pt-4">
-                          <div className="flex items-center gap-2 mb-3 text-sm text-muted-foreground">
-                            <FileText className="w-4 h-4" />
-                            {t('ui.specTabCss3')}
-                          </div>
-                          <SpecContent content={css3Section.content} moduleId={mod.id} />
-                        </div>
-                      );
-                    }
-
-                    // 两个规范都有 → Tabs 切换
-                    return (
-                      <div className="border-t pt-4">
-                        <Tabs defaultValue="css2">
-                          <TabsList className="h-8">
-                            <TabsTrigger value="css2" className="text-xs gap-1.5">
-                              <BookMarked className="w-3.5 h-3.5" />
-                              {t('ui.specTabCss2')}
-                            </TabsTrigger>
-                            <TabsTrigger value="css3" className="text-xs gap-1.5">
-                              <FileText className="w-3.5 h-3.5" />
-                              {t('ui.specTabCss3')}
-                            </TabsTrigger>
-                          </TabsList>
-                          <TabsContent value="css2" className="mt-3">
-                            <SpecContent content={css2Section!.content} moduleId={mod.id} />
-                          </TabsContent>
-                          <TabsContent value="css3" className="mt-3">
-                            <SpecContent content={css3Section!.content} moduleId={mod.id} />
-                          </TabsContent>
-                        </Tabs>
-                      </div>
-                    );
-                  })()}
                 </CardContent>
               </Card>
             ))}
@@ -373,7 +372,7 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
       </div>
 
       {/* Mobile TOC Button (visible only on mobile) */}
-      {tocItems.length > 0 && <MobileTocSheet items={tocItems} />}
+      {(tocItems || []).length > 0 && <MobileTocSheet items={tocItems} />}
       </article>
 
       {/* Right Sidebar — table of contents (desktop only) */}
