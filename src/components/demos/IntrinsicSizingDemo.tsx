@@ -1,263 +1,103 @@
 'use client';
 
-import { useState } from 'react';
+import { DemoPlayground } from './DemoPlayground';
 
-type SizingKeyword = 'auto' | 'min-content' | 'max-content' | 'fit-content' | 'fit-content-value';
+const defaultCSS = `.box {
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.label {
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 4px;
+  font-family: monospace;
+}
+
+.auto { width: auto; background: #dbeafe; border: 2px solid #3b82f6; }
+.min { width: min-content; background: #dcfce7; border: 2px solid #22c55e; }
+.max { width: max-content; background: #fef9c3; border: 2px solid #eab308; }
+.fit { width: fit-content; background: #fce7f3; border: 2px solid #ec4899; }`;
+
+const defaultHTML = `<div class="label">width: auto</div>
+<div class="box auto">这是一段示例文本内容，用于演示不同内在尺寸关键字的效果。</div>
+
+<div class="label">width: min-content</div>
+<div class="box min">这是一段示例文本内容，用于演示不同内在尺寸关键字的效果。</div>
+
+<div class="label">width: max-content</div>
+<div class="box max">这是一段示例文本内容，用于演示不同内在尺寸关键字的效果。</div>
+
+<div class="label">width: fit-content</div>
+<div class="box fit">这是一段示例文本内容，用于演示不同内在尺寸关键字的效果。</div>`;
+
+const presets = [
+  {
+    label: '长文本对比',
+    css: `.box { padding: 12px; margin-bottom: 12px; border-radius: 6px; font-size: 14px; }
+.label { font-size: 11px; color: #64748b; margin-bottom: 4px; font-family: monospace; }
+.auto { width: auto; background: #dbeafe; border: 2px solid #3b82f6; }
+.min { width: min-content; background: #dcfce7; border: 2px solid #22c55e; }
+.max { width: max-content; background: #fef9c3; border: 2px solid #eab308; }
+.fit { width: fit-content; background: #fce7f3; border: 2px solid #ec4899; }`,
+  },
+  {
+    label: '短文本对比',
+    css: `.box { padding: 12px; margin-bottom: 12px; border-radius: 6px; font-size: 14px; }
+.label { font-size: 11px; color: #64748b; margin-bottom: 4px; font-family: monospace; }
+.auto { width: auto; background: #dbeafe; border: 2px solid #3b82f6; }
+.min { width: min-content; background: #dcfce7; border: 2px solid #22c55e; }
+.max { width: max-content; background: #fef9c3; border: 2px solid #eab308; }
+.fit { width: fit-content; background: #fce7f3; border: 2px solid #ec4899; }`,
+    html: `<div class="label">width: auto</div>
+<div class="box auto">短文本</div>
+<div class="label">width: min-content</div>
+<div class="box min">短文本</div>
+<div class="label">width: max-content</div>
+<div class="box max">短文本</div>
+<div class="label">width: fit-content</div>
+<div class="box fit">短文本</div>`,
+  },
+  {
+    label: 'Grid 中的内在尺寸',
+    css: `.grid { display: grid; grid-template-columns: min-content max-content fit-content(200px); gap: 12px; }
+.cell { padding: 12px; border-radius: 6px; font-size: 13px; }
+.cell:nth-child(3n+1) { background: #dcfce7; border: 2px solid #22c55e; }
+.cell:nth-child(3n+2) { background: #fef9c3; border: 2px solid #eab308; }
+.cell:nth-child(3n+3) { background: #fce7f3; border: 2px solid #ec4899; }
+.label { font-size: 11px; color: #64748b; margin-bottom: 8px; font-family: monospace; }`,
+    html: `<div class="label">grid-template-columns: min-content max-content fit-content(200px)</div>
+<div class="grid">
+  <div class="cell">min-content 列</div>
+  <div class="cell">max-content 列</div>
+  <div class="cell">fit-content(200px) 这段文本会受限于200px</div>
+</div>`,
+  },
+  {
+    label: 'fit-content 带数值',
+    css: `.box { padding: 12px; margin-bottom: 12px; border-radius: 6px; font-size: 14px; }
+.label { font-size: 11px; color: #64748b; margin-bottom: 4px; font-family: monospace; }
+.fit-200 { width: fit-content; max-width: 200px; background: #e0e7ff; border: 2px solid #6366f1; }
+.fit-300 { width: fit-content; max-width: 300px; background: #fce7f3; border: 2px solid #ec4899; }
+.fit-full { width: fit-content; background: #dcfce7; border: 2px solid #22c55e; }`,
+    html: `<div class="label">fit-content (max-width: 200px)</div>
+<div class="box fit-200">这段文本的宽度限制在200px以内，超出会换行。</div>
+<div class="label">fit-content (max-width: 300px)</div>
+<div class="box fit-300">这段文本的宽度限制在300px以内，超出会换行。</div>
+<div class="label">fit-content (无限制)</div>
+<div class="box fit-full">短文本不受限</div>`,
+  },
+];
 
 export function IntrinsicSizingDemo() {
-  const [selectedKeyword, setSelectedKeyword] = useState<SizingKeyword>('max-content');
-  const [fitContentValue, setFitContentValue] = useState(300);
-  const [contentMode, setContentMode] = useState<'short' | 'long' | 'mixed'>('mixed');
-
-  const presets = [
-    { name: '短文本', keyword: 'max-content' as SizingKeyword, content: 'short' as const },
-    { name: '长文本', keyword: 'min-content' as SizingKeyword, content: 'long' as const },
-    { name: '混合内容', keyword: 'fit-content' as SizingKeyword, content: 'mixed' as const },
-  ];
-
-  const content = {
-    short: '短文本',
-    long: '这是一段很长的文本内容，用于演示不同的内在尺寸关键字如何影响元素宽度。',
-    mixed: (
-      <>
-        <span style={{ display: 'inline-block', width: '60px', height: '40px', background: '#3b82f6', borderRadius: '4px', marginRight: '8px' }}></span>
-        混合文本和元素
-        <span style={{ display: 'inline-block', width: '80px', height: '40px', background: '#10b981', borderRadius: '4px', marginLeft: '8px' }}></span>
-      </>
-    ),
-  };
-
-  const keywords = [
-    {
-      id: 'auto' as SizingKeyword,
-      name: 'auto',
-      description: '默认行为（块级元素填充可用宽度）',
-      css: 'width: auto;',
-    },
-    {
-      id: 'min-content' as SizingKeyword,
-      name: 'min-content',
-      description: '最小内容宽度（最长单词或不可断行元素）',
-      css: 'width: min-content;',
-    },
-    {
-      id: 'max-content' as SizingKeyword,
-      name: 'max-content',
-      description: '最大内容宽度（内容不换行时的宽度）',
-      css: 'width: max-content;',
-    },
-    {
-      id: 'fit-content' as SizingKeyword,
-      name: 'fit-content',
-      description: '适应内容宽度 = min(max-content, max(min-content, 可用宽度))',
-      css: 'width: fit-content;',
-    },
-    {
-      id: 'fit-content-value' as SizingKeyword,
-      name: 'fit-content(value)',
-      description: '适应内容但不超过指定值',
-      css: `width: fit-content(${fitContentValue}px);`,
-    },
-  ];
-
-  const currentKeyword = keywords.find((k) => k.id === selectedKeyword)!;
-
-  const getBoxStyle = () => {
-    const base: React.CSSProperties = {
-      padding: '1rem',
-      backgroundColor: 'rgb(59, 130, 246)',
-      color: 'white',
-      borderRadius: '0.5rem',
-      marginBottom: '1rem',
-    };
-
-    if (selectedKeyword === 'auto') {
-      return { ...base, width: 'auto' };
-    } else if (selectedKeyword === 'min-content') {
-      return { ...base, width: 'min-content' };
-    } else if (selectedKeyword === 'max-content') {
-      return { ...base, width: 'max-content' };
-    } else if (selectedKeyword === 'fit-content') {
-      return { ...base, width: 'fit-content' };
-    } else {
-      return { ...base, width: `fit-content(${fitContentValue}px)` };
-    }
-  };
-
   return (
-    <div className="space-y-6 p-6 bg-background rounded-lg">
-      {/* Presets */}
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
-          预设样式
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {presets.map((preset) => (
-            <button
-              key={preset.name}
-              onClick={() => {
-                setSelectedKeyword(preset.keyword);
-                setContentMode(preset.content);
-              }}
-              className="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
-            >
-              {preset.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Sizing Keyword Selector */}
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
-          内在尺寸关键字
-        </label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {keywords.map((keyword) => (
-            <button
-              key={keyword.id}
-              onClick={() => setSelectedKeyword(keyword.id)}
-              className={`px-3 py-2 rounded text-sm transition-colors text-left ${
-                selectedKeyword === keyword.id
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-muted text-foreground hover:bg-muted/80'
-              }`}
-            >
-              {keyword.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* fit-content(value) Control */}
-      {selectedKeyword === 'fit-content-value' && (
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-2">
-            fit-content 最大值: {fitContentValue}px
-          </label>
-          <input
-            type="range"
-            min="100"
-            max="500"
-            step="10"
-            value={fitContentValue}
-            onChange={(e) => setFitContentValue(Number(e.target.value))}
-            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
-          />
-        </div>
-      )}
-
-      {/* Content Mode */}
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
-          内容类型
-        </label>
-        <div className="flex gap-2">
-          {(['short', 'long', 'mixed'] as const).map((mode) => (
-            <button
-              key={mode}
-              onClick={() => setContentMode(mode)}
-              className={`px-4 py-2 rounded transition-colors ${
-                contentMode === mode
-                  ? 'bg-green-500 text-white'
-                  : 'bg-muted text-foreground hover:bg-muted/80'
-              }`}
-            >
-              {mode === 'short' ? '短文本' : mode === 'long' ? '长文本' : '混合内容'}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Keyword Description */}
-      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-        <h3 className="font-bold text-blue-900 dark:text-blue-100 mb-2">
-          {currentKeyword.name}
-        </h3>
-        <p className="text-sm text-gray-700 dark:text-gray-300">
-          {currentKeyword.description}
-        </p>
-      </div>
-
-      {/* Side-by-side Comparison */}
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
-          内在尺寸对比
-        </label>
-        <div className="border border-border rounded-lg p-6 bg-muted/50 space-y-4">
-          {/* auto */}
-          <div>
-            <div className="text-xs text-muted-foreground mb-1 font-mono">width: auto;</div>
-            <div style={{ ...getBoxStyle(), width: 'auto' }}>
-              {content[contentMode]}
-            </div>
-          </div>
-
-          {/* min-content */}
-          <div>
-            <div className="text-xs text-muted-foreground mb-1 font-mono">width: min-content;</div>
-            <div style={{ ...getBoxStyle(), width: 'min-content' }}>
-              {content[contentMode]}
-            </div>
-          </div>
-
-          {/* max-content */}
-          <div>
-            <div className="text-xs text-muted-foreground mb-1 font-mono">width: max-content;</div>
-            <div style={{ ...getBoxStyle(), width: 'max-content' }}>
-              {content[contentMode]}
-            </div>
-          </div>
-
-          {/* fit-content */}
-          <div>
-            <div className="text-xs text-muted-foreground mb-1 font-mono">width: fit-content;</div>
-            <div style={{ ...getBoxStyle(), width: 'fit-content' }}>
-              {content[contentMode]}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Selected Keyword Demo */}
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
-          当前选中: {currentKeyword.name}
-        </label>
-        <div className="border border-border rounded-lg p-6 bg-muted/50">
-          <div style={getBoxStyle()}>
-            {content[contentMode]}
-          </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className="flex-1 border-t-2 border-blue-400"></div>
-            <div className="font-mono">计算宽度</div>
-            <div className="flex-1 border-t-2 border-blue-400"></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Explanation */}
-      <div className="bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800 rounded-lg p-4 text-sm">
-        <p className="font-semibold text-purple-900 dark:text-purple-100 mb-2">
-          内在尺寸计算规则
-        </p>
-        <ul className="text-gray-700 dark:text-gray-300 space-y-1 list-disc list-inside">
-          <li><strong>min-content</strong>: 最窄可能宽度（不溢出）</li>
-          <li><strong>max-content</strong>: 内容自然宽度（不换行）</li>
-          <li><strong>fit-content</strong>: 介于 min-content 和 max-content 之间，受可用宽度限制</li>
-          <li><strong>fit-content(value)</strong>: fit-content 的行为，但不超过指定值</li>
-        </ul>
-      </div>
-
-      {/* CSS Code Output */}
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
-          生成的 CSS 代码
-        </label>
-        <pre className="bg-gray-900 dark:bg-black text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
-          {`.element {\n  ${currentKeyword.css}\n}`}
-        </pre>
-      </div>
-    </div>
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={380}
+    />
   );
 }

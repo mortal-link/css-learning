@@ -1,176 +1,178 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
+import { DemoPlayground } from './DemoPlayground';
 
-type DisplayMode = 'html-table' | 'css-table' | 'anonymous-box'
+const defaultCSS = `/* HTML 原生表格 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 14px;
+}
+th {
+  background: #f1f5f9;
+  font-weight: 600;
+}`;
+
+const defaultHTML = `<table>
+  <thead>
+    <tr>
+      <th>姓名</th>
+      <th>年龄</th>
+      <th>城市</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>张三</td><td>28</td><td>北京</td></tr>
+    <tr><td>李四</td><td>32</td><td>上海</td></tr>
+  </tbody>
+</table>`;
+
+const presets = [
+  {
+    label: 'HTML 表格',
+    css: `table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 14px;
+}
+th { background: #f1f5f9; font-weight: 600; }`,
+    html: `<table>
+  <thead>
+    <tr><th>姓名</th><th>年龄</th><th>城市</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>张三</td><td>28</td><td>北京</td></tr>
+    <tr><td>李四</td><td>32</td><td>上海</td></tr>
+  </tbody>
+</table>`,
+  },
+  {
+    label: 'CSS 表格布局',
+    css: `/* 用 div + display: table 模拟表格 */
+.table { display: table; width: 100%; border-collapse: collapse; }
+.thead { display: table-header-group; }
+.tbody { display: table-row-group; }
+.row { display: table-row; }
+.cell {
+  display: table-cell;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+.head-cell {
+  display: table-cell;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  font-size: 14px;
+  background: #f1f5f9;
+  font-weight: 600;
+}`,
+    html: `<div class="table">
+  <div class="thead">
+    <div class="row">
+      <div class="head-cell">姓名</div>
+      <div class="head-cell">年龄</div>
+      <div class="head-cell">城市</div>
+    </div>
+  </div>
+  <div class="tbody">
+    <div class="row">
+      <div class="cell">张三</div>
+      <div class="cell">28</div>
+      <div class="cell">北京</div>
+    </div>
+    <div class="row">
+      <div class="cell">李四</div>
+      <div class="cell">32</div>
+      <div class="cell">上海</div>
+    </div>
+  </div>
+</div>`,
+  },
+  {
+    label: '匿名盒子',
+    css: `/* 缺少 table-row 时浏览器自动生成匿名盒子 */
+.table { display: table; width: 100%; border-collapse: collapse; }
+.cell {
+  display: table-cell;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  font-size: 14px;
+  background: #fef9c3;
+}
+.note {
+  margin-top: 12px;
+  padding: 8px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #1e40af;
+}`,
+    html: `<div class="table">
+  <div class="cell">姓名</div>
+  <div class="cell">年龄</div>
+  <div class="cell">城市</div>
+</div>
+<div class="note">
+  这些 table-cell 之间缺少 table-row 父元素，浏览器会自动生成匿名的 table-row 盒子来包裹它们。
+</div>`,
+  },
+  {
+    label: '表格层次结构',
+    css: `/* 表格完整层次：table > row-group > row > cell */
+.table { display: table; width: 100%; border-collapse: collapse; }
+.caption { display: table-caption; text-align: center; font-weight: bold; padding: 8px; background: #e0e7ff; }
+.col-group { display: table-column-group; }
+.col { display: table-column; }
+.thead { display: table-header-group; background: #f1f5f9; }
+.tbody { display: table-row-group; }
+.tfoot { display: table-footer-group; background: #f0fdf4; }
+.row { display: table-row; }
+.cell { display: table-cell; border: 1px solid #ccc; padding: 8px; font-size: 13px; }`,
+    html: `<div class="table">
+  <div class="caption">用户信息表</div>
+  <div class="thead">
+    <div class="row">
+      <div class="cell"><strong>姓名</strong></div>
+      <div class="cell"><strong>年龄</strong></div>
+      <div class="cell"><strong>城市</strong></div>
+    </div>
+  </div>
+  <div class="tbody">
+    <div class="row">
+      <div class="cell">张三</div><div class="cell">28</div><div class="cell">北京</div>
+    </div>
+    <div class="row">
+      <div class="cell">李四</div><div class="cell">32</div><div class="cell">上海</div>
+    </div>
+  </div>
+  <div class="tfoot">
+    <div class="row">
+      <div class="cell" colspan="3">合计: 2 人</div>
+    </div>
+  </div>
+</div>`,
+  },
+];
 
 export function TableModelDemo() {
-  const [displayMode, setDisplayMode] = useState<DisplayMode>('html-table')
-
-  const generateCSS = (): string => {
-    switch (displayMode) {
-      case 'html-table':
-        return `/* 使用原生 HTML 表格元素 */
-table { display: table; }
-tr { display: table-row; }
-td { display: table-cell; }`
-      case 'css-table':
-        return `.table { display: table; }
-.row { display: table-row; }
-.cell { display: table-cell; }`
-      case 'anonymous-box':
-        return `/* 缺少中间层时浏览器自动生成匿名盒子 */
-.table { display: table; }
-.cell { display: table-cell; }
-/* 浏览器自动插入 table-row 匿名盒子 */`
-    }
-  }
-
-  const applyPreset = (preset: string) => {
-    switch (preset) {
-      case 'HTML表格':
-        setDisplayMode('html-table')
-        break
-      case 'CSS表格布局':
-        setDisplayMode('css-table')
-        break
-      case '匿名盒子':
-        setDisplayMode('anonymous-box')
-        break
-    }
-  }
-
   return (
-    <div className="space-y-6 p-6 bg-background border rounded-lg">
-      {/* Display Mode Selector */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">表格模式</label>
-        <div className="flex gap-2 flex-wrap">
-          {[
-            { value: 'html-table', label: 'HTML 表格' },
-            { value: 'css-table', label: 'CSS 表格布局' },
-            { value: 'anonymous-box', label: '匿名盒子生成' },
-          ].map((mode) => (
-            <button
-              key={mode.value}
-              onClick={() => setDisplayMode(mode.value as DisplayMode)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                displayMode === mode.value
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-muted hover:bg-muted/80'
-              }`}
-            >
-              {mode.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Preset Buttons */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">预设方案</label>
-        <div className="flex flex-wrap gap-2">
-          {['HTML表格', 'CSS表格布局', '匿名盒子'].map((preset) => (
-            <button
-              key={preset}
-              onClick={() => applyPreset(preset)}
-              className="px-4 py-2 rounded-md text-sm font-medium bg-muted hover:bg-muted/80 transition-colors"
-            >
-              {preset}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Preview */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">预览</label>
-        <div className="p-4 bg-muted/30 border rounded-lg">
-          {displayMode === 'html-table' && (
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-muted">
-                  <th className="border border-border p-2 text-left text-sm font-semibold">姓名</th>
-                  <th className="border border-border p-2 text-left text-sm font-semibold">年龄</th>
-                  <th className="border border-border p-2 text-left text-sm font-semibold">城市</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border border-border p-2 text-sm">张三</td>
-                  <td className="border border-border p-2 text-sm">28</td>
-                  <td className="border border-border p-2 text-sm">北京</td>
-                </tr>
-                <tr>
-                  <td className="border border-border p-2 text-sm">李四</td>
-                  <td className="border border-border p-2 text-sm">32</td>
-                  <td className="border border-border p-2 text-sm">上海</td>
-                </tr>
-              </tbody>
-            </table>
-          )}
-
-          {displayMode === 'css-table' && (
-            <div className="table w-full border-collapse">
-              <div className="table-row-group">
-                <div className="table-row bg-muted">
-                  <div className="table-cell border border-border p-2 text-sm font-semibold">姓名</div>
-                  <div className="table-cell border border-border p-2 text-sm font-semibold">年龄</div>
-                  <div className="table-cell border border-border p-2 text-sm font-semibold">城市</div>
-                </div>
-              </div>
-              <div className="table-row-group">
-                <div className="table-row">
-                  <div className="table-cell border border-border p-2 text-sm">张三</div>
-                  <div className="table-cell border border-border p-2 text-sm">28</div>
-                  <div className="table-cell border border-border p-2 text-sm">北京</div>
-                </div>
-                <div className="table-row">
-                  <div className="table-cell border border-border p-2 text-sm">李四</div>
-                  <div className="table-cell border border-border p-2 text-sm">32</div>
-                  <div className="table-cell border border-border p-2 text-sm">上海</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {displayMode === 'anonymous-box' && (
-            <div className="space-y-3">
-              <div className="table w-full border-collapse">
-                <div className="table-cell border border-border p-2 text-sm bg-yellow-50 dark:bg-yellow-950/30">
-                  姓名
-                </div>
-                <div className="table-cell border border-border p-2 text-sm bg-yellow-50 dark:bg-yellow-950/30">
-                  年龄
-                </div>
-                <div className="table-cell border border-border p-2 text-sm bg-yellow-50 dark:bg-yellow-950/30">
-                  城市
-                </div>
-              </div>
-              <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded text-xs">
-                <p className="text-blue-900 dark:text-blue-100">
-                  ⚠️ 注意：这些 table-cell 元素之间缺少 table-row 父元素。浏览器会自动生成匿名的 table-row 盒子来包裹它们。
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Info Box */}
-      <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded text-sm">
-        <p className="text-blue-900 dark:text-blue-100">
-          💡 <strong>表格模型：</strong>表格由多层盒子组成（table → row-group → row → cell）。当某层缺失时，浏览器会自动生成匿名盒子。
-        </p>
-      </div>
-
-      {/* CSS Code Output */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">CSS 代码</label>
-        <div className="bg-muted/50 rounded p-3 font-mono text-xs overflow-x-auto whitespace-pre">
-          <code className="text-foreground">{generateCSS()}</code>
-        </div>
-      </div>
-    </div>
-  )
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={250}
+    />
+  );
 }

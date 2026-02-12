@@ -1,312 +1,112 @@
-'use client'
+'use client';
+import { DemoPlayground } from './DemoPlayground';
 
-import { useState, useEffect } from 'react'
-import { Badge } from '@/components/ui/badge'
+const defaultHTML = `<div class="perf-demo">
+  <div class="selector-box good">
+    <div class="label">.btn-primary</div>
+    <div class="desc">直接类选择器 — 最快</div>
+    <div class="steps">匹配步骤: 1步（直接查找类名）</div>
+    <div class="badge green">高效</div>
+  </div>
+  <div class="selector-box medium">
+    <div class="label">nav > ul li</div>
+    <div class="desc">3层嵌套 — 中等</div>
+    <div class="steps">匹配: li → ul(父) → nav(祖父)</div>
+    <div class="badge yellow">中等</div>
+  </div>
+  <div class="selector-box bad">
+    <div class="label">div div div div a</div>
+    <div class="desc">5层嵌套 — 过深</div>
+    <div class="steps">匹配: a → div → div → div → div</div>
+    <div class="badge red">低效</div>
+  </div>
+  <div class="note">
+    <strong>浏览器从右向左匹配选择器</strong><br>
+    关键选择器（最右）决定初始候选集，然后逐步向左验证
+  </div>
+</div>`;
 
-interface SelectorPart {
-  text: string
-  type: 'element' | 'class' | 'id' | 'combinator'
-}
+const defaultCSS = `.perf-demo { padding: 12px; font-family: sans-serif; }
+.selector-box { padding: 12px; margin: 8px 0; border-radius: 8px; border: 2px solid; position: relative; }
+.good { border-color: #22c55e; background: #f0fdf4; }
+.medium { border-color: #f59e0b; background: #fffbeb; }
+.bad { border-color: #ef4444; background: #fef2f2; }
+.label { font-family: monospace; font-size: 16px; font-weight: bold; margin-bottom: 4px; }
+.desc { font-size: 13px; color: #555; }
+.steps { font-size: 11px; color: #888; margin-top: 4px; font-family: monospace; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white; margin-top: 6px; }
+.green { background: #22c55e; }
+.yellow { background: #f59e0b; }
+.red { background: #ef4444; }
+.note { margin-top: 12px; padding: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; color: #1e40af; }`;
 
 const presets = [
   {
-    name: '高效选择器',
-    selector: '.btn-primary',
-    description: '直接类选择器，最快',
-    isEfficient: true
+    label: '高效选择器',
+    css: `.perf-demo { padding: 12px; font-family: sans-serif; }
+.selector-box { padding: 16px; margin: 8px 0; border-radius: 8px; border: 2px solid #22c55e; background: #f0fdf4; }
+.label { font-family: monospace; font-size: 18px; font-weight: bold; color: #166534; }
+.desc { font-size: 13px; color: #555; margin-top: 4px; }
+.note { margin-top: 12px; padding: 10px; background: #dcfce7; border: 1px solid #86efac; border-radius: 6px; font-size: 12px; color: #166534; }`,
+    html: `<div class="perf-demo">
+  <div class="selector-box"><div class="label">.btn-primary</div><div class="desc">直接类选择器，浏览器通过哈希表直接查找，O(1) 复杂度</div></div>
+  <div class="selector-box"><div class="label">#header</div><div class="desc">ID 选择器，唯一标识，最快的选择器类型</div></div>
+  <div class="selector-box"><div class="label">[type="submit"]</div><div class="desc">属性选择器，单步匹配，性能良好</div></div>
+  <div class="note"><strong>建议：</strong>关键选择器（最右）使用类名或 ID，避免标签名和通配符</div>
+</div>`,
   },
   {
-    name: '中等效率',
-    selector: 'nav > ul li',
-    description: '简洁的结构',
-    isEfficient: true
+    label: '低效选择器',
+    css: `.perf-demo { padding: 12px; font-family: sans-serif; }
+.selector-box { padding: 16px; margin: 8px 0; border-radius: 8px; border: 2px solid #ef4444; background: #fef2f2; }
+.label { font-family: monospace; font-size: 18px; font-weight: bold; color: #991b1b; }
+.desc { font-size: 13px; color: #555; margin-top: 4px; }
+.arrow { font-size: 12px; font-family: monospace; color: #dc2626; margin-top: 4px; }
+.note { margin-top: 12px; padding: 10px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 6px; font-size: 12px; color: #991b1b; }`,
+    html: `<div class="perf-demo">
+  <div class="selector-box"><div class="label">div div div div a</div><div class="desc">过深嵌套，每个 a 元素都要向上验证 4 层</div><div class="arrow">a → div? → div? → div? → div?</div></div>
+  <div class="selector-box"><div class="label">div * a</div><div class="desc">通配符 * 匹配任意元素，大量无效检查</div><div class="arrow">a → *(任何) → div?</div></div>
+  <div class="selector-box"><div class="label">body div ul li a</div><div class="desc">从 body 开始的超长链，严重影响性能</div></div>
+  <div class="note"><strong>避免：</strong>超过 3 层嵌套、通配符 *、从 body/html 开始的选择器</div>
+</div>`,
   },
   {
-    name: '低效选择器',
-    selector: 'div div div div a',
-    description: '过深嵌套，慢',
-    isEfficient: false
+    label: '匹配方向演示',
+    css: `.perf-demo { padding: 12px; font-family: sans-serif; }
+.step { display: flex; align-items: center; gap: 8px; padding: 8px; margin: 4px 0; border-radius: 6px; font-size: 13px; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; flex-shrink: 0; }
+.selector-display { font-family: monospace; font-size: 18px; text-align: center; padding: 12px; background: #f8fafc; border-radius: 8px; margin: 8px 0; letter-spacing: 2px; }
+.highlight { color: #ef4444; font-weight: bold; }
+.dim { color: #94a3b8; }
+.note { margin-top: 12px; padding: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; color: #1e40af; }`,
+    html: `<div class="perf-demo">
+  <div class="selector-display"><span class="dim">div</span> <span class="dim">></span> <span class="dim">ul</span> <span class="highlight">li.active</span></div>
+  <div class="step"><div class="step-num">1</div>找到所有 <code style="font-weight:bold;color:#ef4444">li.active</code>（关键选择器）</div>
+  <div class="step"><div class="step-num">2</div>检查每个 li.active 的父元素是否是 <code style="color:#f59e0b">ul</code></div>
+  <div class="step"><div class="step-num">3</div>检查 ul 的父元素是否是 <code style="color:#22c55e">div</code></div>
+  <div class="note">从右向左：先用关键选择器快速缩小候选集，再逐步验证祖先</div>
+</div>`,
   },
   {
-    name: '通用选择器',
-    selector: 'div * a',
-    description: '包含通配符，慢',
-    isEfficient: false
+    label: '优化建议',
+    css: `.perf-demo { padding: 12px; font-family: sans-serif; }
+.row { display: flex; gap: 12px; margin: 8px 0; align-items: stretch; }
+.card { flex: 1; padding: 12px; border-radius: 8px; font-size: 12px; }
+.bad-card { background: #fef2f2; border: 2px solid #fca5a5; }
+.good-card { background: #f0fdf4; border: 2px solid #86efac; }
+.card-title { font-weight: bold; margin-bottom: 6px; font-size: 13px; }
+.bad-card .card-title { color: #dc2626; }
+.good-card .card-title { color: #16a34a; }
+code { font-family: monospace; background: rgba(0,0,0,0.05); padding: 1px 4px; border-radius: 2px; }
+.arrow-center { display: flex; align-items: center; font-size: 20px; color: #666; }`,
+    html: `<div class="perf-demo">
+  <div class="row"><div class="card bad-card"><div class="card-title">避免</div><code>div div a</code></div><div class="arrow-center">→</div><div class="card good-card"><div class="card-title">推荐</div><code>.nav-link</code></div></div>
+  <div class="row"><div class="card bad-card"><div class="card-title">避免</div><code>ul > li > a</code></div><div class="arrow-center">→</div><div class="card good-card"><div class="card-title">推荐</div><code>.menu-item a</code></div></div>
+  <div class="row"><div class="card bad-card"><div class="card-title">避免</div><code>div * span</code></div><div class="arrow-center">→</div><div class="card good-card"><div class="card-title">推荐</div><code>.text-highlight</code></div></div>
+</div>`,
   },
-]
+];
 
 export function SelectorPerfDemo() {
-  const [selector, setSelector] = useState('.btn-primary')
-  const [currentStep, setCurrentStep] = useState(-1)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [customInput, setCustomInput] = useState('')
-
-  const parseSelector = (sel: string): SelectorPart[] => {
-    const parts: SelectorPart[] = []
-    const tokens = sel.trim().split(/(\s+|>|\+|~)/).filter((t) => t.trim())
-
-    for (const token of tokens) {
-      const trimmed = token.trim()
-      if (!trimmed) continue
-
-      if (trimmed === '>' || trimmed === '+' || trimmed === '~' || trimmed === ' ') {
-        parts.push({ text: trimmed, type: 'combinator' })
-      } else if (trimmed.startsWith('#')) {
-        parts.push({ text: trimmed, type: 'id' })
-      } else if (trimmed.startsWith('.')) {
-        parts.push({ text: trimmed, type: 'class' })
-      } else if (trimmed === '*') {
-        parts.push({ text: trimmed, type: 'element' })
-      } else {
-        parts.push({ text: trimmed, type: 'element' })
-      }
-    }
-
-    return parts
-  }
-
-  const selectorParts = parseSelector(selector)
-  const totalSteps = selectorParts.filter((p) => p.type !== 'combinator').length
-
-  const startAnimation = () => {
-    setCurrentStep(-1)
-    setIsAnimating(true)
-    let step = 0
-
-    const interval = setInterval(() => {
-      setCurrentStep(step)
-      step++
-
-      if (step >= totalSteps) {
-        clearInterval(interval)
-        setTimeout(() => {
-          setIsAnimating(false)
-          setCurrentStep(-1)
-        }, 1500)
-      }
-    }, 800)
-  }
-
-  const handlePreset = (preset: typeof presets[0]) => {
-    setSelector(preset.selector)
-    setCustomInput('')
-    setCurrentStep(-1)
-  }
-
-  const handleCustomSubmit = () => {
-    if (customInput.trim()) {
-      setSelector(customInput.trim())
-      setCurrentStep(-1)
-    }
-  }
-
-  const getStepDescription = (): string => {
-    if (currentStep === -1) return '点击"开始动画"查看浏览器如何从右向左匹配选择器'
-
-    const relevantParts = selectorParts.filter((p) => p.type !== 'combinator').reverse()
-    const currentPart = relevantParts[currentStep]
-
-    if (currentStep === 0) {
-      return `步骤 1：从最右边的选择器 "${currentPart?.text}" 开始，找到所有匹配的元素（关键选择器）`
-    } else if (currentStep === totalSteps - 1) {
-      return `步骤 ${currentStep + 1}：验证最左边的选择器 "${currentPart?.text}"，完成匹配`
-    } else {
-      return `步骤 ${currentStep + 1}：向左移动，验证选择器 "${currentPart?.text}"`
-    }
-  }
-
-  const analyzeEfficiency = (): { level: string; color: string; advice: string } => {
-    const hasUniversal = selector.includes('*')
-    const depth = selectorParts.filter((p) => p.type !== 'combinator').length
-    const hasId = selectorParts.some((p) => p.type === 'id')
-
-    if (hasUniversal) {
-      return {
-        level: '低效',
-        color: 'text-red-600 dark:text-red-400',
-        advice: '避免使用通配符 *，它会匹配所有元素，性能开销大。',
-      }
-    }
-
-    if (depth > 4) {
-      return {
-        level: '低效',
-        color: 'text-red-600 dark:text-red-400',
-        advice: '选择器层级过深（>4层），增加匹配复杂度。建议使用更具体的类名。',
-      }
-    }
-
-    if (hasId) {
-      return {
-        level: '高效',
-        color: 'text-green-600 dark:text-green-400',
-        advice: 'ID 选择器非常快，浏览器可以直接定位元素。',
-      }
-    }
-
-    if (depth <= 2) {
-      return {
-        level: '高效',
-        color: 'text-green-600 dark:text-green-400',
-        advice: '简洁的选择器，匹配快速。这是推荐的做法。',
-      }
-    }
-
-    return {
-      level: '中等',
-      color: 'text-amber-600 dark:text-amber-400',
-      advice: '选择器效率一般，可以考虑简化。',
-    }
-  }
-
-  const efficiency = analyzeEfficiency()
-
-  return (
-    <div className="space-y-4">
-      {/* Custom Input */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium">自定义选择器</div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={customInput}
-            onChange={(e) => setCustomInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleCustomSubmit()}
-            placeholder="输入 CSS 选择器，如 div.container ul li a"
-            className="flex-1 px-3 py-2 rounded-md border-2 border-border bg-background text-sm"
-          />
-          <button
-            onClick={handleCustomSubmit}
-            className="px-4 py-2 text-sm rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors"
-          >
-            应用
-          </button>
-        </div>
-      </div>
-
-      {/* Preset Buttons */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium">预设示例</div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {presets.map((preset) => (
-            <button
-              key={preset.name}
-              onClick={() => handlePreset(preset)}
-              className={`px-3 py-2 text-left rounded-md transition-colors ${
-                selector === preset.selector
-                  ? 'bg-blue-100 dark:bg-blue-950/50 border-2 border-blue-500'
-                  : 'bg-muted hover:bg-muted/80 border-2 border-transparent'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-mono text-sm">{preset.selector}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">{preset.description}</div>
-                </div>
-                <Badge
-                  variant={preset.isEfficient ? 'default' : 'secondary'}
-                  className={preset.isEfficient ? 'bg-green-600' : 'bg-red-600'}
-                >
-                  {preset.isEfficient ? '高效' : '低效'}
-                </Badge>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Current Selector Display */}
-      <div className="p-4 bg-muted/30 rounded-lg border border-border">
-        <div className="text-sm font-medium mb-2">当前选择器</div>
-        <div className="font-mono text-lg mb-3 flex flex-wrap items-center gap-1">
-          {selectorParts.map((part, index) => {
-            const nonCombinatorIndex = selectorParts
-              .slice(0, index + 1)
-              .filter((p) => p.type !== 'combinator').length - 1
-            const isActive =
-              isAnimating &&
-              part.type !== 'combinator' &&
-              nonCombinatorIndex === totalSteps - currentStep - 1
-
-            return (
-              <span
-                key={index}
-                className={`transition-all duration-300 ${
-                  part.type === 'combinator'
-                    ? 'text-muted-foreground mx-1'
-                    : isActive
-                    ? 'bg-blue-500 text-white px-2 py-1 rounded shadow-lg scale-110'
-                    : 'text-foreground'
-                }`}
-              >
-                {part.text === ' ' ? '␣' : part.text}
-              </span>
-            )
-          })}
-        </div>
-
-        <button
-          onClick={startAnimation}
-          disabled={isAnimating}
-          className={`w-full px-4 py-2 text-sm rounded-md transition-colors ${
-            isAnimating
-              ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
-              : 'bg-blue-500 text-white hover:bg-blue-600'
-          }`}
-        >
-          {isAnimating ? '匹配中...' : '开始动画'}
-        </button>
-      </div>
-
-      {/* Animation Steps */}
-      <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
-        <div className="text-sm font-medium mb-2">匹配过程（从右向左）</div>
-        <div className="text-sm text-blue-900 dark:text-blue-100">
-          {getStepDescription()}
-        </div>
-        {currentStep >= 0 && (
-          <div className="mt-3 flex items-center gap-2">
-            <div className="flex-1 bg-blue-200 dark:bg-blue-900 rounded-full h-2 overflow-hidden">
-              <div
-                className="bg-blue-500 dark:bg-blue-400 h-full transition-all duration-300"
-                style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
-              />
-            </div>
-            <span className="text-xs font-mono text-blue-700 dark:text-blue-300">
-              {currentStep + 1}/{totalSteps}
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* Efficiency Analysis */}
-      <div className="p-4 bg-muted/30 rounded-lg border border-border">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="text-sm font-medium">性能评估</div>
-          <Badge variant="secondary" className={efficiency.color}>
-            {efficiency.level}
-          </Badge>
-        </div>
-        <div className="text-sm text-muted-foreground">{efficiency.advice}</div>
-      </div>
-
-      {/* Why Right-to-Left */}
-      <div className="bg-muted/50 rounded-lg p-3">
-        <div className="text-xs leading-relaxed text-muted-foreground space-y-2">
-          <p className="font-semibold text-foreground">为什么从右向左匹配？</p>
-          <p>
-            浏览器从<strong>最右边的选择器</strong>（关键选择器）开始匹配，然后向左验证。这种方式可以快速排除不匹配的元素：
-          </p>
-          <ul className="list-disc list-inside space-y-1 ml-2">
-            <li>如果右边的选择器不匹配，立即放弃，无需检查左边</li>
-            <li>减少了需要检查的元素数量</li>
-            <li>相比从左向右，避免了大量无效的 DOM 遍历</li>
-          </ul>
-          <p className="mt-2 pt-2 border-t border-border">
-            <strong>优化建议：</strong>让最右边的选择器（关键选择器）尽可能具体，如使用类或 ID，避免使用通配符或过于宽泛的元素选择器。
-          </p>
-        </div>
-      </div>
-    </div>
-  )
+  return <DemoPlayground defaultCSS={defaultCSS} defaultHTML={defaultHTML} presets={presets} iframeHeight={360} />;
 }

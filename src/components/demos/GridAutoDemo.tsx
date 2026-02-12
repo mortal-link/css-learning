@@ -1,237 +1,254 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Badge } from '@/components/ui/badge'
+import { DemoPlayground } from './DemoPlayground';
 
-interface Preset {
-  name: string
-  autoRows: number
-  autoCols: number
-  autoFlow: 'row' | 'column' | 'dense'
-  itemCount: number
-}
-
-const presets: Preset[] = [
-  { name: '自动行', autoRows: 80, autoCols: 100, autoFlow: 'row', itemCount: 8 },
-  { name: '自动列', autoRows: 80, autoCols: 100, autoFlow: 'column', itemCount: 8 },
-  { name: '密集填充', autoRows: 60, autoCols: 100, autoFlow: 'dense', itemCount: 12 },
-]
-
-export function GridAutoDemo() {
-  const [autoRows, setAutoRows] = useState(80)
-  const [autoCols, setAutoCols] = useState(100)
-  const [autoFlow, setAutoFlow] = useState<'row' | 'column' | 'dense'>('row')
-  const [itemCount, setItemCount] = useState(8)
-
-  const handlePreset = (preset: Preset) => {
-    setAutoRows(preset.autoRows)
-    setAutoCols(preset.autoCols)
-    setAutoFlow(preset.autoFlow)
-    setItemCount(preset.itemCount)
-  }
-
-  const getCSSCode = () => {
-    return `.container {
+const defaultCSS = `.container {
   display: grid;
-  /* 显式网格: 3 列 × 2 行 */
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 80px);
+  grid-auto-rows: 60px;
+  grid-auto-flow: row;
+  gap: 8px;
+  padding: 16px;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  background: #eff6ff;
+}
+.item {
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+}
+/* 显式网格项 (蓝色) */
+.item-1 { background: #3b82f6; }
+.item-2 { background: #6366f1; }
+.item-3 { background: #8b5cf6; }
+.item-4 { background: #2563eb; }
+.item-5 { background: #4f46e5; }
+.item-6 { background: #7c3aed; }
+/* 隐式网格项 (橙色) */
+.item-7 { background: #f59e0b; }
+.item-8 { background: #f97316; }
+.implicit-label {
+  font-size: 10px;
+  opacity: 0.8;
+}
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #666;
+}
+.legend-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}`;
 
-  /* 隐式轨道尺寸 */
-  grid-auto-rows: ${autoRows}px;
-  grid-auto-columns: ${autoCols}px;
+const defaultHTML = `<div class="label">显式 3x2 网格 + 隐式行 (grid-auto-rows: 60px)</div>
+<div class="container">
+  <div class="item item-1">1</div>
+  <div class="item item-2">2</div>
+  <div class="item item-3">3</div>
+  <div class="item item-4">4</div>
+  <div class="item item-5">5</div>
+  <div class="item item-6">6</div>
+  <div class="item item-7">7<span class="implicit-label">隐式</span></div>
+  <div class="item item-8">8<span class="implicit-label">隐式</span></div>
+</div>
+<div class="legend">
+  <span><span class="legend-box" style="background:#3b82f6"></span>显式网格</span>
+  <span><span class="legend-box" style="background:#f59e0b"></span>隐式网格</span>
+</div>`;
 
-  /* 自动放置算法 */
-  grid-auto-flow: ${autoFlow};
-  gap: 12px;
-}`
-  }
+const presets = [
+  {
+    label: '自动行 (row)',
+    css: defaultCSS,
+    html: defaultHTML,
+  },
+  {
+    label: '自动列 (column)',
+    css: `.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 80px);
+  grid-auto-columns: 80px;
+  grid-auto-flow: column;
+  gap: 8px;
+  padding: 16px;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  background: #eff6ff;
+  overflow-x: auto;
+}
+.item {
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+}
+.item-1 { background: #3b82f6; }
+.item-2 { background: #6366f1; }
+.item-3 { background: #8b5cf6; }
+.item-4 { background: #2563eb; }
+.item-5 { background: #4f46e5; }
+.item-6 { background: #7c3aed; }
+.item-7 { background: #f59e0b; }
+.item-8 { background: #f97316; }
+.implicit-label {
+  font-size: 10px;
+  opacity: 0.8;
+}
+.label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}`,
+    html: `<div class="label">grid-auto-flow: column — 按列填充，隐式列宽 80px</div>
+<div class="container">
+  <div class="item item-1">1</div>
+  <div class="item item-2">2</div>
+  <div class="item item-3">3</div>
+  <div class="item item-4">4</div>
+  <div class="item item-5">5</div>
+  <div class="item item-6">6</div>
+  <div class="item item-7">7<span class="implicit-label">隐式</span></div>
+  <div class="item item-8">8<span class="implicit-label">隐式</span></div>
+</div>`,
+  },
+  {
+    label: '密集填充 (dense)',
+    css: `.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 60px;
+  grid-auto-flow: dense;
+  gap: 8px;
+  padding: 16px;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  background: #eff6ff;
+}
+.item {
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+}
+.item-1 { background: #3b82f6; }
+.item-2 { background: #6366f1; }
+.item-3 {
+  background: #ef4444;
+  grid-column: span 2;
+}
+.item-4 { background: #f59e0b; }
+.item-5 { background: #10b981; }
+.item-6 {
+  background: #ec4899;
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.item-7 { background: #8b5cf6; }
+.item-8 { background: #14b8a6; }
+.item-9 { background: #f97316; }
+.item-10 { background: #06b6d4; }
+.item-11 { background: #84cc16; }
+.item-12 { background: #a855f7; }
+.label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}`,
+    html: `<div class="label">grid-auto-flow: dense — 自动填补空隙</div>
+<div class="container">
+  <div class="item item-1">1</div>
+  <div class="item item-2">2</div>
+  <div class="item item-3">3 (span 2)</div>
+  <div class="item item-4">4</div>
+  <div class="item item-5">5</div>
+  <div class="item item-6">6 (2x2)</div>
+  <div class="item item-7">7</div>
+  <div class="item item-8">8</div>
+  <div class="item item-9">9</div>
+  <div class="item item-10">10</div>
+  <div class="item item-11">11</div>
+  <div class="item item-12">12</div>
+</div>`,
+  },
+  {
+    label: 'minmax 隐式行',
+    css: `.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(60px, auto);
+  gap: 8px;
+  padding: 16px;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  background: #eff6ff;
+}
+.item {
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 8px;
+}
+.item-1 { background: #3b82f6; }
+.item-2 { background: #6366f1; }
+.item-3 { background: #8b5cf6; }
+.item-4 { background: #f59e0b; }
+.item-5 { background: #10b981; }
+.item-6 { background: #ef4444; }
+.label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}`,
+    html: `<div class="label">grid-auto-rows: minmax(60px, auto) — 最小 60px，内容多时自动撑高</div>
+<div class="container">
+  <div class="item item-1">短内容</div>
+  <div class="item item-2">这是一段较长的内容，会自动撑高行的高度，其他同行项目也跟着变高</div>
+  <div class="item item-3">3</div>
+  <div class="item item-4">4</div>
+  <div class="item item-5">5</div>
+  <div class="item item-6">6</div>
+</div>`,
+  },
+];
 
-  // Generate items with some spanning different sizes for dense mode
-  const getItemSize = (index: number) => {
-    if (autoFlow === 'dense') {
-      // Create varied sizes for dense packing demo
-      if (index === 2) return { colSpan: 2, rowSpan: 1 }
-      if (index === 5) return { colSpan: 1, rowSpan: 2 }
-      if (index === 8) return { colSpan: 2, rowSpan: 2 }
-    }
-    return { colSpan: 1, rowSpan: 1 }
-  }
-
-  const isImplicit = (index: number) => {
-    // Items beyond 6 (3 cols × 2 rows) are in implicit grid
-    return index >= 6
-  }
-
-  const gridItems = Array.from({ length: itemCount }, (_, i) => i + 1)
-
+export function GridAutoDemo() {
   return (
-    <div className="space-y-4">
-      {/* Presets */}
-      <div className="flex flex-wrap gap-2">
-        {presets.map((preset) => (
-          <button
-            key={preset.name}
-            onClick={() => handlePreset(preset)}
-            className="px-3 py-1.5 text-sm rounded-md bg-muted hover:bg-muted/80 transition-colors"
-          >
-            {preset.name}
-          </button>
-        ))}
-      </div>
-
-      {/* Grid Auto Flow */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium">grid-auto-flow</div>
-        <div className="flex gap-2">
-          {(['row', 'column', 'dense'] as const).map((flow) => (
-            <button
-              key={flow}
-              onClick={() => setAutoFlow(flow)}
-              className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                autoFlow === flow
-                  ? 'bg-blue-500 text-white dark:bg-blue-600'
-                  : 'bg-muted hover:bg-muted/80'
-              }`}
-            >
-              {flow}
-            </button>
-          ))}
-        </div>
-        <div className="text-xs text-muted-foreground">
-          {autoFlow === 'row' && 'row: 按行填充，优先填满每一行'}
-          {autoFlow === 'column' && 'column: 按列填充，优先填满每一列'}
-          {autoFlow === 'dense' && 'dense: 密集填充，尝试填补前面的空隙'}
-        </div>
-      </div>
-
-      {/* Auto Rows Slider */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium">grid-auto-rows</label>
-          <Badge variant="secondary" className="font-mono text-xs">
-            {autoRows}px
-          </Badge>
-        </div>
-        <input
-          type="range"
-          min="40"
-          max="120"
-          value={autoRows}
-          onChange={(e) => setAutoRows(Number(e.target.value))}
-          className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-blue-200 dark:bg-blue-900"
-        />
-      </div>
-
-      {/* Auto Columns Slider */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium">grid-auto-columns</label>
-          <Badge variant="secondary" className="font-mono text-xs">
-            {autoCols}px
-          </Badge>
-        </div>
-        <input
-          type="range"
-          min="60"
-          max="150"
-          value={autoCols}
-          onChange={(e) => setAutoCols(Number(e.target.value))}
-          className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-blue-200 dark:bg-blue-900"
-        />
-      </div>
-
-      {/* Item Count */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium">网格项数量</label>
-          <Badge variant="secondary" className="font-mono text-xs">
-            {itemCount}
-          </Badge>
-        </div>
-        <input
-          type="range"
-          min="6"
-          max="15"
-          value={itemCount}
-          onChange={(e) => setItemCount(Number(e.target.value))}
-          className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-green-200 dark:bg-green-900"
-        />
-      </div>
-
-      {/* Visual Preview */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium">网格预览</div>
-        <div className="p-4 bg-muted/30 rounded-lg border-2 border-dashed border-border overflow-auto">
-          <div
-            className="grid gap-3"
-            style={{
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gridTemplateRows: 'repeat(2, 80px)',
-              gridAutoRows: `${autoRows}px`,
-              gridAutoColumns: `${autoCols}px`,
-              gridAutoFlow: autoFlow,
-            }}
-          >
-            {gridItems.map((num) => {
-              const size = getItemSize(num - 1)
-              const implicit = isImplicit(num - 1)
-
-              return (
-                <div
-                  key={num}
-                  style={{
-                    gridColumn: size.colSpan > 1 ? `span ${size.colSpan}` : undefined,
-                    gridRow: size.rowSpan > 1 ? `span ${size.rowSpan}` : undefined,
-                  }}
-                  className={`rounded-md p-3 flex flex-col items-center justify-center font-semibold text-lg shadow-md transition-all ${
-                    implicit
-                      ? 'bg-gradient-to-br from-orange-400 to-orange-600 dark:from-orange-500 dark:to-orange-700 text-white'
-                      : 'bg-gradient-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 text-white'
-                  }`}
-                >
-                  <div>{num}</div>
-                  {implicit && (
-                    <div className="text-xs mt-1 opacity-90">隐式</div>
-                  )}
-                  {(size.colSpan > 1 || size.rowSpan > 1) && (
-                    <div className="text-xs mt-1 opacity-90">
-                      span {size.colSpan}×{size.rowSpan}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-
-          {/* Legend */}
-          <div className="flex gap-4 mt-4 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-gradient-to-br from-blue-400 to-blue-600"></div>
-              <span>显式网格 (3×2)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-gradient-to-br from-orange-400 to-orange-600"></div>
-              <span>隐式网格</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CSS Code Output */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium">CSS 代码</div>
-        <pre className="p-3 bg-gray-900 dark:bg-gray-950 text-gray-100 dark:text-gray-200 rounded-lg text-xs overflow-x-auto">
-          <code>{getCSSCode()}</code>
-        </pre>
-      </div>
-
-      {/* Explanation */}
-      <div className="space-y-2 text-xs text-muted-foreground bg-muted/50 rounded-lg p-3">
-        <p><strong className="text-foreground">显式 vs 隐式网格:</strong> grid-template-* 定义显式网格（蓝色），超出部分自动创建隐式轨道（橙色）。</p>
-        <p><strong className="text-foreground">grid-auto-rows/columns:</strong> 控制隐式轨道的尺寸。</p>
-        <p><strong className="text-foreground">grid-auto-flow:</strong> row 按行填充，column 按列填充，dense 尝试填补空隙（适合不同尺寸的项）。</p>
-      </div>
-    </div>
-  )
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={320}
+    />
+  );
 }

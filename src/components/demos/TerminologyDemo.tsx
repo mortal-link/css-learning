@@ -1,362 +1,167 @@
-'use client'
+'use client';
+import { DemoPlayground } from './DemoPlayground';
 
-import { useState } from 'react'
-import { Badge } from '@/components/ui/badge'
-
-type HoveredPart =
-  | 'selector'
-  | 'property'
-  | 'value'
-  | 'declaration'
-  | 'declaration-block'
-  | 'rule-set'
-  | null
-
-type PartInfo = {
-  title: string
-  description: string
-  color: string
+const defaultCSS = `/* CSS 规则结构解析 */
+.rule-box {
+  font-family: monospace;
+  font-size: 15px;
+  line-height: 2;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
 }
+.selector { color: #2563eb; font-weight: bold; border-bottom: 2px solid #2563eb; }
+.property { color: #16a34a; }
+.value    { color: #9333ea; }
+.declaration { background: #fef3c7; padding: 2px 4px; border-radius: 3px; }
+.brace { color: #64748b; }
 
-export function TerminologyDemo() {
-  const [hoveredPart, setHoveredPart] = useState<HoveredPart>(null)
-  const [displayNone, setDisplayNone] = useState<boolean>(false)
+.legend {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+.legend-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.legend-item.s { background: #dbeafe; border: 1px solid #93c5fd; }
+.legend-item.p { background: #dcfce7; border: 1px solid #86efac; }
+.legend-item.v { background: #f3e8ff; border: 1px solid #c4b5fd; }
+.legend-item.d { background: #fef3c7; border: 1px solid #fcd34d; }
+.legend-item.db { background: #fce7f3; border: 1px solid #f9a8d4; }
+.legend-item.rs { background: #e0e7ff; border: 1px solid #a5b4fc; }`;
 
-  const partInfos: Record<string, PartInfo> = {
-    selector: {
-      title: '选择器 (Selector)',
-      description: '指定要应用样式的 HTML 元素。可以是元素名、类名、ID 或更复杂的选择器。',
-      color: 'border-blue-500 bg-blue-50',
-    },
-    property: {
-      title: '属性 (Property)',
-      description: 'CSS 属性名，定义要修改的样式特征（如颜色、字体大小等）。',
-      color: 'border-green-500 bg-green-50',
-    },
-    value: {
-      title: '值 (Value)',
-      description: '分配给属性的具体值，定义样式的外观。',
-      color: 'border-purple-500 bg-purple-50',
-    },
-    declaration: {
-      title: '声明 (Declaration)',
-      description: '属性和值的组合，形如 property: value。多个声明用分号分隔。',
-      color: 'border-orange-500 bg-orange-50',
-    },
-    'declaration-block': {
-      title: '声明块 (Declaration Block)',
-      description: '用花括号 {} 包裹的一组声明。包含要应用到选择器的所有样式。',
-      color: 'border-pink-500 bg-pink-50',
-    },
-    'rule-set': {
-      title: '规则集 (Rule Set)',
-      description: '完整的 CSS 规则，由选择器和声明块组成。也称为"样式规则"。',
-      color: 'border-indigo-500 bg-indigo-50',
-    },
-  }
+const defaultHTML = `<div class="rule-box">
+  <span class="selector">h1</span> <span class="brace">{</span><br>
+  &nbsp;&nbsp;<span class="declaration"><span class="property">color</span>: <span class="value">red</span>;</span><br>
+  &nbsp;&nbsp;<span class="declaration"><span class="property">font-size</span>: <span class="value">2em</span>;</span><br>
+  <span class="brace">}</span>
+</div>
 
-  const currentInfo = hoveredPart ? partInfos[hoveredPart] : null
+<div class="legend">
+  <div class="legend-item s"><strong>选择器</strong> (Selector) — 指定目标元素</div>
+  <div class="legend-item p"><strong>属性</strong> (Property) — 样式特征名</div>
+  <div class="legend-item v"><strong>值</strong> (Value) — 具体样式值</div>
+  <div class="legend-item d"><strong>声明</strong> (Declaration) — 属性:值 的组合</div>
+  <div class="legend-item db"><strong>声明块</strong> (Block) — {} 内所有声明</div>
+  <div class="legend-item rs"><strong>规则集</strong> (Rule Set) — 选择器 + 声明块</div>
+</div>`;
 
-  return (
-    <div className="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg border border-gray-200">
-      <h3 className="text-lg font-bold mb-4">CSS 术语可视化</h3>
-
-      {/* CSS Rule Visualization */}
-      <div className="mb-6">
-        <h4 className="text-sm font-semibold mb-3">CSS 规则解析（悬停查看各部分）</h4>
-        <div
-          className={`p-6 rounded-lg border-2 transition-all ${
-            hoveredPart === 'rule-set'
-              ? 'border-indigo-500 bg-indigo-50 shadow-lg'
-              : 'border-gray-300 bg-gray-50'
-          }`}
-          onMouseEnter={() => setHoveredPart('rule-set')}
-          onMouseLeave={() => setHoveredPart(null)}
-        >
-          <div className="font-mono text-lg space-y-2">
-            {/* Selector */}
-            <div className="flex items-center gap-2">
-              <span
-                className={`px-2 py-1 rounded border-2 transition-all cursor-pointer ${
-                  hoveredPart === 'selector'
-                    ? 'border-blue-500 bg-blue-100 shadow-md'
-                    : 'border-transparent hover:border-blue-300 hover:bg-blue-50'
-                }`}
-                onMouseEnter={(e) => {
-                  e.stopPropagation()
-                  setHoveredPart('selector')
-                }}
-              >
-                h1
-              </span>
-              <span
-                className={`px-2 py-1 rounded border-2 transition-all ${
-                  hoveredPart === 'declaration-block'
-                    ? 'border-pink-500 bg-pink-100'
-                    : ''
-                }`}
-              >
-                {'{'}
-              </span>
-            </div>
-
-            {/* Declaration 1 */}
-            <div
-              className={`pl-8 flex items-center gap-2 ${
-                hoveredPart === 'declaration-block' ? 'opacity-100' : ''
-              }`}
-            >
-              <div
-                className={`flex items-center gap-2 px-2 py-1 rounded border-2 transition-all cursor-pointer ${
-                  hoveredPart === 'declaration'
-                    ? 'border-orange-500 bg-orange-100 shadow-md'
-                    : 'border-transparent hover:border-orange-300 hover:bg-orange-50'
-                }`}
-                onMouseEnter={(e) => {
-                  e.stopPropagation()
-                  setHoveredPart('declaration')
-                }}
-              >
-                <span
-                  className={`px-1 rounded border-2 transition-all ${
-                    hoveredPart === 'property'
-                      ? 'border-green-500 bg-green-100'
-                      : 'border-transparent hover:border-green-300 hover:bg-green-50'
-                  }`}
-                  onMouseEnter={(e) => {
-                    e.stopPropagation()
-                    setHoveredPart('property')
-                  }}
-                >
-                  color
-                </span>
-                <span>:</span>
-                <span
-                  className={`px-1 rounded border-2 transition-all ${
-                    hoveredPart === 'value'
-                      ? 'border-purple-500 bg-purple-100'
-                      : 'border-transparent hover:border-purple-300 hover:bg-purple-50'
-                  }`}
-                  onMouseEnter={(e) => {
-                    e.stopPropagation()
-                    setHoveredPart('value')
-                  }}
-                >
-                  red
-                </span>
-                <span>;</span>
-              </div>
-            </div>
-
-            {/* Declaration 2 */}
-            <div className="pl-8 flex items-center gap-2">
-              <span
-                className={`px-1 rounded border-2 transition-all ${
-                  hoveredPart === 'property'
-                    ? 'border-green-500 bg-green-100'
-                    : 'border-transparent hover:border-green-300 hover:bg-green-50'
-                }`}
-                onMouseEnter={(e) => {
-                  e.stopPropagation()
-                  setHoveredPart('property')
-                }}
-              >
-                font-size
-              </span>
-              <span>:</span>
-              <span
-                className={`px-1 rounded border-2 transition-all ${
-                  hoveredPart === 'value'
-                    ? 'border-purple-500 bg-purple-100'
-                    : 'border-transparent hover:border-purple-300 hover:bg-purple-50'
-                }`}
-                onMouseEnter={(e) => {
-                  e.stopPropagation()
-                  setHoveredPart('value')
-                }}
-              >
-                2em
-              </span>
-              <span>;</span>
-            </div>
-
-            {/* Closing Brace */}
-            <div className="flex items-center gap-2">
-              <span
-                className={`px-2 py-1 rounded border-2 transition-all ${
-                  hoveredPart === 'declaration-block'
-                    ? 'border-pink-500 bg-pink-100'
-                    : ''
-                }`}
-              >
-                {'}'}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Explanation Panel */}
-        {currentInfo ? (
-          <div className={`mt-4 p-5 rounded-lg border-2 shadow-sm ${currentInfo.color}`}>
-            <h5 className="text-base font-bold text-gray-800 mb-2">
-              {currentInfo.title}
-            </h5>
-            <p className="text-sm text-gray-700">{currentInfo.description}</p>
-          </div>
-        ) : (
-          <div className="mt-4 p-5 bg-gray-50 rounded-lg border border-gray-200">
-            <p className="text-sm text-gray-600 text-center">
-              将鼠标悬停在 CSS 规则的不同部分上，查看术语解释
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Element → Box Visualization */}
-      <div className="mt-8 pt-8 border-t-2 border-gray-200">
-        <h4 className="text-sm font-semibold mb-3">元素 (Element) → 盒子 (Box) 的关系</h4>
-
-        <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="text-sm text-gray-700 mb-2">
-            <strong>核心概念：</strong>HTML 元素生成 CSS 盒子。一个元素可以生成 0 个、1 个或多个盒子。
-          </p>
-          <div className="flex items-center gap-3">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={displayNone}
-                onChange={(e) => setDisplayNone(e.target.checked)}
-                className="w-4 h-4"
-              />
-              <span className="text-sm font-medium">
-                对 &lt;p&gt; 应用 <code className="px-1 bg-white rounded">display: none</code>
-              </span>
-            </label>
-            <Badge variant="secondary">
-              {displayNone ? '生成 0 个盒子' : '生成 1 个盒子'}
-            </Badge>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* DOM Tree */}
-          <div className="p-4 bg-gray-50 rounded-lg border border-gray-300">
-            <h5 className="text-sm font-semibold mb-3 text-gray-700">DOM 树（文档结构）</h5>
-            <div className="space-y-2 font-mono text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                <code>&lt;div&gt;</code>
-                <Badge variant="outline" className="text-xs">元素</Badge>
-              </div>
-              <div className="ml-6 space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                  <code>&lt;p&gt;</code>
-                  <Badge variant="outline" className="text-xs">元素</Badge>
-                  {displayNone && (
-                    <Badge className="text-xs bg-red-500">display: none</Badge>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                  <code>&lt;span&gt;</code>
-                  <Badge variant="outline" className="text-xs">元素</Badge>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                  <code>&lt;img&gt;</code>
-                  <Badge variant="outline" className="text-xs">元素</Badge>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Box Tree */}
-          <div className="p-4 bg-green-50 rounded-lg border border-green-300">
-            <h5 className="text-sm font-semibold mb-3 text-gray-700">盒树（渲染结构）</h5>
-            <div className="space-y-2 font-mono text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded bg-green-500"></div>
-                <span>div 盒子</span>
-                <Badge className="text-xs bg-green-600">block</Badge>
-              </div>
-              <div className="ml-6 space-y-2">
-                {!displayNone && (
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded bg-green-500"></div>
-                    <span>p 盒子</span>
-                    <Badge className="text-xs bg-green-600">block</Badge>
-                  </div>
-                )}
-                {displayNone && (
-                  <div className="flex items-center gap-2 opacity-50">
-                    <div className="w-3 h-3 rounded bg-gray-400"></div>
-                    <span className="line-through">p 盒子</span>
-                    <Badge className="text-xs bg-gray-400">不生成</Badge>
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded bg-green-500"></div>
-                  <span>span 盒子</span>
-                  <Badge className="text-xs bg-blue-600">inline</Badge>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded bg-green-500"></div>
-                  <span>img 盒子</span>
-                  <Badge className="text-xs bg-purple-600">replaced</Badge>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Pseudo-element Example */}
-        <div className="mt-6 p-4 bg-purple-50 rounded-lg border border-purple-200">
-          <h5 className="text-sm font-semibold mb-3 text-gray-700">
-            伪元素生成额外的盒子
-          </h5>
-          <div className="space-y-3">
-            <div className="font-mono text-sm bg-white p-3 rounded border border-gray-300">
-              <div>h2::before {'{'}</div>
-              <div className="pl-4">content: "★ ";</div>
-              <div className="pl-4">color: gold;</div>
-              <div>{'}'}</div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="flex-1">
-                <Badge variant="outline" className="mb-2">DOM 结构</Badge>
-                <div className="text-sm">
-                  只有 1 个 <code>&lt;h2&gt;</code> 元素
-                </div>
-              </div>
-              <div className="text-2xl text-gray-400">→</div>
-              <div className="flex-1">
-                <Badge className="mb-2 bg-purple-600">渲染盒子</Badge>
-                <div className="text-sm space-y-1">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                    <span>::before 伪元素盒子</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                    <span>h2 主盒子</span>
-                  </div>
-                  <div className="text-xs text-gray-600 mt-2">
-                    生成了 2 个盒子！
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Summary */}
-      <div className="mt-6 p-4 bg-yellow-50 rounded border border-yellow-200">
-        <p className="text-sm text-gray-700">
-          <strong>关键区别：</strong>元素是 HTML 文档结构的一部分，而盒子是 CSS 用于布局和渲染的视觉容器。CSS 样式应用到盒子上，而不是直接应用到元素上。
-        </p>
+const presets = [
+  {
+    label: '基础规则集',
+    css: `.rule-box { font-family: monospace; font-size: 15px; line-height: 2; padding: 20px; background: #f8fafc; border-radius: 8px; border: 2px solid #e2e8f0; }
+.selector { color: #2563eb; font-weight: bold; border-bottom: 2px solid #2563eb; }
+.property { color: #16a34a; }
+.value { color: #9333ea; }
+.declaration { background: #fef3c7; padding: 2px 4px; border-radius: 3px; }
+.brace { color: #64748b; }
+.note { margin-top: 12px; font-size: 13px; color: #475569; font-family: system-ui; }`,
+    html: `<div class="rule-box">
+  <span class="selector">h1</span> <span class="brace">{</span><br>
+  &nbsp;&nbsp;<span class="declaration"><span class="property">color</span>: <span class="value">red</span>;</span><br>
+  &nbsp;&nbsp;<span class="declaration"><span class="property">font-size</span>: <span class="value">2em</span>;</span><br>
+  <span class="brace">}</span>
+</div>
+<p class="note">一个完整的规则集 = 选择器 + 声明块（花括号内的所有声明）</p>`,
+  },
+  {
+    label: '元素 vs 盒子',
+    css: `.container { font-family: system-ui; padding: 16px; }
+.row { display: flex; gap: 24px; align-items: flex-start; }
+.col { flex: 1; }
+.col h3 { font-size: 14px; font-weight: bold; margin-bottom: 10px; padding: 6px 10px; border-radius: 4px; }
+.col.dom h3 { background: #dbeafe; color: #1e40af; }
+.col.box h3 { background: #dcfce7; color: #166534; }
+.tree { font-family: monospace; font-size: 13px; line-height: 1.8; padding: 12px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0; }
+.tree .block { color: #16a34a; }
+.tree .inline { color: #2563eb; }
+.tree .none { color: #9ca3af; text-decoration: line-through; }
+.arrow { font-size: 24px; color: #94a3b8; align-self: center; }
+.note { margin-top: 12px; font-size: 12px; color: #64748b; padding: 8px; background: #fffbeb; border-radius: 4px; }`,
+    html: `<div class="container">
+  <div class="row">
+    <div class="col dom">
+      <h3>DOM 树 (元素)</h3>
+      <div class="tree">
+        div<br>
+        &nbsp;&nbsp;p<br>
+        &nbsp;&nbsp;span (display:none)<br>
+        &nbsp;&nbsp;img
       </div>
     </div>
-  )
+    <div class="arrow">→</div>
+    <div class="col box">
+      <h3>盒树 (盒子)</h3>
+      <div class="tree">
+        <span class="block">div — block box</span><br>
+        &nbsp;&nbsp;<span class="block">p — block box</span><br>
+        &nbsp;&nbsp;<span class="none">span — 无盒子</span><br>
+        &nbsp;&nbsp;<span class="inline">img — replaced box</span>
+      </div>
+    </div>
+  </div>
+  <div class="note">元素是 HTML 结构，盒子是 CSS 渲染结构。display:none 的元素不生成盒子。</div>
+</div>`,
+  },
+  {
+    label: '伪元素生成额外盒子',
+    css: `.demo { font-family: system-ui; padding: 16px; }
+.title { font-size: 18px; font-weight: bold; margin-bottom: 12px; }
+.title::before { content: "★ "; color: gold; }
+.code { font-family: monospace; font-size: 13px; padding: 12px; background: #1e293b; color: #e2e8f0; border-radius: 6px; margin-bottom: 12px; line-height: 1.8; }
+.result { display: flex; gap: 16px; align-items: center; }
+.box-count { padding: 8px 12px; border-radius: 6px; font-size: 13px; }
+.bc-dom { background: #dbeafe; border: 1px solid #93c5fd; }
+.bc-render { background: #f3e8ff; border: 1px solid #c4b5fd; }`,
+    html: `<div class="demo">
+  <h2 class="title">伪元素标题</h2>
+  <div class="code">
+    h2::before {<br>
+    &nbsp;&nbsp;content: "★ ";<br>
+    &nbsp;&nbsp;color: gold;<br>
+    }
+  </div>
+  <div class="result">
+    <div class="box-count bc-dom">DOM: 1 个 h2 元素</div>
+    <span style="color:#94a3b8; font-size:20px;">→</span>
+    <div class="box-count bc-render">渲染: 2 个盒子 (::before + h2)</div>
+  </div>
+</div>`,
+  },
+  {
+    label: '复杂选择器结构',
+    css: `.rule-box { font-family: monospace; font-size: 14px; line-height: 2.2; padding: 20px; background: #f8fafc; border-radius: 8px; border: 2px solid #e2e8f0; }
+.sel { color: #2563eb; font-weight: bold; }
+.combinator { color: #dc2626; font-weight: bold; font-size: 16px; }
+.pseudo { color: #d97706; font-style: italic; }
+.prop { color: #16a34a; }
+.val { color: #9333ea; }
+.comment { color: #94a3b8; font-style: italic; }
+.note { margin-top: 12px; font-size: 12px; color: #64748b; font-family: system-ui; }`,
+    html: `<div class="rule-box">
+  <span class="comment">/* 复合选择器 */</span><br>
+  <span class="sel">div</span><span class="combinator"> > </span><span class="sel">p</span><span class="sel">.highlight</span><span class="pseudo">:first-child</span> {<br>
+  &nbsp;&nbsp;<span class="prop">color</span>: <span class="val">red</span>;<br>
+  &nbsp;&nbsp;<span class="prop">font-weight</span>: <span class="val">bold</span>;<br>
+  }
+</div>
+<p class="note">
+  选择器组成：类型选择器(div) + 子组合器(>) + 类型选择器(p) + 类选择器(.highlight) + 伪类(:first-child)
+</p>`,
+  },
+];
+
+export function TerminologyDemo() {
+  return (
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+    />
+  );
 }

@@ -1,268 +1,160 @@
 'use client';
+import { DemoPlayground } from './DemoPlayground';
 
-import { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
+const defaultHTML = `<div class="battle">
+  <h3>特异性对决</h3>
+  <div class="versus">
+    <div class="fighter win">
+      <div class="selector">#id</div>
+      <div class="spec">(0, 1, 0, 0)</div>
+      <div class="breakdown">
+        <span class="s-item">inline: 0</span>
+        <span class="s-item highlight">ID: 1</span>
+        <span class="s-item">class: 0</span>
+        <span class="s-item">element: 0</span>
+      </div>
+      <div class="result win-badge">获胜</div>
+    </div>
+    <div class="vs">VS</div>
+    <div class="fighter lose">
+      <div class="selector">.class.class.class</div>
+      <div class="spec">(0, 0, 3, 0)</div>
+      <div class="breakdown">
+        <span class="s-item">inline: 0</span>
+        <span class="s-item">ID: 0</span>
+        <span class="s-item highlight">class: 3</span>
+        <span class="s-item">element: 0</span>
+      </div>
+      <div class="result lose-badge">落败</div>
+    </div>
+  </div>
+  <div class="rule">1 个 ID 选择器 > 任意数量的类选择器</div>
+</div>`;
 
-interface Specificity {
-  a: number; // inline styles
-  b: number; // IDs
-  c: number; // classes, attributes, pseudo-classes
-  d: number; // elements, pseudo-elements
-}
+const defaultCSS = `.battle { padding: 16px; font-family: sans-serif; }
+h3 { text-align: center; margin: 0 0 16px; font-size: 18px; }
+.versus { display: flex; align-items: center; gap: 12px; }
+.fighter { flex: 1; padding: 16px; border-radius: 8px; text-align: center; }
+.win { background: #f0fdf4; border: 2px solid #22c55e; }
+.lose { background: #fef2f2; border: 2px solid #ef4444; }
+.selector { font-family: monospace; font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+.spec { font-family: monospace; font-size: 22px; font-weight: bold; color: #333; margin-bottom: 8px; }
+.breakdown { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-bottom: 8px; }
+.s-item { font-size: 10px; padding: 2px 6px; background: #f1f5f9; border-radius: 4px; }
+.s-item.highlight { background: #dbeafe; color: #1d4ed8; font-weight: bold; }
+.result { font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 4px; display: inline-block; }
+.win-badge { background: #22c55e; color: white; }
+.lose-badge { background: #ef4444; color: white; }
+.vs { font-size: 24px; font-weight: bold; color: #666; }
+.rule { text-align: center; margin-top: 12px; padding: 8px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; color: #1e40af; }`;
 
-function parseSelector(selector: string): Specificity {
-  const spec: Specificity = { a: 0, b: 0, c: 0, d: 0 };
-
-  // Handle inline style attribute
-  if (selector.includes('style=')) {
-    spec.a = 1;
-    return spec;
-  }
-
-  // Remove strings to avoid false matches
-  const cleaned = selector.replace(/"[^"]*"/g, '').replace(/'[^']*'/g, '');
-
-  // Count IDs
-  spec.b = (cleaned.match(/#[\w-]+/g) || []).length;
-
-  // Count classes, attributes, and pseudo-classes
-  spec.c =
-    (cleaned.match(/\.[\w-]+/g) || []).length + // classes
-    (cleaned.match(/\[[^\]]+\]/g) || []).length + // attributes
-    (cleaned.match(/:(?!not|where|is|has)[\w-]+/g) || []).length; // pseudo-classes (excluding structural)
-
-  // Count elements and pseudo-elements
-  spec.d =
-    (cleaned.match(/(?:^|[\s>+~])(?!not|where|is|has)[a-z][\w-]*/gi) || []).length + // elements
-    (cleaned.match(/::[\w-]+/g) || []).length; // pseudo-elements
-
-  return spec;
-}
-
-function compareSpecificity(spec1: Specificity, spec2: Specificity): number {
-  if (spec1.a !== spec2.a) return spec1.a - spec2.a;
-  if (spec1.b !== spec2.b) return spec1.b - spec2.b;
-  if (spec1.c !== spec2.c) return spec1.c - spec2.c;
-  return spec1.d - spec2.d;
-}
-
-function formatSpecificity(spec: Specificity): string {
-  return `(${spec.a},${spec.b},${spec.c},${spec.d})`;
-}
-
-interface PresetBattle {
-  name: string;
-  selector1: string;
-  selector2: string;
-}
-
-const PRESET_BATTLES: PresetBattle[] = [
-  { name: 'ID vs 类', selector1: '#id', selector2: '.class.class.class' },
-  { name: '后代 vs 类', selector1: 'div p', selector2: '.container' },
-  { name: 'style vs ID', selector1: 'style=""', selector2: '#header' },
-  { name: '复杂选择器', selector1: 'div.class#id', selector2: '.nav .item:hover' },
-  { name: '伪类对决', selector1: 'a:hover', selector2: '.link' },
-  { name: '属性选择器', selector1: '[type="text"]', selector2: 'input.field' },
+const presets = [
+  {
+    label: 'ID vs 类',
+    css: `.battle { padding: 16px; font-family: sans-serif; } h3 { text-align: center; margin: 0 0 16px; font-size: 18px; }
+.versus { display: flex; align-items: center; gap: 12px; }
+.fighter { flex: 1; padding: 16px; border-radius: 8px; text-align: center; }
+.win { background: #f0fdf4; border: 2px solid #22c55e; } .lose { background: #fef2f2; border: 2px solid #ef4444; }
+.selector { font-family: monospace; font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+.spec { font-family: monospace; font-size: 22px; font-weight: bold; color: #333; margin-bottom: 8px; }
+.result { font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 4px; display: inline-block; }
+.win-badge { background: #22c55e; color: white; } .lose-badge { background: #ef4444; color: white; }
+.vs { font-size: 24px; font-weight: bold; color: #666; }
+.rule { text-align: center; margin-top: 12px; padding: 8px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; color: #1e40af; }`,
+    html: `<div class="battle"><h3>ID vs 类</h3>
+<div class="versus">
+  <div class="fighter win"><div class="selector">#id</div><div class="spec">(0,1,0,0)</div><div class="result win-badge">获胜</div></div>
+  <div class="vs">VS</div>
+  <div class="fighter lose"><div class="selector">.a.b.c</div><div class="spec">(0,0,3,0)</div><div class="result lose-badge">落败</div></div>
+</div>
+<div class="rule">1个 ID > 任意数量的 class。ID 在更高位，永远胜出。</div></div>`,
+  },
+  {
+    label: 'style vs ID',
+    css: `.battle { padding: 16px; font-family: sans-serif; } h3 { text-align: center; margin: 0 0 16px; font-size: 18px; }
+.versus { display: flex; align-items: center; gap: 12px; }
+.fighter { flex: 1; padding: 16px; border-radius: 8px; text-align: center; }
+.win { background: #f0fdf4; border: 2px solid #22c55e; } .lose { background: #fef2f2; border: 2px solid #ef4444; }
+.selector { font-family: monospace; font-size: 16px; font-weight: bold; margin-bottom: 8px; }
+.spec { font-family: monospace; font-size: 22px; font-weight: bold; color: #333; margin-bottom: 8px; }
+.result { font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 4px; display: inline-block; }
+.win-badge { background: #22c55e; color: white; } .lose-badge { background: #ef4444; color: white; }
+.vs { font-size: 24px; font-weight: bold; color: #666; }
+.rule { text-align: center; margin-top: 12px; padding: 8px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; color: #1e40af; }`,
+    html: `<div class="battle"><h3>inline style vs ID</h3>
+<div class="versus">
+  <div class="fighter win"><div class="selector">style=""</div><div class="spec">(1,0,0,0)</div><div class="result win-badge">获胜</div></div>
+  <div class="vs">VS</div>
+  <div class="fighter lose"><div class="selector">#header</div><div class="spec">(0,1,0,0)</div><div class="result lose-badge">落败</div></div>
+</div>
+<div class="rule">内联样式 (1,0,0,0) 始终优先于 ID 选择器 (0,1,0,0)</div></div>`,
+  },
+  {
+    label: '复杂选择器',
+    css: `.battle { padding: 16px; font-family: sans-serif; } h3 { text-align: center; margin: 0 0 16px; font-size: 18px; }
+.versus { display: flex; align-items: center; gap: 12px; }
+.fighter { flex: 1; padding: 16px; border-radius: 8px; text-align: center; }
+.win { background: #f0fdf4; border: 2px solid #22c55e; } .lose { background: #fef2f2; border: 2px solid #ef4444; }
+.selector { font-family: monospace; font-size: 15px; font-weight: bold; margin-bottom: 8px; }
+.spec { font-family: monospace; font-size: 22px; font-weight: bold; color: #333; margin-bottom: 4px; }
+.detail { font-size: 10px; color: #666; margin-bottom: 8px; }
+.result { font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 4px; display: inline-block; }
+.win-badge { background: #22c55e; color: white; } .lose-badge { background: #ef4444; color: white; }
+.vs { font-size: 24px; font-weight: bold; color: #666; }
+.rule { text-align: center; margin-top: 12px; padding: 8px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; color: #1e40af; }`,
+    html: `<div class="battle"><h3>复杂选择器对决</h3>
+<div class="versus">
+  <div class="fighter win"><div class="selector">div.class#id</div><div class="spec">(0,1,1,1)</div><div class="detail">1 ID + 1 class + 1 元素</div><div class="result win-badge">获胜</div></div>
+  <div class="vs">VS</div>
+  <div class="fighter lose"><div class="selector">.nav .item:hover</div><div class="spec">(0,0,3,0)</div><div class="detail">2 class + 1 伪类</div><div class="result lose-badge">落败</div></div>
+</div>
+<div class="rule">有 ID 的选择器始终胜出，因为 ID 位 (b) 优先于 class 位 (c)</div></div>`,
+  },
+  {
+    label: '伪类对决',
+    css: `.battle { padding: 16px; font-family: sans-serif; } h3 { text-align: center; margin: 0 0 16px; font-size: 18px; }
+.versus { display: flex; align-items: center; gap: 12px; }
+.fighter { flex: 1; padding: 16px; border-radius: 8px; text-align: center; }
+.win { background: #f0fdf4; border: 2px solid #22c55e; }
+.tie { background: #fffbeb; border: 2px solid #f59e0b; }
+.selector { font-family: monospace; font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+.spec { font-family: monospace; font-size: 22px; font-weight: bold; color: #333; margin-bottom: 4px; }
+.detail { font-size: 10px; color: #666; margin-bottom: 8px; }
+.result { font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 4px; display: inline-block; }
+.win-badge { background: #22c55e; color: white; } .tie-badge { background: #f59e0b; color: white; }
+.vs { font-size: 24px; font-weight: bold; color: #666; }
+.rule { text-align: center; margin-top: 12px; padding: 8px; background: #fffbeb; border: 1px solid #fcd34d; border-radius: 6px; font-size: 12px; color: #92400e; }`,
+    html: `<div class="battle"><h3>伪类 vs 类</h3>
+<div class="versus">
+  <div class="fighter tie"><div class="selector">a:hover</div><div class="spec">(0,0,1,1)</div><div class="detail">1 伪类 + 1 元素</div><div class="result tie-badge">平局</div></div>
+  <div class="vs">VS</div>
+  <div class="fighter tie"><div class="selector">.link</div><div class="spec">(0,0,1,0)</div><div class="detail">1 class</div><div class="result win-badge">稍胜</div></div>
+</div>
+<div class="rule">伪类(:hover)与类(.link)同属 c 列，但 a:hover 多了 1 个元素(d 列)，所以 a:hover 略高。但如果用 .link:hover 则为 (0,0,2,0)，更强！</div></div>`,
+  },
+  {
+    label: '属性选择器',
+    css: `.battle { padding: 16px; font-family: sans-serif; } h3 { text-align: center; margin: 0 0 16px; font-size: 18px; }
+.versus { display: flex; align-items: center; gap: 12px; }
+.fighter { flex: 1; padding: 16px; border-radius: 8px; text-align: center; }
+.tie { background: #fffbeb; border: 2px solid #f59e0b; }
+.selector { font-family: monospace; font-size: 16px; font-weight: bold; margin-bottom: 8px; }
+.spec { font-family: monospace; font-size: 22px; font-weight: bold; color: #333; margin-bottom: 4px; }
+.detail { font-size: 10px; color: #666; margin-bottom: 8px; }
+.result { font-size: 12px; font-weight: bold; padding: 4px 12px; border-radius: 4px; display: inline-block; }
+.tie-badge { background: #f59e0b; color: white; }
+.vs { font-size: 24px; font-weight: bold; color: #666; }
+.rule { text-align: center; margin-top: 12px; padding: 8px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; color: #1e40af; }`,
+    html: `<div class="battle"><h3>属性 vs 类</h3>
+<div class="versus">
+  <div class="fighter tie"><div class="selector">[type="text"]</div><div class="spec">(0,0,1,0)</div><div class="detail">1 属性选择器</div><div class="result tie-badge">平局</div></div>
+  <div class="vs">VS</div>
+  <div class="fighter tie"><div class="selector">.field</div><div class="spec">(0,0,1,0)</div><div class="detail">1 类选择器</div><div class="result tie-badge">平局</div></div>
+</div>
+<div class="rule">属性选择器和类选择器特异性相同，都在 c 列计数。相同特异性时，后声明的规则胜出。</div></div>`,
+  },
 ];
 
 export function SpecificityBattle() {
-  const [selector1, setSelector1] = useState('#id');
-  const [selector2, setSelector2] = useState('.class.class.class');
-
-  const spec1 = parseSelector(selector1);
-  const spec2 = parseSelector(selector2);
-  const comparison = compareSpecificity(spec1, spec2);
-
-  const applyPreset = (preset: PresetBattle) => {
-    setSelector1(preset.selector1);
-    setSelector2(preset.selector2);
-  };
-
-  const getBarWidth = (spec: Specificity): number => {
-    const total = spec.a * 1000 + spec.b * 100 + spec.c * 10 + spec.d;
-    const maxTotal = Math.max(
-      spec1.a * 1000 + spec1.b * 100 + spec1.c * 10 + spec1.d,
-      spec2.a * 1000 + spec2.b * 100 + spec2.c * 10 + spec2.d,
-      1
-    );
-    return (total / maxTotal) * 100;
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Input Fields */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">选择器 A</label>
-          <input
-            type="text"
-            value={selector1}
-            onChange={(e) => setSelector1(e.target.value)}
-            className="w-full px-3 py-2 rounded-md border border-border bg-background text-foreground font-mono text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-            placeholder="输入 CSS 选择器"
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">选择器 B</label>
-          <input
-            type="text"
-            value={selector2}
-            onChange={(e) => setSelector2(e.target.value)}
-            className="w-full px-3 py-2 rounded-md border border-border bg-background text-foreground font-mono text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-            placeholder="输入 CSS 选择器"
-          />
-        </div>
-      </div>
-
-      {/* Specificity Breakdown */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div
-          className={`p-4 rounded-lg border-2 transition-colors ${
-            comparison > 0
-              ? 'border-green-500 bg-green-500/10'
-              : comparison < 0
-              ? 'border-red-500 bg-red-500/10'
-              : 'border-yellow-500 bg-yellow-500/10'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <code className="text-sm font-mono text-foreground truncate">{selector1}</code>
-            {comparison > 0 && (
-              <Badge className="bg-green-500 text-white">获胜</Badge>
-            )}
-            {comparison === 0 && (
-              <Badge className="bg-yellow-500 text-white">平局</Badge>
-            )}
-          </div>
-          <div className="space-y-2">
-            <div className="text-2xl font-bold text-foreground">{formatSpecificity(spec1)}</div>
-            <div className="grid grid-cols-4 gap-2 text-xs">
-              <div className="text-center">
-                <div className="font-semibold text-foreground">{spec1.a}</div>
-                <div className="text-muted-foreground">内联</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-foreground">{spec1.b}</div>
-                <div className="text-muted-foreground">ID</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-foreground">{spec1.c}</div>
-                <div className="text-muted-foreground">类</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-foreground">{spec1.d}</div>
-                <div className="text-muted-foreground">元素</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className={`p-4 rounded-lg border-2 transition-colors ${
-            comparison < 0
-              ? 'border-green-500 bg-green-500/10'
-              : comparison > 0
-              ? 'border-red-500 bg-red-500/10'
-              : 'border-yellow-500 bg-yellow-500/10'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <code className="text-sm font-mono text-foreground truncate">{selector2}</code>
-            {comparison < 0 && (
-              <Badge className="bg-green-500 text-white">获胜</Badge>
-            )}
-            {comparison === 0 && (
-              <Badge className="bg-yellow-500 text-white">平局</Badge>
-            )}
-          </div>
-          <div className="space-y-2">
-            <div className="text-2xl font-bold text-foreground">{formatSpecificity(spec2)}</div>
-            <div className="grid grid-cols-4 gap-2 text-xs">
-              <div className="text-center">
-                <div className="font-semibold text-foreground">{spec2.a}</div>
-                <div className="text-muted-foreground">内联</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-foreground">{spec2.b}</div>
-                <div className="text-muted-foreground">ID</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-foreground">{spec2.c}</div>
-                <div className="text-muted-foreground">类</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-foreground">{spec2.d}</div>
-                <div className="text-muted-foreground">元素</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Visual Bar Chart */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-foreground">优先级对比</h3>
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <code className="text-xs font-mono text-muted-foreground w-24 truncate">
-              {selector1}
-            </code>
-            <div className="flex-1 h-8 bg-muted rounded-md overflow-hidden">
-              <div
-                className={`h-full transition-all duration-300 ${
-                  comparison > 0 ? 'bg-green-500' : comparison < 0 ? 'bg-red-500' : 'bg-yellow-500'
-                }`}
-                style={{ width: `${getBarWidth(spec1)}%` }}
-              />
-            </div>
-            <Badge variant="outline" className="w-20 justify-center">
-              {formatSpecificity(spec1)}
-            </Badge>
-          </div>
-          <div className="flex items-center gap-2">
-            <code className="text-xs font-mono text-muted-foreground w-24 truncate">
-              {selector2}
-            </code>
-            <div className="flex-1 h-8 bg-muted rounded-md overflow-hidden">
-              <div
-                className={`h-full transition-all duration-300 ${
-                  comparison < 0 ? 'bg-green-500' : comparison > 0 ? 'bg-red-500' : 'bg-yellow-500'
-                }`}
-                style={{ width: `${getBarWidth(spec2)}%` }}
-              />
-            </div>
-            <Badge variant="outline" className="w-20 justify-center">
-              {formatSpecificity(spec2)}
-            </Badge>
-          </div>
-        </div>
-      </div>
-
-      {/* Presets */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-foreground">预设对决</h3>
-        <div className="flex flex-wrap gap-2">
-          {PRESET_BATTLES.map((preset) => (
-            <button
-              key={preset.name}
-              onClick={() => applyPreset(preset)}
-              className="px-4 py-2 text-sm bg-secondary hover:bg-secondary/80 rounded-md transition-colors"
-            >
-              {preset.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Result Explanation */}
-      <div className="rounded-lg border border-border bg-muted p-4">
-        <div className="text-xs text-muted-foreground mb-2">结果说明：</div>
-        <div className="text-sm text-foreground">
-          {comparison > 0 && `选择器 A 优先级更高 ${formatSpecificity(spec1)} > ${formatSpecificity(spec2)}`}
-          {comparison < 0 && `选择器 B 优先级更高 ${formatSpecificity(spec2)} > ${formatSpecificity(spec1)}`}
-          {comparison === 0 && `两个选择器优先级相同，后定义的规则将生效`}
-        </div>
-      </div>
-    </div>
-  );
+  return <DemoPlayground defaultCSS={defaultCSS} defaultHTML={defaultHTML} presets={presets} iframeHeight={340} />;
 }

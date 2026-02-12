@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   ArrowLeft,
   ArrowRight,
@@ -285,58 +284,57 @@ export default async function ModulePage({ params }: { params: Promise<{ slug: s
                         </AccordionContent>
                       </AccordionItem>
                     )}
-                    {/* 规范原文区域 — 默认折叠 */}
+                    {/* 规范原文区域 */}
                     {(() => {
-                      const css2Section = css2Contents
-                        .map((s) => s.content!.sections[section.specId || section.id])
-                        .find(Boolean);
+                      const sectionKey = section.specId || section.id;
+
+                      // CSS2: 仅构建外链
+                      let css2Url = '';
+                      for (const s of css2Contents) {
+                        if (s.content!.sections[sectionKey]) {
+                          const entry = Object.values(CSS2_CHAPTER_MAP).find(v => v.specName === s.specName);
+                          if (entry) css2Url = `${entry.url}#${sectionKey}`;
+                          break;
+                        }
+                      }
+
+                      // CSS3: 展示完整内容
                       const css3Section = specContents
-                        .map((s) => s.content!.sections[section.specId || section.id])
+                        .map((s) => s.content!.sections[sectionKey])
                         .find(Boolean);
 
-                      if (!css2Section && !css3Section) return null;
+                      if (!css2Url && !css3Section) return null;
 
                       return (
-                        <AccordionItem value="spec-text" className="border-none">
-                          <AccordionTrigger className="py-2 text-sm hover:no-underline">
-                            <span className="flex items-center gap-2">
-                              <BookMarked className="w-4 h-4" />
-                              {css2Section && css3Section
-                                ? `${t('ui.specTabCss2')} / ${t('ui.specTabCss3')}`
-                                : css2Section
-                                  ? t('ui.specTabCss2')
-                                  : t('ui.specTabCss3')}
-                            </span>
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            {css2Section && !css3Section && (
-                              <SpecContent content={css2Section.content} moduleId={mod.id} />
-                            )}
-                            {!css2Section && css3Section && (
-                              <SpecContent content={css3Section.content} moduleId={mod.id} />
-                            )}
-                            {css2Section && css3Section && (
-                              <Tabs defaultValue="css2">
-                                <TabsList className="h-8">
-                                  <TabsTrigger value="css2" className="text-xs gap-1.5">
-                                    <BookMarked className="w-3.5 h-3.5" />
-                                    {t('ui.specTabCss2')}
-                                  </TabsTrigger>
-                                  <TabsTrigger value="css3" className="text-xs gap-1.5">
-                                    <FileText className="w-3.5 h-3.5" />
-                                    {t('ui.specTabCss3')}
-                                  </TabsTrigger>
-                                </TabsList>
-                                <TabsContent value="css2" className="mt-3">
-                                  <SpecContent content={css2Section.content} moduleId={mod.id} />
-                                </TabsContent>
-                                <TabsContent value="css3" className="mt-3">
-                                  <SpecContent content={css3Section.content} moduleId={mod.id} />
-                                </TabsContent>
-                              </Tabs>
-                            )}
-                          </AccordionContent>
-                        </AccordionItem>
+                        <>
+                          {css3Section && (
+                            <AccordionItem value="spec-text" className="border-none">
+                              <AccordionTrigger className="py-2 text-sm hover:no-underline">
+                                <span className="flex items-center gap-2">
+                                  <BookMarked className="w-4 h-4" />
+                                  {t('ui.specTabCss3')}
+                                </span>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <SpecContent content={css3Section.content} moduleId={mod.id} />
+                              </AccordionContent>
+                            </AccordionItem>
+                          )}
+                          {css2Url && (
+                            <div className="flex items-center py-2">
+                              <a
+                                href={css2Url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                              >
+                                <BookMarked className="w-3.5 h-3.5" />
+                                {t('ui.specTabCss2')}
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            </div>
+                          )}
+                        </>
                       );
                     })()}
                   </Accordion>

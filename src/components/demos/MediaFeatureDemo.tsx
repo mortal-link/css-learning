@@ -1,266 +1,196 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { DemoPlayground } from './DemoPlayground';
 
-interface MediaFeature {
-  name: string;
-  label: string;
-  category: string;
-  value: string;
-  query: string;
+const defaultCSS = `.category {
+  margin-bottom: 16px;
+}
+.category h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid;
+}
+.cat-viewport h3 { border-color: #3b82f6; color: #3b82f6; }
+.cat-display h3  { border-color: #10b981; color: #10b981; }
+.cat-pref h3     { border-color: #8b5cf6; color: #8b5cf6; }
+.cat-interact h3 { border-color: #f59e0b; color: #f59e0b; }
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+.feature {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 10px;
+}
+.feature .name { font-size: 11px; color: #999; font-family: monospace; }
+.feature .label { font-size: 13px; font-weight: 600; margin: 2px 0; }
+.feature .query {
+  font-size: 11px;
+  font-family: monospace;
+  background: #f1f5f9;
+  padding: 3px 6px;
+  border-radius: 3px;
+  margin-top: 4px;
+  word-break: break-all;
 }
 
+.cat-viewport .feature { border-left: 3px solid #3b82f6; }
+.cat-display .feature  { border-left: 3px solid #10b981; }
+.cat-pref .feature     { border-left: 3px solid #8b5cf6; }
+.cat-interact .feature { border-left: 3px solid #f59e0b; }`;
+
+const defaultHTML = `<div class="category cat-viewport">
+  <h3>视口特性</h3>
+  <div class="features">
+    <div class="feature"><div class="name">width</div><div class="label">视口宽度</div><div class="query">@media (min-width: 768px)</div></div>
+    <div class="feature"><div class="name">height</div><div class="label">视口高度</div><div class="query">@media (min-height: 600px)</div></div>
+    <div class="feature"><div class="name">aspect-ratio</div><div class="label">宽高比</div><div class="query">@media (aspect-ratio: 16/9)</div></div>
+    <div class="feature"><div class="name">orientation</div><div class="label">方向</div><div class="query">@media (orientation: landscape)</div></div>
+  </div>
+</div>
+
+<div class="category cat-display">
+  <h3>显示质量</h3>
+  <div class="features">
+    <div class="feature"><div class="name">resolution</div><div class="label">分辨率</div><div class="query">@media (min-resolution: 2dppx)</div></div>
+    <div class="feature"><div class="name">color</div><div class="label">颜色位深</div><div class="query">@media (color)</div></div>
+    <div class="feature"><div class="name">color-gamut</div><div class="label">色域</div><div class="query">@media (color-gamut: p3)</div></div>
+  </div>
+</div>
+
+<div class="category cat-pref">
+  <h3>用户偏好</h3>
+  <div class="features">
+    <div class="feature"><div class="name">prefers-color-scheme</div><div class="label">配色方案</div><div class="query">@media (prefers-color-scheme: dark)</div></div>
+    <div class="feature"><div class="name">prefers-reduced-motion</div><div class="label">减少动画</div><div class="query">@media (prefers-reduced-motion: reduce)</div></div>
+    <div class="feature"><div class="name">prefers-contrast</div><div class="label">对比度</div><div class="query">@media (prefers-contrast: high)</div></div>
+  </div>
+</div>
+
+<div class="category cat-interact">
+  <h3>交互能力</h3>
+  <div class="features">
+    <div class="feature"><div class="name">hover</div><div class="label">悬停能力</div><div class="query">@media (hover: hover)</div></div>
+    <div class="feature"><div class="name">pointer</div><div class="label">指针精度</div><div class="query">@media (pointer: fine)</div></div>
+  </div>
+</div>`;
+
+const presets = [
+  {
+    label: '全部特性',
+    css: `.category { margin-bottom: 16px; }
+.category h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid; }
+.cat-viewport h3 { border-color: #3b82f6; color: #3b82f6; }
+.cat-display h3  { border-color: #10b981; color: #10b981; }
+.cat-pref h3     { border-color: #8b5cf6; color: #8b5cf6; }
+.cat-interact h3 { border-color: #f59e0b; color: #f59e0b; }
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+.feature { border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px; }
+.feature .name { font-size: 11px; color: #999; font-family: monospace; }
+.feature .label { font-size: 13px; font-weight: 600; margin: 2px 0; }
+.feature .query { font-size: 11px; font-family: monospace; background: #f1f5f9; padding: 3px 6px; border-radius: 3px; margin-top: 4px; word-break: break-all; }
+.cat-viewport .feature { border-left: 3px solid #3b82f6; }
+.cat-display .feature  { border-left: 3px solid #10b981; }
+.cat-pref .feature     { border-left: 3px solid #8b5cf6; }
+.cat-interact .feature { border-left: 3px solid #f59e0b; }`,
+  },
+  {
+    label: '宽度响应',
+    css: `.box {
+  padding: 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  text-align: center;
+  font-weight: 600;
+  background: #fee2e2;
+  color: #991b1b;
+}
+.box::after { content: " -- 窄屏 (< 400px)"; }
+
+@media (min-width: 400px) {
+  .box { background: #fef3c7; color: #92400e; }
+  .box::after { content: " -- 中等 (400-599px)"; }
+}
+@media (min-width: 600px) {
+  .box { background: #d1fae5; color: #065f46; }
+  .box::after { content: " -- 宽屏 (>= 600px)"; }
+}
+.note { font-size: 12px; color: #666; margin-top: 12px; }`,
+    html: `<div class="box">当前宽度</div>
+<div class="note">iframe 宽度就是 @media 查询检测的宽度，调整后观察变化。</div>`,
+  },
+  {
+    label: '组合查询',
+    css: `.example { border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+.example h3 { font-size: 13px; color: #3b82f6; font-family: monospace; margin-bottom: 6px; }
+.example pre { font-size: 12px; font-family: monospace; background: #f8fafc; padding: 10px; border-radius: 4px; white-space: pre-wrap; line-height: 1.5; }`,
+    html: `<div class="example">
+  <h3>AND 组合</h3>
+  <pre>@media (min-width: 768px) and (orientation: landscape) {
+  /* 宽屏且横向 */
+}</pre>
+</div>
+<div class="example">
+  <h3>OR 组合（逗号）</h3>
+  <pre>@media (max-width: 599px), (orientation: portrait) {
+  /* 窄屏 或 竖向 */
+}</pre>
+</div>
+<div class="example">
+  <h3>NOT 否定</h3>
+  <pre>@media not print {
+  /* 非打印设备 */
+}</pre>
+</div>
+<div class="example">
+  <h3>范围语法 (Level 4)</h3>
+  <pre>@media (400px <= width <= 800px) {
+  /* 宽度在 400-800px 之间 */
+}</pre>
+</div>`,
+  },
+  {
+    label: '用户偏好',
+    css: `.example { border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+.example h3 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.example pre { font-size: 12px; font-family: monospace; background: #f8fafc; padding: 10px; border-radius: 4px; white-space: pre-wrap; line-height: 1.5; }
+.example .desc { font-size: 12px; color: #666; margin-top: 6px; }`,
+    html: `<div class="example">
+  <h3>暗色模式</h3>
+  <pre>@media (prefers-color-scheme: dark) {
+  body { background: #1a1a1a; color: #eee; }
+}</pre>
+  <div class="desc">检测用户系统是否启用暗色模式。</div>
+</div>
+<div class="example">
+  <h3>减少动画</h3>
+  <pre>@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}</pre>
+  <div class="desc">尊重用户的辅助功能设置，移除动画。</div>
+</div>
+<div class="example">
+  <h3>高对比度</h3>
+  <pre>@media (prefers-contrast: high) {
+  body { border: 2px solid; }
+}</pre>
+  <div class="desc">增强视觉对比度，提升可读性。</div>
+</div>`,
+  },
+];
+
 export function MediaFeatureDemo() {
-  const [features, setFeatures] = useState<MediaFeature[]>([]);
-  const [simulatedWidth, setSimulatedWidth] = useState(1024);
-  const [simulatedColorScheme, setSimulatedColorScheme] = useState<'light' | 'dark'>('light');
-  const [simulatedMotion, setSimulatedMotion] = useState<'no-preference' | 'reduce'>('no-preference');
-
-  useEffect(() => {
-    const detectFeatures = () => {
-      const w = window;
-      const detected: MediaFeature[] = [
-        // Viewport
-        {
-          name: 'width',
-          label: '视口宽度',
-          category: 'viewport',
-          value: `${simulatedWidth}px`,
-          query: `(width: ${simulatedWidth}px)`,
-        },
-        {
-          name: 'height',
-          label: '视口高度',
-          category: 'viewport',
-          value: `${w.innerHeight}px`,
-          query: `(height: ${w.innerHeight}px)`,
-        },
-        {
-          name: 'aspect-ratio',
-          label: '宽高比',
-          category: 'viewport',
-          value: `${Math.round((simulatedWidth / w.innerHeight) * 100) / 100}`,
-          query: `(aspect-ratio: ${simulatedWidth}/${w.innerHeight})`,
-        },
-        {
-          name: 'orientation',
-          label: '方向',
-          category: 'viewport',
-          value: simulatedWidth > w.innerHeight ? 'landscape' : 'portrait',
-          query: `(orientation: ${simulatedWidth > w.innerHeight ? 'landscape' : 'portrait'})`,
-        },
-        // Display Quality
-        {
-          name: 'resolution',
-          label: '分辨率',
-          category: 'display',
-          value: `${w.devicePixelRatio}dppx`,
-          query: `(resolution: ${w.devicePixelRatio}dppx)`,
-        },
-        {
-          name: 'color',
-          label: '颜色位深',
-          category: 'display',
-          value: w.matchMedia('(color)').matches ? '8位/通道' : '不支持',
-          query: '(color)',
-        },
-        {
-          name: 'color-gamut',
-          label: '色域',
-          category: 'display',
-          value: w.matchMedia('(color-gamut: p3)').matches ? 'p3' : w.matchMedia('(color-gamut: rec2020)').matches ? 'rec2020' : 'srgb',
-          query: `(color-gamut: ${w.matchMedia('(color-gamut: p3)').matches ? 'p3' : 'srgb'})`,
-        },
-        // User Preferences
-        {
-          name: 'prefers-color-scheme',
-          label: '首选配色方案',
-          category: 'preferences',
-          value: simulatedColorScheme,
-          query: `(prefers-color-scheme: ${simulatedColorScheme})`,
-        },
-        {
-          name: 'prefers-reduced-motion',
-          label: '减少动画',
-          category: 'preferences',
-          value: simulatedMotion === 'reduce' ? 'reduce' : 'no-preference',
-          query: `(prefers-reduced-motion: ${simulatedMotion})`,
-        },
-        {
-          name: 'prefers-contrast',
-          label: '对比度偏好',
-          category: 'preferences',
-          value: w.matchMedia('(prefers-contrast: high)').matches ? 'high' : w.matchMedia('(prefers-contrast: low)').matches ? 'low' : 'no-preference',
-          query: w.matchMedia('(prefers-contrast: high)').matches ? '(prefers-contrast: high)' : '(prefers-contrast: no-preference)',
-        },
-        // Interaction
-        {
-          name: 'hover',
-          label: '悬停能力',
-          category: 'interaction',
-          value: w.matchMedia('(hover: hover)').matches ? 'hover' : 'none',
-          query: w.matchMedia('(hover: hover)').matches ? '(hover: hover)' : '(hover: none)',
-        },
-        {
-          name: 'pointer',
-          label: '指针精度',
-          category: 'interaction',
-          value: w.matchMedia('(pointer: fine)').matches ? 'fine' : w.matchMedia('(pointer: coarse)').matches ? 'coarse' : 'none',
-          query: w.matchMedia('(pointer: fine)').matches ? '(pointer: fine)' : '(pointer: coarse)',
-        },
-      ];
-
-      setFeatures(detected);
-    };
-
-    detectFeatures();
-  }, [simulatedWidth, simulatedColorScheme, simulatedMotion]);
-
-  const categories = [
-    { id: 'viewport', label: '视口特性', color: 'blue' },
-    { id: 'display', label: '显示质量', color: 'green' },
-    { id: 'preferences', label: '用户偏好', color: 'purple' },
-    { id: 'interaction', label: '交互能力', color: 'orange' },
-  ];
-
-  const getCategoryColor = (category: string) => {
-    const cat = categories.find((c) => c.id === category);
-    switch (cat?.color) {
-      case 'blue':
-        return 'bg-blue-500/10 dark:bg-blue-500/20 border-blue-500/30 text-blue-700 dark:text-blue-300';
-      case 'green':
-        return 'bg-green-500/10 dark:bg-green-500/20 border-green-500/30 text-green-700 dark:text-green-300';
-      case 'purple':
-        return 'bg-purple-500/10 dark:bg-purple-500/20 border-purple-500/30 text-purple-700 dark:text-purple-300';
-      case 'orange':
-        return 'bg-orange-500/10 dark:bg-orange-500/20 border-orange-500/30 text-orange-700 dark:text-orange-300';
-      default:
-        return 'bg-muted/50 dark:bg-muted/30 border-border text-foreground';
-    }
-  };
-
   return (
-    <div className="space-y-6">
-      {/* Simulation Controls */}
-      <div className="space-y-4 rounded-lg border border-border p-4 bg-muted/30 dark:bg-muted/20">
-        <div className="text-sm font-semibold text-foreground mb-3">模拟设置</div>
-
-        {/* Width Simulation */}
-        <div>
-          <label className="text-xs text-muted-foreground mb-2 block">
-            模拟宽度: {simulatedWidth}px
-          </label>
-          <input
-            type="range"
-            min={320}
-            max={1920}
-            value={simulatedWidth}
-            onChange={(e) => setSimulatedWidth(Number(e.target.value))}
-            className="w-full h-1.5 accent-blue-500"
-          />
-        </div>
-
-        {/* Color Scheme Simulation */}
-        <div>
-          <label className="text-xs text-muted-foreground mb-2 block">配色方案</label>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setSimulatedColorScheme('light')}
-              className={`px-4 py-2 text-sm rounded-md transition-colors ${
-                simulatedColorScheme === 'light'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary hover:bg-secondary/80'
-              }`}
-            >
-              浅色模式
-            </button>
-            <button
-              onClick={() => setSimulatedColorScheme('dark')}
-              className={`px-4 py-2 text-sm rounded-md transition-colors ${
-                simulatedColorScheme === 'dark'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary hover:bg-secondary/80'
-              }`}
-            >
-              深色模式
-            </button>
-          </div>
-        </div>
-
-        {/* Motion Simulation */}
-        <div>
-          <label className="text-xs text-muted-foreground mb-2 block">动画偏好</label>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setSimulatedMotion('no-preference')}
-              className={`px-4 py-2 text-sm rounded-md transition-colors ${
-                simulatedMotion === 'no-preference'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary hover:bg-secondary/80'
-              }`}
-            >
-              正常动画
-            </button>
-            <button
-              onClick={() => setSimulatedMotion('reduce')}
-              className={`px-4 py-2 text-sm rounded-md transition-colors ${
-                simulatedMotion === 'reduce'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary hover:bg-secondary/80'
-              }`}
-            >
-              减少动画
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Features by Category */}
-      {categories.map((category) => (
-        <div key={category.id} className="space-y-3">
-          <div className="text-sm font-semibold text-foreground">{category.label}</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {features
-              .filter((f) => f.category === category.id)
-              .map((feature) => (
-                <div
-                  key={feature.name}
-                  className={`rounded-lg border p-4 ${getCategoryColor(category.id)}`}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="text-sm font-medium">{feature.label}</div>
-                    <div className="text-xs font-mono opacity-70">{feature.name}</div>
-                  </div>
-                  <div className="text-lg font-bold mb-2">{feature.value}</div>
-                  <div className="text-xs font-mono opacity-80 bg-black/10 dark:bg-white/10 rounded px-2 py-1">
-                    @media {feature.query}
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      ))}
-
-      {/* CSS Code Output */}
-      <div className="rounded-lg border border-border bg-muted p-4">
-        <div className="text-xs text-muted-foreground mb-2">媒体特性查询示例：</div>
-        <pre className="text-sm font-mono text-foreground whitespace-pre-wrap">
-          {`/* 宽度查询 */
-@media (min-width: 768px) { /* ... */ }
-
-/* 暗色模式查询 */
-@media (prefers-color-scheme: dark) { /* ... */ }
-
-/* 减少动画查询 */
-@media (prefers-reduced-motion: reduce) { /* ... */ }
-
-/* 高分辨率屏幕查询 */
-@media (min-resolution: 2dppx) { /* ... */ }
-
-/* 组合查询 */
-@media (min-width: 768px) and (prefers-color-scheme: dark) { /* ... */ }`}
-        </pre>
-      </div>
-    </div>
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={520}
+    />
   );
 }

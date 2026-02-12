@@ -1,296 +1,137 @@
 'use client';
+import { DemoPlayground } from './DemoPlayground';
 
-import { useState } from 'react';
-
-interface PropertyInfo {
-  name: string;
-  description: string;
-  prefixes: Array<'-webkit-' | '-moz-' | '-ms-' | ''>;
-  browserSupport: {
-    chrome: string;
-    firefox: string;
-    safari: string;
-    edge: string;
-  };
-  exampleValue: string;
+const defaultCSS = `/* 浏览器供应商前缀演示 */
+.demo { padding: 16px; font-family: system-ui, sans-serif; }
+.info-box { padding: 12px 16px; background: #eef2ff; border-left: 4px solid #6366f1; border-radius: 4px; margin-bottom: 16px; font-size: 13px; color: #3730a3; }
+.prefix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.prefix-card { padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; background: #f9fafb; }
+.prefix-card h4 { font-size: 13px; font-family: monospace; font-weight: 600; margin: 0 0 4px; }
+.prefix-card p { font-size: 11px; color: #6b7280; margin: 0; }
+.prefix-list { margin-top: 16px; }
+.prefix-item { display: flex; align-items: center; gap: 8px; padding: 8px; background: #f9fafb; border-radius: 4px; border: 1px solid #e5e7eb; margin-bottom: 4px; }
+.prefix-label { width: 80px; font-family: monospace; font-size: 13px; font-weight: 600; color: #6366f1; }
+.prefix-value { font-family: monospace; font-size: 13px; }
+.code-block { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 12px; line-height: 1.6; margin-top: 16px; }
+.code-comment { color: #6a9955; }
+.ref-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 16px; }
+.ref-table th, .ref-table td { padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+.ref-table th { background: #f9fafb; font-weight: 600; }
+.ref-table .mono { font-family: monospace; color: #6366f1; }
+.best-practices { padding: 16px; background: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; margin-top: 16px; }
+.best-practices h4 { font-size: 13px; font-weight: 600; color: #166534; margin: 0 0 8px; }
+.best-practices li { font-size: 12px; color: #15803d; margin-bottom: 4px; }
+.live-demo { margin-top: 16px; padding: 16px; border-radius: 8px; border: 1px solid #e5e7eb; }
+.demo-text {
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 28px;
+  font-weight: 700;
 }
+.demo-blur {
+  padding: 20px;
+  background: rgba(255,255,255,0.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+}`;
 
-const PREFIXED_PROPERTIES: Record<string, PropertyInfo> = {
-  'user-select': {
-    name: 'user-select',
-    description: '控制用户是否可以选择文本',
-    prefixes: ['-webkit-', '-moz-', '-ms-', ''],
-    browserSupport: {
-      chrome: '✓ 需要 -webkit-',
-      firefox: '✓ 需要 -moz-',
-      safari: '✓ 需要 -webkit-',
-      edge: '✓ 需要 -ms-',
-    },
-    exampleValue: 'none',
-  },
-  'appearance': {
-    name: 'appearance',
-    description: '控制元素的原生外观',
-    prefixes: ['-webkit-', '-moz-', ''],
-    browserSupport: {
-      chrome: '✓ 需要 -webkit-',
-      firefox: '✓ 需要 -moz-',
-      safari: '✓ 需要 -webkit-',
-      edge: '✓ 标准支持',
-    },
-    exampleValue: 'none',
-  },
-  'backdrop-filter': {
-    name: 'backdrop-filter',
-    description: '对元素背后区域应用滤镜效果',
-    prefixes: ['-webkit-', ''],
-    browserSupport: {
-      chrome: '✓ 需要 -webkit-',
-      firefox: '✓ 标准支持',
-      safari: '✓ 需要 -webkit-',
-      edge: '✓ 标准支持',
-    },
-    exampleValue: 'blur(10px)',
-  },
-  'box-decoration-break': {
-    name: 'box-decoration-break',
-    description: '控制元素片段的渲染方式',
-    prefixes: ['-webkit-', ''],
-    browserSupport: {
-      chrome: '✓ 需要 -webkit-',
-      firefox: '✓ 标准支持',
-      safari: '✓ 需要 -webkit-',
-      edge: '✓ 需要 -webkit-',
-    },
-    exampleValue: 'clone',
-  },
-  'text-fill-color': {
-    name: 'text-fill-color',
-    description: '设置文本填充颜色',
-    prefixes: ['-webkit-'],
-    browserSupport: {
-      chrome: '✓ 需要 -webkit-',
-      firefox: '✓ 需要 -webkit-',
-      safari: '✓ 需要 -webkit-',
-      edge: '✓ 需要 -webkit-',
-    },
-    exampleValue: 'transparent',
-  },
-};
+const defaultHTML = `<div class="demo">
+  <div class="info-box">
+    <strong>浏览器供应商前缀：</strong>当 CSS 特性处于实验阶段时，浏览器使用前缀（-webkit-, -moz-, -ms-）来实现。成熟后移除前缀。
+  </div>
+
+  <h3 style="font-size:14px;margin:0 0 12px;">实际效果展示</h3>
+  <div class="live-demo">
+    <div class="demo-text">渐变文字效果</div>
+    <div style="font-size:11px;color:#888;margin-top:4px;">使用 -webkit-text-fill-color + -webkit-background-clip</div>
+  </div>
+
+  <div class="live-demo" style="background:linear-gradient(135deg,#6366f1,#ec4899);margin-top:12px;">
+    <div class="demo-blur">
+      <div style="font-size:14px;font-weight:600;">毛玻璃效果</div>
+      <div style="font-size:11px;color:#666;">使用 -webkit-backdrop-filter + backdrop-filter</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:14px;margin:16px 0 12px;">需要前缀的属性</h3>
+  <div class="prefix-grid">
+    <div class="prefix-card"><h4>user-select</h4><p>控制用户是否可以选择文本</p></div>
+    <div class="prefix-card"><h4>appearance</h4><p>控制元素的原生外观</p></div>
+    <div class="prefix-card"><h4>backdrop-filter</h4><p>对元素背后区域应用滤镜</p></div>
+    <div class="prefix-card"><h4>text-fill-color</h4><p>设置文本填充颜色</p></div>
+  </div>
+
+  <h3 style="font-size:14px;margin:0 0 12px;">Autoprefixer 输出示例</h3>
+  <div class="code-block">
+    .element {<br>
+    &nbsp;&nbsp;-webkit-user-select: none;<br>
+    &nbsp;&nbsp;-moz-user-select: none;<br>
+    &nbsp;&nbsp;-ms-user-select: none;<br>
+    &nbsp;&nbsp;user-select: none;<br>
+    }
+  </div>
+
+  <table class="ref-table">
+    <tr><th>前缀</th><th>浏览器引擎</th><th>代表浏览器</th></tr>
+    <tr><td class="mono">-webkit-</td><td>WebKit / Blink</td><td>Chrome, Safari, Edge</td></tr>
+    <tr><td class="mono">-moz-</td><td>Gecko</td><td>Firefox</td></tr>
+    <tr><td class="mono">-ms-</td><td>Trident</td><td>IE, 旧版 Edge</td></tr>
+    <tr><td class="mono">-o-</td><td>Presto</td><td>旧版 Opera</td></tr>
+  </table>
+
+  <div class="best-practices">
+    <h4>最佳实践建议</h4>
+    <ul style="padding-left:16px;margin:0;">
+      <li>使用 Autoprefixer 等工具自动添加前缀</li>
+      <li>标准属性写在最后，让它覆盖带前缀的版本</li>
+      <li>定期检查 caniuse.com，移除不再需要的前缀</li>
+      <li>使用 browserslist 配置目标浏览器</li>
+    </ul>
+  </div>
+</div>`;
+
+const presets = [
+  { label: '渐变文字', css: `/* 渐变文字需要 -webkit- 前缀 */
+.demo { padding: 16px; font-family: system-ui; }
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1, #ec4899, #f59e0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 36px;
+  font-weight: 800;
+  text-align: center;
+  padding: 20px;
+}`,
+    html: `<div class="demo"><div class="gradient-text">CSS 渐变文字效果</div><p style="text-align:center;font-size:12px;color:#888;">需要 -webkit-background-clip 和 -webkit-text-fill-color</p></div>` },
+  { label: '毛玻璃效果', css: `/* backdrop-filter 需要 -webkit- 前缀 */
+.demo { padding: 20px; font-family: system-ui; background: linear-gradient(135deg, #667eea, #764ba2); min-height: 200px; display: flex; align-items: center; justify-content: center; }
+.glass {
+  padding: 24px 32px;
+  background: rgba(255,255,255,0.2);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  text-align: center;
+}
+.glass h3 { margin: 0 0 8px; font-size: 18px; }
+.glass p { margin: 0; font-size: 13px; opacity: 0.9; }`,
+    html: `<div class="demo"><div class="glass"><h3>毛玻璃效果</h3><p>-webkit-backdrop-filter: blur(12px)</p></div></div>` },
+];
 
 export function VendorPrefixDemo() {
-  const [selectedProperty, setSelectedProperty] = useState('user-select');
-  const [autoprefixerMode, setAutoprefixerMode] = useState(false);
-
-  const property = PREFIXED_PROPERTIES[selectedProperty];
-
-  const generateCSS = () => {
-    if (autoprefixerMode) {
-      // Show autoprefixer output with all prefixes
-      return property.prefixes
-        .map((prefix) => `  ${prefix}${property.name}: ${property.exampleValue};`)
-        .join('\n');
-    } else {
-      // Show only standard property
-      return `  ${property.name}: ${property.exampleValue};`;
-    }
-  };
-
   return (
-    <div className="space-y-6">
-      {/* Info Box */}
-      <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500 rounded">
-        <p className="text-sm text-indigo-900 dark:text-indigo-200">
-          <strong>浏览器供应商前缀：</strong>
-          当 CSS 特性处于实验阶段时，浏览器使用前缀（-webkit-, -moz-, -ms-）来实现。
-          成熟后会移除前缀，支持标准属性名。
-        </p>
-      </div>
-
-      {/* Property Selector */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">
-          选择 CSS 属性
-        </label>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {Object.keys(PREFIXED_PROPERTIES).map((key) => (
-            <button
-              key={key}
-              onClick={() => setSelectedProperty(key)}
-              className={`p-3 text-left rounded-lg border-2 transition-all ${
-                selectedProperty === key
-                  ? 'border-primary bg-primary/10'
-                  : 'border-border bg-secondary hover:bg-secondary/80'
-              }`}
-            >
-              <div className="font-mono text-sm font-semibold text-foreground">
-                {key}
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                {PREFIXED_PROPERTIES[key].description}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Autoprefixer Toggle */}
-      <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg border border-border">
-        <button
-          onClick={() => setAutoprefixerMode(!autoprefixerMode)}
-          className={`relative w-12 h-6 rounded-full transition-colors ${
-            autoprefixerMode ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
-          }`}
-        >
-          <div
-            className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
-              autoprefixerMode ? 'translate-x-7' : 'translate-x-1'
-            }`}
-          />
-        </button>
-        <div>
-          <div className="text-sm font-medium text-foreground">
-            Autoprefixer 模式
-          </div>
-          <div className="text-xs text-muted-foreground">
-            {autoprefixerMode ? '自动添加所有必需的前缀' : '仅显示标准属性'}
-          </div>
-        </div>
-      </div>
-
-      {/* Property Details */}
-      <div className="space-y-3">
-        <div className="text-sm font-medium text-foreground">
-          需要的浏览器前缀
-        </div>
-        <div className="space-y-2">
-          {property.prefixes.map((prefix) => (
-            <div
-              key={prefix || 'standard'}
-              className="flex items-center gap-2 p-2 bg-muted/50 rounded border border-border"
-            >
-              <div className="w-24 font-mono text-sm font-semibold text-primary">
-                {prefix || '(标准)'}
-              </div>
-              <div className="font-mono text-sm text-foreground">
-                {prefix}{property.name}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Browser Support */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          浏览器兼容性
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="text-lg">🌐</div>
-              <div className="text-xs font-semibold text-foreground">Chrome</div>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              {property.browserSupport.chrome}
-            </div>
-          </div>
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="text-lg">🦊</div>
-              <div className="text-xs font-semibold text-foreground">Firefox</div>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              {property.browserSupport.firefox}
-            </div>
-          </div>
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="text-lg">🧭</div>
-              <div className="text-xs font-semibold text-foreground">Safari</div>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              {property.browserSupport.safari}
-            </div>
-          </div>
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="text-lg">📊</div>
-              <div className="text-xs font-semibold text-foreground">Edge</div>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              {property.browserSupport.edge}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CSS Output */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          {autoprefixerMode ? '输出 CSS（带前缀）' : '输入 CSS（标准属性）'}
-        </div>
-        <div className="p-4 bg-gray-900 dark:bg-gray-950 rounded-lg border border-border">
-          <pre className="text-sm font-mono text-gray-100">
-            <code>{`.element {
-${generateCSS()}
-}`}</code>
-          </pre>
-        </div>
-      </div>
-
-      {/* Prefix Reference */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          常见前缀参考
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="p-2 text-left font-semibold text-foreground">前缀</th>
-                <th className="p-2 text-left font-semibold text-foreground">浏览器引擎</th>
-                <th className="p-2 text-left font-semibold text-foreground">代表浏览器</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-border">
-                <td className="p-2 font-mono text-primary">-webkit-</td>
-                <td className="p-2 text-muted-foreground">WebKit / Blink</td>
-                <td className="p-2 text-muted-foreground">Chrome, Safari, Edge</td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="p-2 font-mono text-primary">-moz-</td>
-                <td className="p-2 text-muted-foreground">Gecko</td>
-                <td className="p-2 text-muted-foreground">Firefox</td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="p-2 font-mono text-primary">-ms-</td>
-                <td className="p-2 text-muted-foreground">Trident</td>
-                <td className="p-2 text-muted-foreground">IE, 旧版 Edge</td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="p-2 font-mono text-primary">-o-</td>
-                <td className="p-2 text-muted-foreground">Presto</td>
-                <td className="p-2 text-muted-foreground">旧版 Opera</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Best Practices */}
-      <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-500 rounded-lg">
-        <div className="text-sm font-semibold text-green-800 dark:text-green-200 mb-2">
-          最佳实践建议
-        </div>
-        <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
-          <li>• 使用 Autoprefixer 等工具自动添加前缀，避免手动维护</li>
-          <li>• 标准属性写在最后，让它覆盖带前缀的版本</li>
-          <li>• 定期检查 caniuse.com，移除不再需要的前缀</li>
-          <li>• 使用 browserslist 配置目标浏览器，精确控制前缀</li>
-        </ul>
-      </div>
-    </div>
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={520}
+    />
   );
 }

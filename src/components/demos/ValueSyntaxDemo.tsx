@@ -1,249 +1,138 @@
 'use client';
+import { DemoPlayground } from './DemoPlayground';
 
-import { useState } from 'react';
+const defaultCSS = `/* CSS 值定义语法 — 乘法器 */
+.demo { padding: 16px; font-family: system-ui, sans-serif; }
+.info-box { padding: 12px 16px; background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 4px; margin-bottom: 16px; font-size: 13px; color: #1e3a5f; }
+.multiplier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.mult-card { padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; text-align: left; background: #f9fafb; }
+.mult-card:hover { background: #f3f4f6; }
+.mult-card.active { border-color: #3b82f6; background: #eff6ff; }
+.mult-symbol { font-size: 20px; font-family: monospace; font-weight: 700; color: #3b82f6; }
+.mult-name { font-size: 11px; color: #6b7280; margin-top: 4px; }
+.detail-box { padding: 16px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 16px; }
+.detail-symbol { font-size: 28px; font-family: monospace; font-weight: 700; color: #3b82f6; }
+.detail-desc { font-size: 13px; color: #6b7280; margin: 8px 0; }
+.pattern-box { padding: 8px 12px; background: #fff; border: 1px solid #e5e7eb; border-radius: 4px; font-family: monospace; font-size: 13px; }
+.examples { margin-top: 12px; }
+.examples h4 { font-size: 13px; margin: 0 0 8px; }
+.example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ex-item { padding: 8px 12px; border-radius: 6px; border: 1px solid; display: flex; align-items: center; gap: 8px; }
+.ex-valid { background: #f0fdf4; border-color: #86efac; }
+.ex-invalid { background: #fef2f2; border-color: #fca5a5; }
+.ex-mark { font-size: 16px; }
+.ex-code { font-family: monospace; font-size: 12px; }
+.code-block { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 12px; line-height: 1.6; margin-top: 16px; }
+.code-comment { color: #6a9955; }
+.ref-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 16px; }
+.ref-table th, .ref-table td { padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+.ref-table th { background: #f9fafb; font-weight: 600; }
+.ref-table .mono { font-family: monospace; color: #3b82f6; }`;
 
-interface Multiplier {
-  symbol: string;
-  name: string;
-  description: string;
-  pattern: string;
-  validExamples: string[];
-  invalidExamples: string[];
+const defaultHTML = `<div class="demo">
+  <div class="info-box">
+    <strong>CSS 值定义语法：</strong>
+    CSS 规范使用特殊符号（乘法器）来定义属性值可以出现的次数和组合方式。
+  </div>
+
+  <div class="multiplier-grid" id="grid"></div>
+  <div id="detail"></div>
+
+  <div class="code-block">
+    <span class="code-comment">/* margin 属性：&lt;length&gt;{1,4} */</span><br>
+    margin: 10px;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">/* 1 个值 */</span><br>
+    margin: 10px 20px;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">/* 2 个值 */</span><br>
+    margin: 10px 20px 30px 40px; <span class="code-comment">/* 4 个值 */</span><br><br>
+    <span class="code-comment">/* background-image：&lt;image&gt;# */</span><br>
+    background-image: url(a.jpg);<br>
+    background-image: url(a.jpg), url(b.jpg);<br><br>
+    <span class="code-comment">/* animation-name：&lt;name&gt;# */</span><br>
+    animation-name: fadeIn, slideUp;
+  </div>
+
+  <table class="ref-table">
+    <tr><th>组合</th><th>含义</th><th>示例</th></tr>
+    <tr><td class="mono">*</td><td>0 或多次，空格分隔</td><td class="mono">&lt;length&gt;*</td></tr>
+    <tr><td class="mono">+</td><td>1 或多次，空格分隔</td><td class="mono">&lt;length&gt;+</td></tr>
+    <tr><td class="mono">#</td><td>1 或多次，逗号分隔</td><td class="mono">&lt;length&gt;#</td></tr>
+    <tr><td class="mono">{1,4}</td><td>1 到 4 次，逗号分隔</td><td class="mono">&lt;length&gt;#{1,4}</td></tr>
+  </table>
+</div>
+
+<script>
+var mults = [
+  {sym:'?', name:'可选(0或1次)', desc:'该值可以出现 0 次或 1 次', pattern:'<length>?', valid:['','10px','2em'], invalid:['10px 20px']},
+  {sym:'*', name:'零或多次', desc:'该值可以出现 0 次或多次', pattern:'<length>*', valid:['','10px','10px 20px'], invalid:[]},
+  {sym:'+', name:'一或多次', desc:'该值必须至少出现 1 次', pattern:'<length>+', valid:['10px','10px 20px'], invalid:['(空)']},
+  {sym:'#', name:'逗号分隔', desc:'可多次出现，用逗号分隔', pattern:'<length>#', valid:['10px','10px, 20px'], invalid:['(空)','10px 20px']},
+  {sym:'{A,B}', name:'次数范围', desc:'必须出现 A 到 B 次', pattern:'<length>{1,4}', valid:['10px','10px 20px','10px 20px 30px 40px'], invalid:['(空)','5个值']},
+  {sym:'!', name:'必需值', desc:'该值是必需的，不能省略', pattern:'<color>!', valid:['red','#ff0000'], invalid:['(空)']},
+];
+var sel = 0;
+
+function render() {
+  var grid = '';
+  for (var i = 0; i < mults.length; i++) {
+    grid += '<div class="mult-card' + (i===sel?' active':'') + '" onclick="sel=' + i + ';render()">';
+    grid += '<div class="mult-symbol">' + mults[i].sym + '</div>';
+    grid += '<div class="mult-name">' + mults[i].name + '</div></div>';
+  }
+  document.getElementById('grid').innerHTML = grid;
+
+  var m = mults[sel];
+  var html = '<div class="detail-box">';
+  html += '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">';
+  html += '<span class="detail-symbol">' + m.sym + '</span>';
+  html += '<span style="font-size:16px;font-weight:600;">' + m.name + '</span></div>';
+  html += '<div class="detail-desc">' + m.desc + '</div>';
+  html += '<div class="pattern-box"><span style="font-size:11px;color:#888;">语法示例：</span> ' + m.pattern + '</div></div>';
+
+  html += '<div class="examples"><h4 style="color:#16a34a;">有效示例</h4><div class="example-grid">';
+  for (var j = 0; j < m.valid.length; j++) {
+    html += '<div class="ex-item ex-valid"><span class="ex-mark">&#10003;</span><span class="ex-code">' + (m.valid[j]||'(空)') + '</span></div>';
+  }
+  html += '</div></div>';
+
+  if (m.invalid.length) {
+    html += '<div class="examples" style="margin-top:8px;"><h4 style="color:#dc2626;">无效示例</h4><div class="example-grid">';
+    for (var k = 0; k < m.invalid.length; k++) {
+      html += '<div class="ex-item ex-invalid"><span class="ex-mark">&#10007;</span><span class="ex-code">' + (m.invalid[k]||'(空)') + '</span></div>';
+    }
+    html += '</div></div>';
+  }
+  document.getElementById('detail').innerHTML = html;
 }
+render();
+</script>`;
 
-const MULTIPLIERS: Multiplier[] = [
-  {
-    symbol: '?',
-    name: '可选（0 或 1 次）',
-    description: '该值可以出现 0 次或 1 次',
-    pattern: '<length>?',
-    validExamples: ['', '10px', '2em'],
-    invalidExamples: ['10px 20px', '10px 20px 30px'],
-  },
-  {
-    symbol: '*',
-    name: '零或多次',
-    description: '该值可以出现 0 次或多次',
-    pattern: '<length>*',
-    validExamples: ['', '10px', '10px 20px', '10px 20px 30px'],
-    invalidExamples: [],
-  },
-  {
-    symbol: '+',
-    name: '一或多次',
-    description: '该值必须至少出现 1 次，可以多次',
-    pattern: '<length>+',
-    validExamples: ['10px', '10px 20px', '10px 20px 30px 40px'],
-    invalidExamples: [''],
-  },
-  {
-    symbol: '#',
-    name: '逗号分隔',
-    description: '该值可以多次出现，用逗号分隔',
-    pattern: '<length>#',
-    validExamples: ['10px', '10px, 20px', '10px, 20px, 30px'],
-    invalidExamples: ['', '10px 20px'],
-  },
-  {
-    symbol: '{A,B}',
-    name: '次数范围',
-    description: '该值必须出现 A 到 B 次',
-    pattern: '<length>{1,4}',
-    validExamples: ['10px', '10px 20px', '10px 20px 30px', '10px 20px 30px 40px'],
-    invalidExamples: ['', '10px 20px 30px 40px 50px'],
-  },
-  {
-    symbol: '!',
-    name: '必需值',
-    description: '该值是必需的，不能省略',
-    pattern: '<color>!',
-    validExamples: ['red', '#ff0000', 'rgb(255, 0, 0)'],
-    invalidExamples: [''],
-  },
+const presets = [
+  { label: '可选 ?', css: `/* 可选乘法器 ? */
+.demo { padding: 16px; font-family: system-ui; }
+.info-box { padding: 12px 16px; background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 4px; margin-bottom: 16px; font-size: 13px; }
+.detail-box { padding: 16px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb; }
+.detail-symbol { font-size: 28px; font-family: monospace; font-weight: 700; color: #3b82f6; }
+.example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.ex-item { padding: 8px 12px; border-radius: 6px; border: 1px solid; display: flex; align-items: center; gap: 8px; }
+.ex-valid { background: #f0fdf4; border-color: #86efac; }
+.ex-invalid { background: #fef2f2; border-color: #fca5a5; }` },
+  { label: '逗号分隔 #', css: `/* 逗号分隔乘法器 # */
+.demo { padding: 16px; font-family: system-ui; }
+.info-box { padding: 12px 16px; background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 4px; margin-bottom: 16px; font-size: 13px; }
+.detail-box { padding: 16px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb; }
+.detail-symbol { font-size: 28px; font-family: monospace; font-weight: 700; color: #3b82f6; }
+.example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.ex-item { padding: 8px 12px; border-radius: 6px; border: 1px solid; display: flex; align-items: center; gap: 8px; }
+.ex-valid { background: #f0fdf4; border-color: #86efac; }
+.ex-invalid { background: #fef2f2; border-color: #fca5a5; }` },
 ];
 
 export function ValueSyntaxDemo() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const selected = MULTIPLIERS[selectedIndex];
-
-  const checkValidity = (example: string, isValid: boolean) => {
-    return (
-      <div
-        className={`p-3 rounded-md border ${
-          isValid
-            ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700'
-            : 'bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700'
-        }`}
-      >
-        <div className="flex items-center gap-2">
-          <span className="text-lg">
-            {isValid ? '✓' : '✗'}
-          </span>
-          <code className="text-sm font-mono">
-            {example === '' ? '(空)' : example}
-          </code>
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className="space-y-6">
-      {/* Info Box */}
-      <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded">
-        <p className="text-sm text-blue-900 dark:text-blue-200">
-          <strong>CSS 值定义语法：</strong>
-          CSS 规范使用特殊符号（乘法器）来定义属性值可以出现的次数和组合方式。
-          理解这些符号有助于正确使用 CSS 属性。
-        </p>
-      </div>
-
-      {/* Multiplier Selector */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">
-          选择乘法器
-        </label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {MULTIPLIERS.map((mult, idx) => (
-            <button
-              key={mult.symbol}
-              onClick={() => setSelectedIndex(idx)}
-              className={`p-3 rounded-lg border-2 text-left transition-all ${
-                selectedIndex === idx
-                  ? 'border-primary bg-primary/10'
-                  : 'border-border bg-secondary hover:bg-secondary/80'
-              }`}
-            >
-              <div className="text-lg font-mono font-bold text-primary">
-                {mult.symbol}
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                {mult.name}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Selected Multiplier Details */}
-      <div className="space-y-4">
-        <div className="p-4 bg-muted/50 rounded-lg border border-border">
-          <div className="flex items-baseline gap-3 mb-2">
-            <span className="text-2xl font-mono font-bold text-primary">
-              {selected.symbol}
-            </span>
-            <span className="text-lg font-semibold text-foreground">
-              {selected.name}
-            </span>
-          </div>
-          <p className="text-sm text-muted-foreground mb-3">
-            {selected.description}
-          </p>
-          <div className="p-3 bg-background rounded border border-border">
-            <div className="text-xs text-muted-foreground mb-1">语法示例</div>
-            <code className="text-sm font-mono text-foreground font-semibold">
-              {selected.pattern}
-            </code>
-          </div>
-        </div>
-
-        {/* Valid Examples */}
-        <div className="space-y-2">
-          <div className="text-sm font-medium text-foreground flex items-center gap-2">
-            <span className="text-green-600 dark:text-green-400">✓</span>
-            有效示例
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {selected.validExamples.map((example, idx) => (
-              <div key={idx}>
-                {checkValidity(example, true)}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Invalid Examples */}
-        {selected.invalidExamples.length > 0 && (
-          <div className="space-y-2">
-            <div className="text-sm font-medium text-foreground flex items-center gap-2">
-              <span className="text-red-600 dark:text-red-400">✗</span>
-              无效示例
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {selected.invalidExamples.map((example, idx) => (
-                <div key={idx}>
-                  {checkValidity(example, false)}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Real-world Examples */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          实际应用示例
-        </div>
-        <div className="p-4 bg-gray-900 dark:bg-gray-950 rounded-lg border border-border">
-          <pre className="text-sm font-mono text-gray-100">
-            <code>{`/* margin 属性：<length>{1,4} */
-margin: 10px;                /* 1 个值 */
-margin: 10px 20px;           /* 2 个值 */
-margin: 10px 20px 30px 40px; /* 4 个值 */
-
-/* background-image 属性：<image># */
-background-image: url(a.jpg);
-background-image: url(a.jpg), url(b.jpg);
-background-image: url(a.jpg), linear-gradient(...);
-
-/* animation-name 属性：<single-animation-name># */
-animation-name: fadeIn;
-animation-name: fadeIn, slideUp;
-animation-name: fadeIn, slideUp, bounce;`}</code>
-          </pre>
-        </div>
-      </div>
-
-      {/* Combination Table */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          乘法器组合
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="p-2 text-left font-semibold text-foreground">组合</th>
-                <th className="p-2 text-left font-semibold text-foreground">含义</th>
-                <th className="p-2 text-left font-semibold text-foreground">示例</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-border">
-                <td className="p-2 font-mono text-primary">*</td>
-                <td className="p-2 text-muted-foreground">0 或多次，用空格分隔</td>
-                <td className="p-2 font-mono text-xs">&lt;length&gt;*</td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="p-2 font-mono text-primary">+</td>
-                <td className="p-2 text-muted-foreground">1 或多次，用空格分隔</td>
-                <td className="p-2 font-mono text-xs">&lt;length&gt;+</td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="p-2 font-mono text-primary">#</td>
-                <td className="p-2 text-muted-foreground">1 或多次，用逗号分隔</td>
-                <td className="p-2 font-mono text-xs">&lt;length&gt;#</td>
-              </tr>
-              <tr className="border-b border-border">
-                <td className="p-2 font-mono text-primary">#{'{1,4}'}</td>
-                <td className="p-2 text-muted-foreground">1 到 4 次，用逗号分隔</td>
-                <td className="p-2 font-mono text-xs">&lt;length&gt;#{'{1,4}'}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={500}
+    />
   );
 }

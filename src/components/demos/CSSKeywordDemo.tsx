@@ -1,290 +1,129 @@
 'use client';
+import { DemoPlayground } from './DemoPlayground';
 
-import { useState } from 'react';
+const defaultCSS = `/* CSS 全局关键字演示 */
+.demo { padding: 16px; font-family: system-ui, sans-serif; }
+.info-box { padding: 12px 16px; background: #faf5ff; border-left: 4px solid #a855f7; border-radius: 4px; margin-bottom: 16px; font-size: 13px; color: #581c87; }
+.parent-box { padding: 16px; border: 2px solid #3b82f6; border-radius: 8px; background: #eff6ff; position: relative; }
+.parent-label { font-size: 11px; font-weight: 600; color: #2563eb; margin-bottom: 8px; }
+.parent-prop { font-family: monospace; font-size: 13px; }
+.parent-prop .key { color: #6b7280; }
+.parent-prop .val { font-weight: 600; }
+.child-box { margin-top: 16px; padding: 16px; border: 2px solid #a855f7; border-radius: 8px; background: rgba(168,85,247,0.1); }
+.child-label { font-size: 11px; font-weight: 600; color: #a855f7; margin-bottom: 8px; }
+.result-row { margin-top: 8px; font-size: 12px; }
+.result-row .key { color: #6b7280; }
+.result-row .val { font-family: monospace; font-weight: 600; color: #a855f7; }
+.explain-box { margin-top: 16px; padding: 12px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb; }
+.explain-box .title { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
+.explain-box p { font-size: 13px; color: #6b7280; margin: 0; }
+.ref-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 16px; }
+.ref-table th, .ref-table td { padding: 8px; border: 1px solid #e5e7eb; text-align: left; }
+.ref-table th { background: #f3f4f6; font-weight: 600; }
+.ref-table .mono { font-family: monospace; color: #a855f7; }
+.code-block { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 12px; line-height: 1.6; margin-top: 16px; }
+.code-comment { color: #6a9955; }`;
 
-type KeywordType = 'initial' | 'inherit' | 'unset' | 'revert' | 'revert-layer';
-type PropertyType = 'color' | 'border';
+const defaultHTML = `<div class="demo">
+  <div class="info-box">
+    <strong>CSS 全局关键字：</strong>所有 CSS 属性都接受 initial、inherit、unset、revert、revert-layer 这些全局关键字。
+  </div>
 
-interface PropertyConfig {
-  name: string;
-  inherited: boolean;
-  initialValue: string;
-  parentValue: string;
-}
+  <div class="parent-box">
+    <div class="parent-label">父元素 (Parent)</div>
+    <div class="parent-prop"><span class="key">color:</span> <span class="val" style="color:blue;">blue</span></div>
+    <div style="font-size:11px;color:#2563eb;margin-top:4px;">计算值：blue</div>
 
-const PROPERTIES: Record<PropertyType, PropertyConfig> = {
-  color: {
-    name: 'color',
-    inherited: true,
-    initialValue: 'black',
-    parentValue: 'blue',
-  },
-  border: {
-    name: 'border',
-    inherited: false,
-    initialValue: 'none',
-    parentValue: '2px solid green',
-  },
-};
+    <div class="child-box">
+      <div class="child-label">子元素 (Child)</div>
+      <div class="parent-prop"><span class="key">color:</span> <span class="val">initial</span></div>
+      <div class="result-row"><span class="key">指定值：</span><span class="val">initial</span></div>
+      <div class="result-row"><span class="key">计算值：</span><span class="val">black</span></div>
+    </div>
+  </div>
 
-const KEYWORDS: Array<{ value: KeywordType; label: string }> = [
-  { value: 'initial', label: 'initial' },
-  { value: 'inherit', label: 'inherit' },
-  { value: 'unset', label: 'unset' },
-  { value: 'revert', label: 'revert' },
-  { value: 'revert-layer', label: 'revert-layer' },
-];
+  <div class="explain-box">
+    <div class="title">解析过程</div>
+    <p>使用属性的初始值：black（color 的初始值为 black）</p>
+  </div>
 
-function computeValue(
-  keyword: KeywordType,
-  property: PropertyConfig
-): { specified: string; computed: string; explanation: string } {
-  switch (keyword) {
-    case 'initial':
-      return {
-        specified: 'initial',
-        computed: property.initialValue,
-        explanation: `使用属性的初始值：${property.initialValue}`,
-      };
-    case 'inherit':
-      return {
-        specified: 'inherit',
-        computed: property.parentValue,
-        explanation: `继承父元素的计算值：${property.parentValue}`,
-      };
-    case 'unset':
-      if (property.inherited) {
-        return {
-          specified: 'unset',
-          computed: property.parentValue,
-          explanation: `继承属性，等同于 inherit：${property.parentValue}`,
-        };
-      } else {
-        return {
-          specified: 'unset',
-          computed: property.initialValue,
-          explanation: `非继承属性，等同于 initial：${property.initialValue}`,
-        };
-      }
-    case 'revert':
-      return {
-        specified: 'revert',
-        computed: property.inherited ? property.parentValue : property.initialValue,
-        explanation: `回退到用户代理样式或继承值`,
-      };
-    case 'revert-layer':
-      return {
-        specified: 'revert-layer',
-        computed: property.inherited ? property.parentValue : property.initialValue,
-        explanation: `回退到上一层级样式`,
-      };
-  }
-}
+  <table class="ref-table">
+    <tr><th>关键字</th><th>继承属性</th><th>非继承属性</th></tr>
+    <tr><td class="mono">initial</td><td>→ 初始值</td><td>→ 初始值</td></tr>
+    <tr><td class="mono">inherit</td><td>→ 父元素计算值</td><td>→ 父元素计算值</td></tr>
+    <tr><td class="mono">unset</td><td>→ 父元素计算值（=inherit）</td><td>→ 初始值（=initial）</td></tr>
+    <tr><td class="mono">revert</td><td>→ 用户代理样式</td><td>→ 用户代理样式</td></tr>
+    <tr><td class="mono">revert-layer</td><td>→ 上一层样式</td><td>→ 上一层样式</td></tr>
+  </table>
 
-export function CSSKeywordDemo() {
-  const [selectedKeyword, setSelectedKeyword] = useState<KeywordType>('initial');
-  const [selectedProperty, setSelectedProperty] = useState<PropertyType>('color');
+  <div class="code-block">
+    .parent {<br>
+    &nbsp;&nbsp;color: blue;<br>
+    }<br><br>
+    .child {<br>
+    &nbsp;&nbsp;color: initial;<br>
+    &nbsp;&nbsp;<span class="code-comment">/* 计算值: black */</span><br>
+    }
+  </div>
+</div>`;
 
-  const property = PROPERTIES[selectedProperty];
-  const result = computeValue(selectedKeyword, property);
-
-  return (
-    <div className="space-y-6">
-      {/* Info Box */}
-      <div className="p-4 bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500 rounded">
-        <p className="text-sm text-purple-900 dark:text-purple-200">
-          <strong>CSS 全局关键字：</strong>
-          所有 CSS 属性都接受这些全局关键字，它们控制值的继承和重置行为。
-        </p>
-      </div>
-
-      {/* Property Toggle */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">
-          选择属性类型
-        </label>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setSelectedProperty('color')}
-            className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
-              selectedProperty === 'color'
-                ? 'border-primary bg-primary/10 text-primary'
-                : 'border-border bg-secondary text-muted-foreground hover:bg-secondary/80'
-            }`}
-          >
-            color (继承属性)
-          </button>
-          <button
-            onClick={() => setSelectedProperty('border')}
-            className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
-              selectedProperty === 'border'
-                ? 'border-primary bg-primary/10 text-primary'
-                : 'border-border bg-secondary text-muted-foreground hover:bg-secondary/80'
-            }`}
-          >
-            border (非继承属性)
-          </button>
-        </div>
-      </div>
-
-      {/* Keyword Buttons */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">
-          选择关键字
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {KEYWORDS.map(({ value, label }) => (
-            <button
-              key={value}
-              onClick={() => setSelectedKeyword(value)}
-              className={`px-4 py-2 rounded-lg border-2 font-mono text-sm transition-all ${
-                selectedKeyword === value
-                  ? 'border-primary bg-primary text-primary-foreground'
-                  : 'border-border bg-secondary hover:bg-secondary/80'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Visual DOM Structure */}
-      <div className="space-y-3">
-        <div className="text-sm font-medium text-foreground">
-          DOM 结构与样式流
-        </div>
-        <div className="relative">
-          {/* Parent */}
-          <div className="p-4 border-2 border-blue-500 rounded-lg bg-blue-50 dark:bg-blue-900/20">
-            <div className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2">
-              父元素 (Parent)
-            </div>
-            <div className="text-sm font-mono space-y-1">
-              <div>
-                <span className="text-muted-foreground">{property.name}:</span>{' '}
-                <span className="text-foreground font-semibold">{property.parentValue}</span>
-              </div>
-            </div>
-            <div className="mt-2 text-xs text-blue-600 dark:text-blue-400">
-              计算值：{property.parentValue}
-            </div>
-
-            {/* Arrow */}
-            <div className="absolute left-1/2 top-full -translate-x-1/2 mt-2">
-              <svg width="24" height="24" viewBox="0 0 24 24" className="text-primary">
-                <path
-                  d="M12 4L12 20M12 20L6 14M12 20L18 14"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                />
-              </svg>
-            </div>
-
-            {/* Child */}
-            <div className="mt-8 p-4 border-2 border-primary rounded-lg bg-primary/10">
-              <div className="text-xs font-semibold text-primary mb-2">
-                子元素 (Child)
-              </div>
-              <div className="text-sm font-mono space-y-1">
-                <div>
-                  <span className="text-muted-foreground">{property.name}:</span>{' '}
-                  <span className="text-foreground font-semibold">{selectedKeyword}</span>
-                </div>
-              </div>
-              <div className="mt-2 space-y-1">
-                <div className="text-xs">
-                  <span className="text-muted-foreground">指定值：</span>
-                  <span className="font-mono font-semibold text-foreground">
-                    {result.specified}
-                  </span>
-                </div>
-                <div className="text-xs">
-                  <span className="text-muted-foreground">计算值：</span>
-                  <span className="font-mono font-semibold text-primary">
-                    {result.computed}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Explanation */}
-      <div className="p-4 bg-muted/50 rounded-lg border border-border">
-        <div className="text-xs font-semibold text-foreground mb-2">
-          解析过程
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {result.explanation}
-        </p>
-      </div>
-
-      {/* Reference Table */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          关键字行为对照表
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse border border-border">
-            <thead>
-              <tr className="bg-muted">
-                <th className="p-2 text-left border border-border font-semibold">关键字</th>
-                <th className="p-2 text-left border border-border font-semibold">继承属性</th>
-                <th className="p-2 text-left border border-border font-semibold">非继承属性</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="p-2 border border-border font-mono text-primary">initial</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 初始值</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 初始值</td>
-              </tr>
-              <tr>
-                <td className="p-2 border border-border font-mono text-primary">inherit</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 父元素计算值</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 父元素计算值</td>
-              </tr>
-              <tr>
-                <td className="p-2 border border-border font-mono text-primary">unset</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 父元素计算值</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 初始值</td>
-              </tr>
-              <tr>
-                <td className="p-2 border border-border font-mono text-primary">revert</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 用户代理样式</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 用户代理样式</td>
-              </tr>
-              <tr>
-                <td className="p-2 border border-border font-mono text-primary">revert-layer</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 上一层样式</td>
-                <td className="p-2 border border-border text-muted-foreground">→ 上一层样式</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* CSS Code Output */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          CSS 代码
-        </div>
-        <div className="p-4 bg-gray-900 dark:bg-gray-950 rounded-lg border border-border">
-          <pre className="text-sm font-mono text-gray-100">
-            <code>{`.parent {
-  ${property.name}: ${property.parentValue};
-}
-
-.child {
-  ${property.name}: ${selectedKeyword};
-  /* 计算值: ${result.computed} */
-}`}</code>
-          </pre>
-        </div>
+const presets = [
+  { label: 'initial (继承属性)', html: `<div class="demo">
+  <div class="info-box"><strong>initial：</strong>使用属性的初始值，不管是否为继承属性。</div>
+  <div class="parent-box">
+    <div class="parent-label">父元素</div>
+    <div class="parent-prop"><span class="key">color:</span> <span class="val" style="color:blue;">blue</span></div>
+    <div class="child-box">
+      <div class="child-label">子元素</div>
+      <div class="parent-prop"><span class="key">color:</span> <span class="val">initial</span></div>
+      <div class="result-row"><span class="key">计算值：</span><span class="val">black</span></div>
+      <div style="margin-top:8px;padding:8px;border-radius:4px;background:white;color:black;">这段文字是 black（初始值）</div>
+    </div>
+  </div>
+</div>` },
+  { label: 'inherit (非继承属性)', html: `<div class="demo">
+  <div class="info-box"><strong>inherit：</strong>强制继承父元素的计算值，即使是非继承属性。</div>
+  <div class="parent-box" style="border-color:#16a34a;background:#f0fdf4;">
+    <div class="parent-label" style="color:#16a34a;">父元素</div>
+    <div class="parent-prop"><span class="key">border:</span> <span class="val" style="color:#16a34a;">2px solid green</span></div>
+    <div class="child-box">
+      <div class="child-label">子元素</div>
+      <div class="parent-prop"><span class="key">border:</span> <span class="val">inherit</span></div>
+      <div class="result-row"><span class="key">计算值：</span><span class="val">2px solid green</span></div>
+      <div style="margin-top:8px;padding:8px;border:2px solid green;border-radius:4px;">border 继承自父元素</div>
+    </div>
+  </div>
+</div>` },
+  { label: 'unset 对比', html: `<div class="demo">
+  <div class="info-box"><strong>unset：</strong>继承属性→inherit，非继承属性→initial。</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div class="parent-box">
+      <div class="parent-label">color (继承属性)</div>
+      <div class="parent-prop"><span class="key">color:</span> <span class="val" style="color:blue;">blue</span></div>
+      <div class="child-box"><div class="child-label">unset = inherit</div>
+        <div class="result-row"><span class="key">计算值：</span><span class="val">blue</span></div>
+        <div style="margin-top:8px;padding:8px;background:white;border-radius:4px;color:blue;">继承 blue</div>
       </div>
     </div>
+    <div class="parent-box" style="border-color:#16a34a;background:#f0fdf4;">
+      <div class="parent-label" style="color:#16a34a;">border (非继承属性)</div>
+      <div class="parent-prop"><span class="key">border:</span> <span class="val">2px solid green</span></div>
+      <div class="child-box"><div class="child-label">unset = initial</div>
+        <div class="result-row"><span class="key">计算值：</span><span class="val">none</span></div>
+        <div style="margin-top:8px;padding:8px;background:white;border-radius:4px;">无边框</div>
+      </div>
+    </div>
+  </div>
+</div>` },
+];
+
+export function CSSKeywordDemo() {
+  return (
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={480}
+    />
   );
 }

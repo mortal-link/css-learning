@@ -1,208 +1,155 @@
 'use client';
 
-import { useState } from 'react';
+import { DemoPlayground } from './DemoPlayground';
 
-type MediaType = 'all' | 'screen' | 'print' | 'speech';
-
-interface MediaTypeInfo {
-  name: MediaType | 'deprecated';
-  label: string;
-  description: string;
-  example: string;
+const defaultCSS = `.type-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.type-card h3 {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.type-card p {
+  font-size: 13px;
+  color: #666;
+}
+.type-card code {
+  font-size: 12px;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 3px;
 }
 
-const MEDIA_TYPES: MediaTypeInfo[] = [
-  {
-    name: 'all',
-    label: 'all',
-    description: '适用于所有设备',
-    example: '@media all { /* 所有设备样式 */ }',
-  },
-  {
-    name: 'screen',
-    label: 'screen',
-    description: '用于屏幕设备（电脑、平板、手机等）',
-    example: '@media screen { /* 屏幕设备样式 */ }',
-  },
-  {
-    name: 'print',
-    label: 'print',
-    description: '用于打印预览和打印页面',
-    example: '@media print { /* 打印样式 */ }',
-  },
-  {
-    name: 'speech',
-    label: 'speech',
-    description: '用于语音合成器和屏幕阅读器',
-    example: '@media speech { /* 语音合成器样式 */ }',
-  },
-];
+.active { border-color: #3b82f6; background: #eff6ff; }
+.active h3 { color: #3b82f6; }
 
-const DEPRECATED_TYPES = [
-  { name: 'tty', label: 'tty（已弃用）', description: '电传打字机和终端' },
-  { name: 'tv', label: 'tv（已弃用）', description: '电视设备' },
-  { name: 'projection', label: 'projection（已弃用）', description: '投影仪' },
-  { name: 'handheld', label: 'handheld（已弃用）', description: '手持设备' },
-  { name: 'braille', label: 'braille（已弃用）', description: '盲文设备' },
-  { name: 'embossed', label: 'embossed（已弃用）', description: '盲文打印机' },
-  { name: 'aural', label: 'aural（已弃用）', description: '语音合成器' },
+.deprecated {
+  opacity: 0.5;
+  border-style: dashed;
+}
+.deprecated h3 { text-decoration: line-through; }
+
+h2 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; }`;
+
+const defaultHTML = `<h2>现行媒体类型</h2>
+<div class="type-card active">
+  <h3>screen</h3>
+  <p>用于屏幕设备（电脑、平板、手机等）</p>
+  <p><code>@media screen { ... }</code></p>
+</div>
+<div class="type-card">
+  <h3>all</h3>
+  <p>适用于所有设备（默认值）</p>
+  <p><code>@media all { ... }</code></p>
+</div>
+<div class="type-card">
+  <h3>print</h3>
+  <p>用于打印预览和打印页面</p>
+  <p><code>@media print { ... }</code></p>
+</div>
+<div class="type-card">
+  <h3>speech</h3>
+  <p>用于语音合成器和屏幕阅读器</p>
+  <p><code>@media speech { ... }</code></p>
+</div>
+
+<h2>已弃用的媒体类型</h2>
+<div class="type-card deprecated"><h3>tty</h3><p>电传打字机和终端</p></div>
+<div class="type-card deprecated"><h3>tv</h3><p>电视设备</p></div>
+<div class="type-card deprecated"><h3>projection</h3><p>投影仪</p></div>
+<div class="type-card deprecated"><h3>handheld</h3><p>手持设备</p></div>`;
+
+const presets = [
+  {
+    label: 'screen 样式',
+    css: `@media screen {
+  .demo { background: linear-gradient(135deg, #dbeafe, #e9d5ff); padding: 20px; border-radius: 6px; }
+  .demo h2 { font-size: 22px; font-weight: bold; margin-bottom: 8px; }
+  .demo p { color: #4b5563; }
+  .demo .color-bar { display: flex; gap: 8px; margin-top: 12px; }
+  .demo .swatch { width: 40px; height: 40px; border-radius: 6px; }
+}
+.info { font-size: 12px; color: #666; margin-top: 12px; }`,
+    html: `<div class="demo">
+  <h2>屏幕视图</h2>
+  <p>针对屏幕优化，包含丰富的颜色和交互效果。</p>
+  <div class="color-bar">
+    <div class="swatch" style="background:#3b82f6"></div>
+    <div class="swatch" style="background:#8b5cf6"></div>
+    <div class="swatch" style="background:#ec4899"></div>
+  </div>
+</div>
+<div class="info">@media screen { ... } -- 只在屏幕设备上生效</div>`,
+  },
+  {
+    label: 'print 样式',
+    css: `@media print {
+  body { font-family: Georgia, serif; }
+  .nav, .sidebar { display: none; }
+  a::after { content: " (" attr(href) ")"; font-size: 12px; color: #666; }
+}
+
+/* 模拟打印样式（始终显示） */
+.print-preview {
+  font-family: Georgia, serif;
+  padding: 20px;
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+}
+.print-preview h2 { font-size: 20px; font-weight: bold; margin-bottom: 8px; }
+.print-preview p { line-height: 1.7; font-size: 14px; }
+.print-preview .footer { border-top: 1px solid #ccc; padding-top: 8px; margin-top: 16px; font-size: 12px; color: #999; }
+.info { font-size: 12px; color: #666; margin-top: 12px; }`,
+    html: `<div class="print-preview">
+  <h2>文档标题</h2>
+  <p>这是针对打印优化的视图。移除了背景色、阴影和装饰效果，使用更适合打印的衬线字体。</p>
+  <div class="footer">打印日期: 2025-01-01</div>
+</div>
+<div class="info">@media print { ... } -- 只在打印时生效，隐藏导航等非必要元素</div>`,
+  },
+  {
+    label: 'all 样式',
+    css: `.type-card { border: 1px solid #e5e7eb; border-radius: 6px; padding: 14px; margin-bottom: 10px; }
+.type-card h3 { font-family: monospace; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.type-card p { font-size: 13px; color: #666; }
+.type-card code { font-size: 12px; background: #f1f5f9; padding: 2px 6px; border-radius: 3px; }
+.active { border-color: #3b82f6; background: #eff6ff; }
+.active h3 { color: #3b82f6; }
+.deprecated { opacity: 0.5; border-style: dashed; }
+.deprecated h3 { text-decoration: line-through; }
+h2 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; }`,
+  },
+  {
+    label: '类型选择器对比',
+    css: `table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { border: 1px solid #e5e7eb; padding: 8px 12px; text-align: left; }
+th { background: #f8fafc; font-weight: 600; }
+.yes { color: #16a34a; font-weight: bold; }
+.no  { color: #dc2626; }
+.dep { color: #9ca3af; font-style: italic; }`,
+    html: `<table>
+  <tr><th>媒体类型</th><th>屏幕</th><th>打印</th><th>语音</th><th>状态</th></tr>
+  <tr><td><code>all</code></td><td class="yes">Y</td><td class="yes">Y</td><td class="yes">Y</td><td>现行</td></tr>
+  <tr><td><code>screen</code></td><td class="yes">Y</td><td class="no">N</td><td class="no">N</td><td>现行</td></tr>
+  <tr><td><code>print</code></td><td class="no">N</td><td class="yes">Y</td><td class="no">N</td><td>现行</td></tr>
+  <tr><td><code>speech</code></td><td class="no">N</td><td class="no">N</td><td class="yes">Y</td><td>现行</td></tr>
+  <tr><td class="dep">tty, tv, projection...</td><td colspan="3" class="dep">不再使用</td><td class="dep">已弃用</td></tr>
+</table>`,
+  },
 ];
 
 export function MediaTypeDemo() {
-  const [selectedType, setSelectedType] = useState<MediaType>('screen');
-
-  const renderPreview = () => {
-    switch (selectedType) {
-      case 'all':
-        return (
-          <div className="space-y-4">
-            <div className="text-lg font-semibold text-foreground">通用样式示例</div>
-            <p className="text-foreground">
-              这些样式将应用于所有媒体类型，包括屏幕、打印和语音合成器。
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-blue-500/10 dark:bg-blue-500/20 rounded border border-blue-500/30">
-                <div className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                  屏幕显示
-                </div>
-              </div>
-              <div className="p-4 bg-green-500/10 dark:bg-green-500/20 rounded border border-green-500/30">
-                <div className="text-sm font-medium text-green-700 dark:text-green-300">
-                  打印输出
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case 'screen':
-        return (
-          <div className="space-y-4">
-            <div className="text-lg font-semibold text-foreground">屏幕视图</div>
-            <div className="p-6 bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-500/30 dark:to-purple-500/30 rounded-lg border border-border">
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-foreground">网页内容</div>
-                <p className="text-foreground/80">
-                  这是针对屏幕优化的视图，包含丰富的颜色、阴影和交互效果。
-                </p>
-                <div className="flex gap-2">
-                  <div className="w-12 h-12 bg-blue-500 rounded-lg shadow-lg" />
-                  <div className="w-12 h-12 bg-purple-500 rounded-lg shadow-lg" />
-                  <div className="w-12 h-12 bg-pink-500 rounded-lg shadow-lg" />
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case 'print':
-        return (
-          <div className="space-y-4">
-            <div className="text-lg font-semibold text-foreground">打印预览</div>
-            <div className="p-6 bg-white dark:bg-gray-900 rounded-lg border-2 border-dashed border-border">
-              <div className="space-y-2 text-black dark:text-white">
-                <div className="text-2xl font-serif font-bold">文档标题</div>
-                <p className="text-sm leading-relaxed">
-                  这是针对打印优化的视图。移除了背景色、阴影和装饰效果，使用更适合打印的字体和布局。文字更清晰，节省墨水。
-                </p>
-                <div className="text-xs text-gray-600 dark:text-gray-400 border-t pt-2 mt-4">
-                  页脚信息 - 打印日期: {new Date().toLocaleDateString('zh-CN')}
-                </div>
-              </div>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              💡 打印样式通常会隐藏导航、侧边栏等非必要元素
-            </div>
-          </div>
-        );
-      case 'speech':
-        return (
-          <div className="space-y-4">
-            <div className="text-lg font-semibold text-foreground">语音合成器视图</div>
-            <div className="p-6 bg-amber-500/10 dark:bg-amber-500/20 rounded-lg border border-amber-500/30">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="text-4xl">🔊</div>
-                  <div>
-                    <div className="font-semibold text-foreground">语音输出优化</div>
-                    <div className="text-sm text-muted-foreground">
-                      为屏幕阅读器优化的内容结构
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-2 text-sm text-foreground">
-                  <p>• 清晰的标题层级</p>
-                  <p>• 语义化的 HTML 结构</p>
-                  <p>• 有意义的 alt 文本</p>
-                  <p>• 可朗读的内容顺序</p>
-                </div>
-              </div>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              💡 语音样式可以控制音量、语速、停顿等属性
-            </div>
-          </div>
-        );
-    }
-  };
-
   return (
-    <div className="space-y-6">
-      {/* Media Type Buttons */}
-      <div>
-        <label className="text-sm text-muted-foreground mb-2 block">选择媒体类型</label>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          {MEDIA_TYPES.map((type) => (
-            <button
-              key={type.name}
-              onClick={() => setSelectedType(type.name as MediaType)}
-              className={`p-4 text-left rounded-lg border transition-colors ${
-                selectedType === type.name
-                  ? 'bg-primary text-primary-foreground border-primary dark:bg-primary dark:text-primary-foreground'
-                  : 'bg-secondary hover:bg-secondary/80 border-border dark:bg-secondary dark:hover:bg-secondary/80'
-              }`}
-            >
-              <div className="font-mono text-sm font-bold">{type.label}</div>
-              <div className="text-xs opacity-80 mt-1">{type.description}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Preview Area */}
-      <div className="rounded-lg border border-border bg-muted/30 dark:bg-muted/20 p-8">
-        {renderPreview()}
-      </div>
-
-      {/* Media Query Explanation */}
-      <div className="rounded-lg border border-border bg-muted/50 dark:bg-muted/30 p-4">
-        <div className="text-xs text-muted-foreground mb-2">当前媒体类型说明：</div>
-        <div className="text-sm text-foreground">
-          {MEDIA_TYPES.find((t) => t.name === selectedType)?.description}
-        </div>
-      </div>
-
-      {/* Deprecated Types */}
-      <div>
-        <div className="text-sm text-muted-foreground mb-2">已弃用的媒体类型</div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          {DEPRECATED_TYPES.map((type) => (
-            <div
-              key={type.name}
-              className="p-3 rounded-lg bg-muted/50 dark:bg-muted/30 border border-border opacity-50"
-            >
-              <div className="font-mono text-xs line-through">{type.label}</div>
-              <div className="text-[10px] text-muted-foreground mt-1">{type.description}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* CSS Code Output */}
-      <div className="rounded-lg border border-border bg-muted p-4">
-        <div className="text-xs text-muted-foreground mb-2">CSS 示例代码：</div>
-        <pre className="text-sm font-mono text-foreground whitespace-pre-wrap">
-          {MEDIA_TYPES.find((t) => t.name === selectedType)?.example}
-        </pre>
-      </div>
-    </div>
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={480}
+    />
   );
 }

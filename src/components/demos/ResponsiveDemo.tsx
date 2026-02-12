@@ -1,276 +1,242 @@
 'use client';
 
-import { useState } from 'react';
+import { DemoPlayground } from './DemoPlayground';
 
-type ViewportSize = 'mobile' | 'tablet' | 'desktop' | 'widescreen';
-
-interface Viewport {
-  name: ViewportSize;
-  label: string;
-  width: number;
-  icon: string;
-}
-
-const VIEWPORTS: Viewport[] = [
-  { name: 'mobile', label: '手机', width: 375, icon: '📱' },
-  { name: 'tablet', label: '平板', width: 768, icon: '📱' },
-  { name: 'desktop', label: '桌面', width: 1024, icon: '💻' },
-  { name: 'widescreen', label: '宽屏', width: 1440, icon: '🖥️' },
-];
-
-export function ResponsiveDemo() {
-  const [selectedViewport, setSelectedViewport] = useState<ViewportSize>('desktop');
-  const [customWidth, setCustomWidth] = useState(1024);
-  const [useCustom, setUseCustom] = useState(false);
-
-  const currentWidth = useCustom
-    ? customWidth
-    : VIEWPORTS.find((v) => v.name === selectedViewport)?.width || 1024;
-
-  const getLayoutColumns = () => {
-    if (currentWidth < 576) return 1;
-    if (currentWidth < 768) return 1;
-    if (currentWidth < 1024) return 2;
-    return 3;
-  };
-
-  const showNavFull = currentWidth >= 768;
-  const fontSize = currentWidth < 576 ? 14 : currentWidth < 1024 ? 16 : 18;
-
-  const generateCSS = () => {
-    return `/* 移动优先的响应式设计 */
+const defaultCSS = `/* 移动优先的响应式布局 */
 
 /* 基础样式（手机） */
-.container {
-  width: 100%;
-  padding: 1rem;
+.header {
+  background: #1e40af;
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+.logo { font-weight: bold; font-size: 16px; }
+.hamburger { font-size: 20px; cursor: pointer; }
+.nav { display: none; }
+
+.hero {
+  background: linear-gradient(135deg, #dbeafe, #e9d5ff);
+  padding: 20px 16px;
+}
+.hero h1 { font-size: 20px; font-weight: bold; margin-bottom: 8px; }
+.hero p { font-size: 13px; color: #4b5563; }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 8px;
+  padding: 16px;
+}
+.card {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+}
+.card .num { font-size: 24px; font-weight: bold; color: #3b82f6; }
+.card .label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+.status {
+  padding: 8px 16px;
+  font-size: 12px;
+  color: #666;
+  background: #f1f5f9;
+  font-family: monospace;
 }
 
-.nav {
-  display: none; /* 隐藏导航，显示汉堡菜单 */
+/* 平板 (>= 480px) */
+@media (min-width: 480px) {
+  .nav { display: flex; gap: 16px; font-size: 14px; }
+  .hamburger { display: none; }
+  .hero h1 { font-size: 24px; }
+  .grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-.font-size {
+/* 桌面 (>= 700px) */
+@media (min-width: 700px) {
+  .hero { padding: 30px 24px; }
+  .hero h1 { font-size: 28px; }
+  .hero p { font-size: 15px; }
+  .grid { grid-template-columns: repeat(3, 1fr); padding: 24px; }
+}`;
+
+const defaultHTML = `<div class="header">
+  <div class="logo">网站 Logo</div>
+  <nav class="nav">
+    <span>首页</span>
+    <span>关于</span>
+    <span>服务</span>
+    <span>联系</span>
+  </nav>
+  <div class="hamburger">&#9776;</div>
+</div>
+
+<div class="hero">
+  <h1>响应式布局示例</h1>
+  <p>调整窗口宽度观察布局变化 -- 导航、网格列数、间距都会自适应。</p>
+</div>
+
+<div class="grid">
+  <div class="card"><div class="num">1</div><div class="label">项目一</div></div>
+  <div class="card"><div class="num">2</div><div class="label">项目二</div></div>
+  <div class="card"><div class="num">3</div><div class="label">项目三</div></div>
+  <div class="card"><div class="num">4</div><div class="label">项目四</div></div>
+  <div class="card"><div class="num">5</div><div class="label">项目五</div></div>
+  <div class="card"><div class="num">6</div><div class="label">项目六</div></div>
+</div>
+
+<div class="status">
+  基础(1列) | >= 480px(2列+导航) | >= 700px(3列+大间距)
+</div>`;
+
+const presets = [
+  {
+    label: '移动优先',
+    css: `.header { background: #1e40af; color: white; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-weight: bold; font-size: 16px; }
+.hamburger { font-size: 20px; }
+.nav { display: none; }
+.hero { background: linear-gradient(135deg, #dbeafe, #e9d5ff); padding: 20px 16px; }
+.hero h1 { font-size: 20px; font-weight: bold; margin-bottom: 8px; }
+.hero p { font-size: 13px; color: #4b5563; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 16px; }
+.card { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; text-align: center; }
+.card .num { font-size: 24px; font-weight: bold; color: #3b82f6; }
+.card .label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+.status { padding: 8px 16px; font-size: 12px; color: #666; background: #f1f5f9; font-family: monospace; }
+
+@media (min-width: 480px) {
+  .nav { display: flex; gap: 16px; font-size: 14px; }
+  .hamburger { display: none; }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 700px) {
+  .hero { padding: 30px 24px; }
+  .hero h1 { font-size: 28px; }
+  .grid { grid-template-columns: repeat(3, 1fr); padding: 24px; }
+}`,
+  },
+  {
+    label: '弹性图片',
+    css: `.gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 16px;
+}
+.img-box {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-radius: 6px;
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #3b82f6;
+  font-weight: 600;
+}
+/* 弹性图片核心规则 */
+img { max-width: 100%; height: auto; }
+
+@media (min-width: 400px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 600px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
+
+.note { padding: 12px 16px; font-size: 12px; color: #666; background: #f1f5f9; }`,
+    html: `<div class="gallery">
+  <div class="img-box">图片 1</div>
+  <div class="img-box">图片 2</div>
+  <div class="img-box">图片 3</div>
+  <div class="img-box">图片 4</div>
+  <div class="img-box">图片 5</div>
+  <div class="img-box">图片 6</div>
+</div>
+<div class="note">弹性图片：使用 max-width: 100% 确保图片不会溢出容器。</div>`,
+  },
+  {
+    label: '流式布局',
+    css: `.container {
+  max-width: 100%;
+  padding: 16px;
+}
+.fluid-box {
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  border-radius: 6px;
+  padding: 5%;
+  margin-bottom: 12px;
   font-size: 14px;
 }
-
-/* 平板（≥768px） */
-@media (min-width: 768px) {
-  .container {
-    padding: 2rem;
-  }
-
-  .nav {
-    display: flex; /* 显示完整导航 */
-  }
-
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .font-size {
-    font-size: 16px;
-  }
+.two-col {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
-
-/* 桌面（≥1024px） */
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .font-size {
-    font-size: 18px;
-    line-height: 1.6;
-  }
+.col {
+  flex: 1 1 200px;
+  min-width: 0;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  padding: 16px;
+  font-size: 13px;
 }
+.note { font-size: 12px; color: #666; margin-top: 12px; }`,
+    html: `<div class="container">
+  <div class="fluid-box">
+    <strong>流式布局：</strong>使用百分比和 flex 实现自适应宽度。padding 使用 5%，随容器宽度缩放。
+  </div>
+  <div class="two-col">
+    <div class="col"><strong>左栏</strong><br>flex: 1 1 200px 使列在窄屏时自动堆叠。</div>
+    <div class="col"><strong>右栏</strong><br>最小宽度 200px，小于此值时换行。</div>
+  </div>
+  <div class="note">流式布局不需要媒体查询 -- 使用弹性单位自然适配。</div>
+</div>`,
+  },
+  {
+    label: '设计模式总结',
+    css: `.pattern {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.pattern h3 { font-size: 14px; font-weight: 700; color: #3b82f6; margin-bottom: 4px; }
+.pattern p { font-size: 12px; color: #666; }
+.pattern code { font-size: 11px; background: #f1f5f9; padding: 2px 6px; border-radius: 3px; }`,
+    html: `<div class="pattern">
+  <h3>流式布局 Fluid Grids</h3>
+  <p>使用百分比和 <code>fr</code> 单位替代固定像素</p>
+</div>
+<div class="pattern">
+  <h3>弹性图片 Flexible Images</h3>
+  <p>使用 <code>max-width: 100%</code> 约束图片宽度</p>
+</div>
+<div class="pattern">
+  <h3>媒体查询 Media Queries</h3>
+  <p>在断点处调整布局: <code>@media (min-width: 768px)</code></p>
+</div>
+<div class="pattern">
+  <h3>移动优先 Mobile First</h3>
+  <p>先写手机样式，用 <code>min-width</code> 逐步增强</p>
+</div>
+<div class="pattern">
+  <h3>容器查询 Container Queries</h3>
+  <p>基于容器而非视口尺寸: <code>@container (min-width: 400px)</code></p>
+</div>`,
+  },
+];
 
-/* 宽屏（≥1440px） */
-@media (min-width: 1440px) {
-  .container {
-    max-width: 1400px;
-    padding: 3rem;
-  }
-}`;
-  };
-
+export function ResponsiveDemo() {
   return (
-    <div className="space-y-6">
-      {/* Viewport Selector */}
-      <div className="space-y-3">
-        <label className="text-sm text-muted-foreground block">选择视口大小</label>
-        <div className="flex flex-wrap gap-2">
-          {VIEWPORTS.map((viewport) => (
-            <button
-              key={viewport.name}
-              onClick={() => {
-                setSelectedViewport(viewport.name);
-                setUseCustom(false);
-              }}
-              className={`px-4 py-2 text-sm rounded-md transition-colors flex items-center gap-2 ${
-                selectedViewport === viewport.name && !useCustom
-                  ? 'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground'
-                  : 'bg-secondary hover:bg-secondary/80 dark:bg-secondary dark:hover:bg-secondary/80'
-              }`}
-            >
-              <span>{viewport.icon}</span>
-              <span>{viewport.label}</span>
-              <span className="text-xs opacity-70">({viewport.width}px)</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Custom Width Slider */}
-        <div className="space-y-2 pt-2">
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={useCustom}
-              onChange={(e) => setUseCustom(e.target.checked)}
-              className="w-4 h-4 accent-blue-500"
-              id="custom-width"
-            />
-            <label htmlFor="custom-width" className="text-sm text-muted-foreground cursor-pointer">
-              自定义宽度: {customWidth}px
-            </label>
-          </div>
-          {useCustom && (
-            <input
-              type="range"
-              min={320}
-              max={1920}
-              value={customWidth}
-              onChange={(e) => setCustomWidth(Number(e.target.value))}
-              className="w-full h-1.5 accent-blue-500"
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Preview Container */}
-      <div className="rounded-lg border border-border bg-muted/30 dark:bg-muted/20 p-4">
-        <div className="flex justify-center">
-          <div
-            className="border-2 border-border rounded-lg overflow-hidden bg-background shadow-lg transition-all duration-300"
-            style={{ width: `${Math.min(currentWidth, 1200)}px`, maxWidth: '100%' }}
-          >
-            {/* Header/Nav */}
-            <div className="bg-primary text-primary-foreground p-3 flex items-center justify-between">
-              <div className="font-bold" style={{ fontSize: `${fontSize}px` }}>
-                网站 Logo
-              </div>
-              {showNavFull ? (
-                <div className="flex gap-4 text-sm">
-                  <span>首页</span>
-                  <span>关于</span>
-                  <span>服务</span>
-                  <span>联系</span>
-                </div>
-              ) : (
-                <div className="text-2xl">☰</div>
-              )}
-            </div>
-
-            {/* Main Content */}
-            <div className="p-4" style={{ fontSize: `${fontSize}px` }}>
-              {/* Hero Section */}
-              <div
-                className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 dark:from-blue-500/30 dark:to-purple-500/30 rounded-lg p-6 mb-4"
-                style={{
-                  padding: currentWidth < 576 ? '1rem' : '1.5rem',
-                }}
-              >
-                <div className="font-bold mb-2" style={{ fontSize: `${fontSize * 1.5}px` }}>
-                  响应式布局示例
-                </div>
-                <p className="text-muted-foreground text-sm">
-                  当前宽度: {currentWidth}px
-                </p>
-              </div>
-
-              {/* Grid Layout */}
-              <div
-                className="grid gap-3"
-                style={{
-                  gridTemplateColumns: `repeat(${getLayoutColumns()}, 1fr)`,
-                }}
-              >
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="aspect-square rounded-lg bg-muted/50 dark:bg-muted/30 border border-border flex items-center justify-center"
-                  >
-                    <span className="text-sm text-muted-foreground">项目 {i + 1}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Info Section */}
-              <div className="mt-4 p-4 bg-muted/50 dark:bg-muted/30 rounded-lg">
-                <div className="text-xs text-muted-foreground space-y-1">
-                  <div>• 列数: {getLayoutColumns()}</div>
-                  <div>• 导航: {showNavFull ? '完整' : '汉堡菜单'}</div>
-                  <div>• 字体大小: {fontSize}px</div>
-                  <div>
-                    • 断点:{' '}
-                    {currentWidth < 576
-                      ? '移动'
-                      : currentWidth < 768
-                      ? '小平板'
-                      : currentWidth < 1024
-                      ? '平板'
-                      : '桌面'}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Active Rules */}
-      <div className="rounded-lg border border-border bg-muted/50 dark:bg-muted/30 p-4">
-        <div className="text-xs text-muted-foreground mb-2">当前激活的样式规则：</div>
-        <div className="space-y-1 text-sm font-mono text-foreground">
-          <div>✓ 基础样式（所有设备）</div>
-          {currentWidth >= 768 && <div>✓ 平板样式 (min-width: 768px)</div>}
-          {currentWidth >= 1024 && <div>✓ 桌面样式 (min-width: 1024px)</div>}
-          {currentWidth >= 1440 && <div>✓ 宽屏样式 (min-width: 1440px)</div>}
-        </div>
-      </div>
-
-      {/* Design Patterns Info */}
-      <div className="rounded-lg border border-blue-500/30 bg-blue-500/10 dark:bg-blue-500/20 p-4">
-        <div className="text-sm font-semibold text-blue-700 dark:text-blue-300 mb-2">
-          响应式设计模式
-        </div>
-        <div className="text-xs text-blue-600 dark:text-blue-400 space-y-1">
-          <div>• 流式布局（Fluid Grids）：使用百分比和 fr 单位</div>
-          <div>• 弹性图片（Flexible Images）：max-width: 100%</div>
-          <div>• 媒体查询（Media Queries）：断点适配</div>
-          <div>• 移动优先（Mobile First）：从小屏开始设计</div>
-          <div>• 容器查询（Container Queries）：基于容器尺寸的样式</div>
-        </div>
-      </div>
-
-      {/* CSS Code Output */}
-      <div className="rounded-lg border border-border bg-muted p-4">
-        <div className="text-xs text-muted-foreground mb-2">响应式 CSS 代码：</div>
-        <pre className="text-sm font-mono text-foreground whitespace-pre-wrap overflow-x-auto">
-          {generateCSS()}
-        </pre>
-      </div>
-    </div>
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={480}
+    />
   );
 }

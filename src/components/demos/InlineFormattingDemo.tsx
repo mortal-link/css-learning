@@ -1,392 +1,187 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Badge } from '@/components/ui/badge'
+import { DemoPlayground } from './DemoPlayground';
 
-type VerticalAlignValue = 'baseline' | 'top' | 'middle' | 'bottom' | 'text-top' | 'text-bottom' | 'sub' | 'super'
-
-interface Preset {
-  name: string
-  fontSize1: number
-  fontSize2: number
-  fontSize3: number
-  lineHeight: number
-  verticalAlign: VerticalAlignValue
+const defaultCSS = `/* 行内格式化模型 */
+.line-box {
+  line-height: 1.8;
+  border: 2px solid #a78bfa;
+  background: rgba(167, 139, 250, 0.05);
+  padding: 8px 12px;
+  margin: 16px;
+  position: relative;
 }
-
-const presets: Preset[] = [
-  { name: '默认基线', fontSize1: 16, fontSize2: 16, fontSize3: 16, lineHeight: 1.5, verticalAlign: 'baseline' },
-  { name: '大小混排', fontSize1: 14, fontSize2: 24, fontSize3: 14, lineHeight: 1.8, verticalAlign: 'baseline' },
-  { name: '上标下标', fontSize1: 16, fontSize2: 12, fontSize3: 16, lineHeight: 1.5, verticalAlign: 'super' },
-  { name: '行高撑开', fontSize1: 16, fontSize2: 16, fontSize3: 16, lineHeight: 3, verticalAlign: 'baseline' },
-]
-
-export function InlineFormattingDemo() {
-  const [fontSize1, setFontSize1] = useState(16)
-  const [fontSize2, setFontSize2] = useState(24)
-  const [fontSize3, setFontSize3] = useState(16)
-  const [lineHeight, setLineHeight] = useState(1.8)
-  const [verticalAlign, setVerticalAlign] = useState<VerticalAlignValue>('baseline')
-  const [showAnnotations, setShowAnnotations] = useState(true)
-
-  const handlePreset = (preset: Preset) => {
-    setFontSize1(preset.fontSize1)
-    setFontSize2(preset.fontSize2)
-    setFontSize3(preset.fontSize3)
-    setLineHeight(preset.lineHeight)
-    setVerticalAlign(preset.verticalAlign)
-  }
-
-  const getCSSCode = () => {
-    return `.line-box {
-  line-height: ${lineHeight};
-  /* line-height 决定行框高度 */
+.line-box-label {
+  position: absolute;
+  top: -10px;
+  left: 8px;
+  background: white;
+  padding: 0 6px;
+  font-size: 11px;
+  color: #7c3aed;
+  font-weight: 500;
 }
 
 .text-1 {
-  font-size: ${fontSize1}px;
-  vertical-align: baseline;
+  font-size: 16px;
+  color: #334155;
+  background: rgba(59, 130, 246, 0.1);
+  border-bottom: 2px solid #3b82f6;
 }
-
 .text-2 {
-  font-size: ${fontSize2}px;
-  vertical-align: ${verticalAlign};
-  /* 调整基线对齐方式 */
+  font-size: 24px;
+  font-weight: bold;
+  color: #e11d48;
+  background: rgba(225, 29, 72, 0.1);
+  border-bottom: 2px solid #e11d48;
+  vertical-align: baseline;
+}
+.text-3 {
+  font-size: 16px;
+  color: #334155;
+  background: rgba(34, 197, 94, 0.1);
+  border-bottom: 2px solid #22c55e;
 }
 
-.text-3 {
-  font-size: ${fontSize3}px;
-  vertical-align: baseline;
-}`
-  }
+.baseline-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #dc2626;
+  text-align: right;
+}
 
-  const calculateLineBoxHeight = () => {
-    const maxFontSize = Math.max(fontSize1, fontSize2, fontSize3)
-    return maxFontSize * lineHeight
-  }
+.legend {
+  margin: 12px 16px;
+  padding: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #475569;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-color {
+  width: 16px;
+  height: 12px;
+  border-radius: 2px;
+}
 
-  const calculateHalfLeading = (fontSize: number) => {
-    const leading = fontSize * lineHeight - fontSize
-    return leading / 2
-  }
+.info {
+  margin: 8px 16px;
+  padding: 10px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #1e40af;
+  line-height: 1.6;
+}`;
 
-  const verticalAlignOptions: VerticalAlignValue[] = [
-    'baseline',
-    'top',
-    'middle',
-    'bottom',
-    'text-top',
-    'text-bottom',
-    'sub',
-    'super',
-  ]
+const defaultHTML = `<div class="line-box">
+  <span class="line-box-label">行框 (Line Box)</span>
+  <span class="text-1">普通文本</span>
+  <span class="text-2">重点内容</span>
+  <span class="text-3">后续文字</span>
+  <span class="baseline-note">← 基线 (baseline)</span>
+</div>
+<div class="legend">
+  <span class="legend-item"><span class="legend-color" style="border:2px solid #a78bfa;"></span> 行框</span>
+  <span class="legend-item"><span class="legend-color" style="background:rgba(59,130,246,0.1);border-bottom:2px solid #3b82f6;"></span> 文本1</span>
+  <span class="legend-item"><span class="legend-color" style="background:rgba(225,29,72,0.1);border-bottom:2px solid #e11d48;"></span> 文本2</span>
+  <span class="legend-item"><span class="legend-color" style="background:rgba(34,197,94,0.1);border-bottom:2px solid #22c55e;"></span> 文本3</span>
+</div>
+<div class="info">
+  行内格式化：每个行内元素生成一个行内框。行框高度由 line-height 决定，元素通过 vertical-align 控制垂直对齐。
+</div>`;
 
+const presets = [
+  {
+    label: '默认基线',
+  },
+  {
+    label: '大小混排',
+    css: `.line-box {
+  line-height: 1.8; border: 2px solid #a78bfa; background: rgba(167,139,250,0.05);
+  padding: 8px 12px; margin: 16px; position: relative;
+}
+.line-box-label { position: absolute; top: -10px; left: 8px; background: white; padding: 0 6px; font-size: 11px; color: #7c3aed; }
+.text-1 { font-size: 14px; color: #334155; background: rgba(59,130,246,0.1); border-bottom: 2px solid #3b82f6; }
+.text-2 { font-size: 32px; font-weight: bold; color: #e11d48; background: rgba(225,29,72,0.1); border-bottom: 2px solid #e11d48; vertical-align: baseline; }
+.text-3 { font-size: 14px; color: #334155; background: rgba(34,197,94,0.1); border-bottom: 2px solid #22c55e; }
+.info { margin: 8px 16px; padding: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 13px; color: #1e40af; line-height: 1.6; }`,
+    html: `<div class="line-box">
+  <span class="line-box-label">行框 (Line Box)</span>
+  <span class="text-1">小号文字</span>
+  <span class="text-2">大号文字</span>
+  <span class="text-3">小号文字</span>
+</div>
+<div class="info">大小混排时，行框高度由最大字号的行内框决定。所有元素默认在基线上对齐。</div>`,
+  },
+  {
+    label: 'vertical-align',
+    css: `.line-box {
+  line-height: 2; border: 2px solid #a78bfa; background: rgba(167,139,250,0.05);
+  padding: 8px 12px; margin: 16px; position: relative;
+}
+.line-box-label { position: absolute; top: -10px; left: 8px; background: white; padding: 0 6px; font-size: 11px; color: #7c3aed; }
+.text-1 { font-size: 16px; color: #334155; background: rgba(59,130,246,0.1); }
+.text-top { font-size: 12px; color: #0369a1; background: rgba(3,105,161,0.1); vertical-align: top; }
+.text-mid { font-size: 12px; color: #7c3aed; background: rgba(124,58,237,0.1); vertical-align: middle; }
+.text-bot { font-size: 12px; color: #b45309; background: rgba(180,83,9,0.1); vertical-align: bottom; }
+.text-sup { font-size: 10px; color: #dc2626; background: rgba(220,38,38,0.1); vertical-align: super; }
+.text-sub { font-size: 10px; color: #16a34a; background: rgba(22,163,74,0.1); vertical-align: sub; }
+.info { margin: 8px 16px; padding: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 13px; color: #1e40af; line-height: 1.6; }`,
+    html: `<div class="line-box">
+  <span class="line-box-label">vertical-align 对齐</span>
+  <span class="text-1">基准</span>
+  <span class="text-top">top</span>
+  <span class="text-mid">middle</span>
+  <span class="text-bot">bottom</span>
+  <span class="text-sup">super</span>
+  <span class="text-sub">sub</span>
+</div>
+<div class="info">vertical-align 控制行内元素在行框内的垂直对齐方式。常用值：baseline(默认)、top、middle、bottom、super、sub。</div>`,
+  },
+  {
+    label: '行高撑开',
+    css: `.line-box {
+  line-height: 3;
+  border: 2px solid #a78bfa;
+  background: rgba(167,139,250,0.05);
+  padding: 8px 12px;
+  margin: 16px;
+  position: relative;
+}
+.line-box-label { position: absolute; top: -10px; left: 8px; background: white; padding: 0 6px; font-size: 11px; color: #7c3aed; }
+.text-1 { font-size: 16px; color: #334155; background: rgba(59,130,246,0.1); border-bottom: 2px solid #3b82f6; }
+.info { margin: 8px 16px; padding: 10px; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 6px; font-size: 13px; color: #5b21b6; line-height: 1.6; }`,
+    html: `<div class="line-box">
+  <span class="line-box-label">line-height: 3</span>
+  <span class="text-1">文本内容</span>
+</div>
+<div class="info">
+  line-height: 3 = font-size × 3。<br>
+  leading（行距）= line-height - font-size，平分为上下两个 half-leading。<br>
+  此例：16px × 3 = 48px 行框高度，leading = 48 - 16 = 32px，每侧 half-leading = 16px。
+</div>`,
+  },
+];
+
+export function InlineFormattingDemo() {
   return (
-    <div className="space-y-4">
-      {/* Preset Scenarios */}
-      <div className="flex flex-wrap gap-2">
-        <span className="text-sm font-medium text-foreground mr-2">预设场景:</span>
-        {presets.map((preset) => (
-          <button
-            key={preset.name}
-            onClick={() => handlePreset(preset)}
-            className="px-3 py-1.5 text-sm rounded-md bg-muted hover:bg-muted/80 transition-colors"
-          >
-            {preset.name}
-          </button>
-        ))}
-      </div>
-
-      {/* Controls */}
-      <div className="grid md:grid-cols-2 gap-4">
-        {/* Font Size Controls */}
-        <div className="space-y-3 p-3 bg-muted/30 rounded-lg">
-          <div className="text-sm font-medium mb-2">字体大小 (font-size)</div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm">文本 1</label>
-              <Badge variant="secondary" className="font-mono text-xs">
-                {fontSize1}px
-              </Badge>
-            </div>
-            <input
-              type="range"
-              min="12"
-              max="32"
-              value={fontSize1}
-              onChange={(e) => setFontSize1(Number(e.target.value))}
-              className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-blue-200 dark:bg-blue-900"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm">文本 2 (重点)</label>
-              <Badge variant="secondary" className="font-mono text-xs">
-                {fontSize2}px
-              </Badge>
-            </div>
-            <input
-              type="range"
-              min="12"
-              max="36"
-              value={fontSize2}
-              onChange={(e) => setFontSize2(Number(e.target.value))}
-              className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-rose-200 dark:bg-rose-900"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm">文本 3</label>
-              <Badge variant="secondary" className="font-mono text-xs">
-                {fontSize3}px
-              </Badge>
-            </div>
-            <input
-              type="range"
-              min="12"
-              max="32"
-              value={fontSize3}
-              onChange={(e) => setFontSize3(Number(e.target.value))}
-              className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-green-200 dark:bg-green-900"
-            />
-          </div>
-        </div>
-
-        {/* Line Height & Vertical Align */}
-        <div className="space-y-3 p-3 bg-muted/30 rounded-lg">
-          <div className="text-sm font-medium mb-2">行高与对齐</div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-sm">line-height</label>
-              <Badge variant="secondary" className="font-mono text-xs">
-                {lineHeight.toFixed(1)}
-              </Badge>
-            </div>
-            <input
-              type="range"
-              min="1"
-              max="3"
-              step="0.1"
-              value={lineHeight}
-              onChange={(e) => setLineHeight(Number(e.target.value))}
-              className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-purple-200 dark:bg-purple-900"
-            />
-            <div className="text-xs text-muted-foreground">
-              行框高度: {calculateLineBoxHeight().toFixed(0)}px
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <div className="text-sm font-medium">vertical-align (文本 2)</div>
-            <div className="grid grid-cols-2 gap-1">
-              {verticalAlignOptions.map((value) => (
-                <button
-                  key={value}
-                  onClick={() => setVerticalAlign(value)}
-                  className={`px-2 py-1 text-xs rounded transition-colors ${
-                    verticalAlign === value
-                      ? 'bg-rose-500 text-white dark:bg-rose-600'
-                      : 'bg-muted hover:bg-muted/80'
-                  }`}
-                >
-                  {value}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Annotations Toggle */}
-      <div className="flex items-center gap-2 p-3 bg-muted/30 rounded-lg">
-        <input
-          type="checkbox"
-          id="annotations"
-          checked={showAnnotations}
-          onChange={(e) => setShowAnnotations(e.target.checked)}
-          className="w-4 h-4 rounded border-border"
-        />
-        <label htmlFor="annotations" className="text-sm font-medium">
-          显示注解（基线、内容区、半行距）
-        </label>
-      </div>
-
-      {/* Visual Line Box */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium">行内格式化可视化</div>
-        <div className="p-6 bg-muted/30 rounded-lg border-2 border-dashed border-border overflow-x-auto">
-          <div className="relative inline-block min-w-full">
-            {/* Line Box Container */}
-            <div
-              className="relative border-2 border-purple-500 dark:border-purple-400 bg-purple-50/30 dark:bg-purple-950/20"
-              style={{
-                lineHeight: lineHeight,
-                height: `${calculateLineBoxHeight()}px`,
-              }}
-            >
-              {/* Line Box Label */}
-              <div className="absolute -top-6 left-0 text-xs font-medium text-purple-600 dark:text-purple-400">
-                行框 (Line Box) - {calculateLineBoxHeight().toFixed(0)}px
-              </div>
-
-              {/* Baseline Reference */}
-              {showAnnotations && (
-                <div
-                  className="absolute left-0 right-0 border-t-2 border-dashed border-red-500 dark:border-red-400"
-                  style={{
-                    bottom: `${fontSize1 * 0.2}px`, // Approximate baseline position
-                  }}
-                >
-                  <span className="absolute right-0 -top-4 text-xs text-red-600 dark:text-red-400 bg-background px-1">
-                    基线 (Baseline)
-                  </span>
-                </div>
-              )}
-
-              {/* Inline Elements */}
-              <div className="relative flex items-baseline gap-2 px-2">
-                {/* Text 1 */}
-                <span className="relative inline-block" style={{ fontSize: `${fontSize1}px` }}>
-                  {showAnnotations && (
-                    <>
-                      <span
-                        className="absolute inset-0 border border-blue-400 dark:border-blue-500 bg-blue-200/20 dark:bg-blue-800/20"
-                        style={{
-                          top: `-${calculateHalfLeading(fontSize1)}px`,
-                          bottom: `-${calculateHalfLeading(fontSize1)}px`,
-                        }}
-                      ></span>
-                      <span className="absolute -top-5 left-0 text-[9px] text-blue-600 dark:text-blue-400 whitespace-nowrap">
-                        half-leading: {calculateHalfLeading(fontSize1).toFixed(1)}px
-                      </span>
-                    </>
-                  )}
-                  <span className="relative z-10 text-foreground">普通文本</span>
-                </span>
-
-                {/* Text 2 (Highlighted with vertical-align) */}
-                <span
-                  className="relative inline-block font-bold text-rose-600 dark:text-rose-400"
-                  style={{
-                    fontSize: `${fontSize2}px`,
-                    verticalAlign: verticalAlign,
-                  }}
-                >
-                  {showAnnotations && (
-                    <>
-                      <span
-                        className="absolute inset-0 border border-rose-400 dark:border-rose-500 bg-rose-200/20 dark:bg-rose-800/20"
-                        style={{
-                          top: `-${calculateHalfLeading(fontSize2)}px`,
-                          bottom: `-${calculateHalfLeading(fontSize2)}px`,
-                        }}
-                      ></span>
-                      <span className="absolute -top-5 left-0 text-[9px] text-rose-600 dark:text-rose-400 whitespace-nowrap">
-                        half-leading: {calculateHalfLeading(fontSize2).toFixed(1)}px
-                      </span>
-                    </>
-                  )}
-                  <span className="relative z-10">重点内容</span>
-                </span>
-
-                {/* Text 3 */}
-                <span className="relative inline-block" style={{ fontSize: `${fontSize3}px` }}>
-                  {showAnnotations && (
-                    <>
-                      <span
-                        className="absolute inset-0 border border-green-400 dark:border-green-500 bg-green-200/20 dark:bg-green-800/20"
-                        style={{
-                          top: `-${calculateHalfLeading(fontSize3)}px`,
-                          bottom: `-${calculateHalfLeading(fontSize3)}px`,
-                        }}
-                      ></span>
-                      <span className="absolute -top-5 left-0 text-[9px] text-green-600 dark:text-green-400 whitespace-nowrap">
-                        half-leading: {calculateHalfLeading(fontSize3).toFixed(1)}px
-                      </span>
-                    </>
-                  )}
-                  <span className="relative z-10 text-foreground">后续文字</span>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Legend */}
-          {showAnnotations && (
-            <div className="mt-6 p-3 bg-background rounded border border-border space-y-2">
-              <div className="text-xs font-medium">图例说明:</div>
-              <div className="grid md:grid-cols-2 gap-2 text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-purple-500 dark:border-purple-400"></div>
-                  <span>行框 (Line Box)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-dashed border-red-500 dark:border-red-400"></div>
-                  <span>基线 (Baseline)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border border-blue-400 dark:border-blue-500 bg-blue-200/20 dark:bg-blue-800/20"></div>
-                  <span>内容区 + 半行距</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border border-rose-400 dark:border-rose-500 bg-rose-200/20 dark:bg-rose-800/20"></div>
-                  <span>对齐调整元素</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Concept Explanation */}
-      <div className="grid md:grid-cols-3 gap-4">
-        <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <div className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">
-            内容区 (Content Area)
-          </div>
-          <div className="text-xs text-blue-600 dark:text-blue-400">
-            由字体度量决定的区域，包含字符的字形。不同字体的内容区高度可能不同。
-          </div>
-        </div>
-
-        <div className="p-3 bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 rounded-lg">
-          <div className="text-sm font-medium text-purple-700 dark:text-purple-300 mb-2">
-            行高 (Line Height)
-          </div>
-          <div className="text-xs text-purple-600 dark:text-purple-400">
-            行框的高度。leading = line-height - font-size，平分为上下两个 half-leading。
-          </div>
-        </div>
-
-        <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg">
-          <div className="text-sm font-medium text-red-700 dark:text-red-300 mb-2">
-            基线 (Baseline)
-          </div>
-          <div className="text-xs text-red-600 dark:text-red-400">
-            默认的垂直对齐参考线。大多数字母"坐"在基线上，下伸部分（如 g、p）延伸到基线下方。
-          </div>
-        </div>
-      </div>
-
-      {/* CSS Code Output */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium">CSS 代码</div>
-        <pre className="p-3 bg-gray-900 dark:bg-gray-950 text-gray-100 dark:text-gray-200 rounded-lg text-xs overflow-x-auto">
-          <code>{getCSSCode()}</code>
-        </pre>
-      </div>
-
-      {/* Explanation */}
-      <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
-        <p className="text-sm text-blue-700 dark:text-blue-300">
-          💡 行内格式化中，每个行内元素生成一个行内框。行框的高度由 line-height 决定，元素通过 vertical-align 控制垂直对齐。
-          leading（行距）是 line-height 减去 font-size 的差值，平分为上下两个 half-leading 分布在内容区的上下。
-        </p>
-      </div>
-    </div>
-  )
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={260}
+    />
+  );
 }

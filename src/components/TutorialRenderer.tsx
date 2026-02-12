@@ -55,7 +55,7 @@ function HeadingBlock({ text }: { text: string }) {
 }
 
 function ParagraphBlock({ text }: { text: string }) {
-  return <p className="text-sm leading-relaxed text-muted-foreground">{parseInlineText(text || '')}</p>;
+  return <p className="text-sm leading-relaxed text-foreground/85">{parseInlineText(text || '')}</p>;
 }
 
 function CodeBlock({ code, caption }: { code: string; lang: string; caption?: string }) {
@@ -73,10 +73,10 @@ function CodeBlock({ code, caption }: { code: string; lang: string; caption?: st
 
 function TipBlock({ text }: { text: string }) {
   return (
-    <div className="my-3 rounded-lg border-l-4 border-green-500/70 bg-green-500/5 p-4">
+    <div className="my-3 rounded-lg border-l-4 border-green-500/70 bg-green-500/8 dark:bg-green-500/10 p-4">
       <div className="flex gap-2">
         <span className="shrink-0 text-sm">💡</span>
-        <p className="text-sm leading-relaxed text-muted-foreground">{parseInlineText(text || '')}</p>
+        <p className="text-sm leading-relaxed text-foreground/85">{parseInlineText(text || '')}</p>
       </div>
     </div>
   );
@@ -84,10 +84,10 @@ function TipBlock({ text }: { text: string }) {
 
 function WarningBlock({ text }: { text: string }) {
   return (
-    <div className="my-3 rounded-lg border-l-4 border-amber-500/70 bg-amber-500/5 p-4">
+    <div className="my-3 rounded-lg border-l-4 border-amber-500/70 bg-amber-500/8 dark:bg-amber-500/10 p-4">
       <div className="flex gap-2">
         <span className="shrink-0 text-sm">⚠️</span>
-        <p className="text-sm leading-relaxed text-muted-foreground">{parseInlineText(text || '')}</p>
+        <p className="text-sm leading-relaxed text-foreground/85">{parseInlineText(text || '')}</p>
       </div>
     </div>
   );
@@ -103,7 +103,7 @@ function ExampleBlock({ title, code, explanation }: { title: string; code: strin
         <pre className="rounded-lg bg-muted/50 border p-4 overflow-x-auto text-xs font-mono leading-relaxed">
           <code>{code || ''}</code>
         </pre>
-        <p className="text-sm leading-relaxed text-muted-foreground">{parseInlineText(explanation || '')}</p>
+        <p className="text-sm leading-relaxed text-foreground/80">{parseInlineText(explanation || '')}</p>
       </div>
     </div>
   );
@@ -113,7 +113,7 @@ function ListBlock({ items, ordered }: { items: string[]; ordered?: boolean }) {
   const Tag = ordered ? 'ol' : 'ul';
   const safeItems = items || [];
   return (
-    <Tag className={`my-2 space-y-1.5 text-sm text-muted-foreground ${ordered ? 'list-decimal' : 'list-none'} pl-0`}>
+    <Tag className={`my-2 space-y-1.5 text-sm text-foreground/85 ${ordered ? 'list-decimal' : 'list-none'} pl-0`}>
       {safeItems.map((item, i) => (
         <li key={i} className="flex items-start gap-2">
           {ordered ? (

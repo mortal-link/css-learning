@@ -1,331 +1,187 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { DemoPlayground } from './DemoPlayground';
 
-interface RGB {
-  r: number;
-  g: number;
-  b: number;
+const defaultCSS = `.swatches {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-interface HSL {
-  h: number;
-  s: number;
-  l: number;
+.swatch {
+  height: 80px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
 }
 
-// RGB to HSL conversion
-function rgbToHsl(r: number, g: number, b: number): HSL {
-  const rNorm = r / 255;
-  const gNorm = g / 255;
-  const bNorm = b / 255;
-
-  const max = Math.max(rNorm, gNorm, bNorm);
-  const min = Math.min(rNorm, gNorm, bNorm);
-  const delta = max - min;
-
-  let h = 0;
-  let s = 0;
-  const l = (max + min) / 2;
-
-  if (delta !== 0) {
-    s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
-
-    if (max === rNorm) {
-      h = ((gNorm - bNorm) / delta + (gNorm < bNorm ? 6 : 0)) / 6;
-    } else if (max === gNorm) {
-      h = ((bNorm - rNorm) / delta + 2) / 6;
-    } else {
-      h = ((rNorm - gNorm) / delta + 4) / 6;
-    }
-  }
-
-  return {
-    h: Math.round(h * 360),
-    s: Math.round(s * 100),
-    l: Math.round(l * 100),
-  };
+.swatch-label {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  margin-top: 4px;
+  font-family: monospace;
 }
 
-// HSL to RGB conversion
-function hslToRgb(h: number, s: number, l: number): RGB {
-  const sNorm = s / 100;
-  const lNorm = l / 100;
-  const hNorm = h / 360;
-
-  const hue2rgb = (p: number, q: number, t: number) => {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
-  };
-
-  let r: number, g: number, b: number;
-
-  if (sNorm === 0) {
-    r = g = b = lNorm;
-  } else {
-    const q = lNorm < 0.5 ? lNorm * (1 + sNorm) : lNorm + sNorm - lNorm * sNorm;
-    const p = 2 * lNorm - q;
-    r = hue2rgb(p, q, hNorm + 1 / 3);
-    g = hue2rgb(p, q, hNorm);
-    b = hue2rgb(p, q, hNorm - 1 / 3);
-  }
-
-  return {
-    r: Math.round(r * 255),
-    g: Math.round(g * 255),
-    b: Math.round(b * 255),
-  };
+.formats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
-// RGB to HEX
-function rgbToHex(r: number, g: number, b: number): string {
-  return `#${[r, g, b].map((x) => x.toString(16).padStart(2, '0').toUpperCase()).join('')}`;
+.format-box {
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
 }
 
-// Presets
-const PRESETS = [
-  { name: '番茄红', hex: '#FF6347' },
-  { name: '海洋蓝', hex: '#0077BE' },
-  { name: '森林绿', hex: '#228B22' },
-  { name: '日落橙', hex: '#FF7F50' },
-  { name: '薰衣草', hex: '#E6E6FA' },
-  { name: '珊瑚粉', hex: '#FF7F7F' },
+.format-box .label {
+  font-size: 11px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.format-box code {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.contrast-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.contrast-box {
+  flex: 1;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+  border: 1px solid #e0e0e0;
+}`;
+
+const defaultHTML = `<div class="swatches">
+  <div>
+    <div class="swatch" style="background: rgb(255, 99, 71)"></div>
+    <div class="swatch-label">rgb(255, 99, 71)</div>
+  </div>
+  <div>
+    <div class="swatch" style="background: hsl(9, 100%, 64%)"></div>
+    <div class="swatch-label">hsl(9, 100%, 64%)</div>
+  </div>
+  <div>
+    <div class="swatch" style="background: oklch(0.63 0.26 29)"></div>
+    <div class="swatch-label">oklch(0.63 0.26 29)</div>
+  </div>
+</div>
+
+<div class="contrast-row">
+  <div class="contrast-box" style="background: rgb(255, 99, 71); color: #000;">黑色文字</div>
+  <div class="contrast-box" style="background: rgb(255, 99, 71); color: #fff;">白色文字</div>
+</div>
+
+<div class="formats">
+  <div class="format-box"><div class="label">HEX</div><code>#FF6347</code></div>
+  <div class="format-box"><div class="label">RGB</div><code>rgb(255, 99, 71)</code></div>
+  <div class="format-box"><div class="label">HSL</div><code>hsl(9, 100%, 64%)</code></div>
+  <div class="format-box"><div class="label">OKLCH</div><code>oklch(0.63 0.26 29)</code></div>
+</div>`;
+
+const presets = [
+  {
+    label: '番茄红 (RGB)',
+    css: `.swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.swatch { height: 80px; border-radius: 8px; border: 2px solid #e0e0e0; }
+.swatch-label { font-size: 12px; color: #666; text-align: center; margin-top: 4px; font-family: monospace; }
+.formats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.format-box { padding: 10px; background: #f5f5f5; border-radius: 6px; border: 1px solid #e0e0e0; }
+.format-box .label { font-size: 11px; color: #999; margin-bottom: 4px; }
+.format-box code { font-size: 13px; font-weight: 600; }
+.contrast-row { display: flex; gap: 12px; margin-bottom: 16px; }
+.contrast-box { flex: 1; padding: 16px; border-radius: 8px; text-align: center; font-weight: 600; font-size: 16px; border: 1px solid #e0e0e0; }`,
+    html: `<div class="swatches">
+  <div><div class="swatch" style="background: rgb(255, 99, 71)"></div><div class="swatch-label">rgb(255, 99, 71)</div></div>
+  <div><div class="swatch" style="background: hsl(9, 100%, 64%)"></div><div class="swatch-label">hsl(9, 100%, 64%)</div></div>
+  <div><div class="swatch" style="background: oklch(0.63 0.26 29)"></div><div class="swatch-label">oklch(0.63 0.26 29)</div></div>
+</div>
+<div class="contrast-row">
+  <div class="contrast-box" style="background: rgb(255, 99, 71); color: #000;">黑色文字</div>
+  <div class="contrast-box" style="background: rgb(255, 99, 71); color: #fff;">白色文字</div>
+</div>
+<div class="formats">
+  <div class="format-box"><div class="label">HEX</div><code>#FF6347</code></div>
+  <div class="format-box"><div class="label">RGB</div><code>rgb(255, 99, 71)</code></div>
+  <div class="format-box"><div class="label">HSL</div><code>hsl(9, 100%, 64%)</code></div>
+  <div class="format-box"><div class="label">OKLCH</div><code>oklch(0.63 0.26 29)</code></div>
+</div>`,
+  },
+  {
+    label: '海洋蓝 (HSL)',
+    css: `.swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.swatch { height: 80px; border-radius: 8px; border: 2px solid #e0e0e0; }
+.swatch-label { font-size: 12px; color: #666; text-align: center; margin-top: 4px; font-family: monospace; }
+.formats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.format-box { padding: 10px; background: #f5f5f5; border-radius: 6px; border: 1px solid #e0e0e0; }
+.format-box .label { font-size: 11px; color: #999; margin-bottom: 4px; }
+.format-box code { font-size: 13px; font-weight: 600; }`,
+    html: `<div class="swatches">
+  <div><div class="swatch" style="background: rgb(0, 119, 190)"></div><div class="swatch-label">rgb(0, 119, 190)</div></div>
+  <div><div class="swatch" style="background: hsl(202, 100%, 37%)"></div><div class="swatch-label">hsl(202, 100%, 37%)</div></div>
+  <div><div class="swatch" style="background: oklch(0.55 0.15 245)"></div><div class="swatch-label">oklch(0.55 0.15 245)</div></div>
+</div>
+<div class="formats">
+  <div class="format-box"><div class="label">HEX</div><code>#0077BE</code></div>
+  <div class="format-box"><div class="label">RGB</div><code>rgb(0, 119, 190)</code></div>
+  <div class="format-box"><div class="label">HSL</div><code>hsl(202, 100%, 37%)</code></div>
+  <div class="format-box"><div class="label">OKLCH</div><code>oklch(0.55 0.15 245)</code></div>
+</div>`,
+  },
+  {
+    label: 'OKLCH 色域',
+    css: `.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+.swatch { height: 60px; border-radius: 8px; border: 2px solid #e0e0e0; }
+.swatch-label { font-size: 11px; color: #666; text-align: center; margin-top: 4px; font-family: monospace; }
+.note { padding: 12px; background: #f0f4ff; border-radius: 8px; font-size: 13px; color: #444; line-height: 1.6; }`,
+    html: `<div class="swatches">
+  <div><div class="swatch" style="background: oklch(0.7 0.25 30)"></div><div class="swatch-label">H: 30</div></div>
+  <div><div class="swatch" style="background: oklch(0.7 0.25 90)"></div><div class="swatch-label">H: 90</div></div>
+  <div><div class="swatch" style="background: oklch(0.7 0.25 150)"></div><div class="swatch-label">H: 150</div></div>
+  <div><div class="swatch" style="background: oklch(0.7 0.25 210)"></div><div class="swatch-label">H: 210</div></div>
+  <div><div class="swatch" style="background: oklch(0.7 0.25 270)"></div><div class="swatch-label">H: 270</div></div>
+  <div><div class="swatch" style="background: oklch(0.7 0.25 330)"></div><div class="swatch-label">H: 330</div></div>
+  <div><div class="swatch" style="background: oklch(0.7 0.15 210)"></div><div class="swatch-label">C: 0.15</div></div>
+  <div><div class="swatch" style="background: oklch(0.7 0.05 210)"></div><div class="swatch-label">C: 0.05</div></div>
+</div>
+<div class="note">OKLCH 使用感知均匀的亮度(L)、彩度(C)和色相(H)，比 HSL 更准确地反映人眼感知。</div>`,
+  },
+  {
+    label: 'Lab 色彩空间',
+    css: `.swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.swatch { height: 80px; border-radius: 8px; border: 2px solid #e0e0e0; }
+.swatch-label { font-size: 12px; color: #666; text-align: center; margin-top: 4px; font-family: monospace; }
+.note { padding: 12px; background: #f0f4ff; border-radius: 8px; font-size: 13px; color: #444; line-height: 1.6; }`,
+    html: `<div class="swatches">
+  <div><div class="swatch" style="background: lab(60 80 0)"></div><div class="swatch-label">lab(60 80 0)</div></div>
+  <div><div class="swatch" style="background: lab(60 -80 0)"></div><div class="swatch-label">lab(60 -80 0)</div></div>
+  <div><div class="swatch" style="background: lab(60 0 80)"></div><div class="swatch-label">lab(60 0 80)</div></div>
+  <div><div class="swatch" style="background: lab(60 0 -80)"></div><div class="swatch-label">lab(60 0 -80)</div></div>
+  <div><div class="swatch" style="background: lch(60 80 30)"></div><div class="swatch-label">lch(60 80 30)</div></div>
+  <div><div class="swatch" style="background: lch(60 80 270)"></div><div class="swatch-label">lch(60 80 270)</div></div>
+</div>
+<div class="note">Lab 和 LCH 是 CSS Color Level 4 中的色彩空间，基于人眼感知设计。a 轴表示红绿，b 轴表示蓝黄。</div>`,
+  },
 ];
 
-function hexToRgb(hex: string): RGB {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : { r: 0, g: 0, b: 0 };
-}
-
-interface ColorSliderProps {
-  label: string;
-  value: number;
-  onChange: (value: number) => void;
-  min: number;
-  max: number;
-  color: string;
-}
-
-function ColorSlider({ label, value, onChange, min, max, color }: ColorSliderProps) {
-  return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs text-muted-foreground w-10 text-right font-mono tabular-nums">
-        {value}
-      </span>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className={`flex-1 h-1.5 rounded-full appearance-none cursor-pointer ${color}`}
-      />
-      <span className="text-xs w-8 font-medium">{label}</span>
-    </div>
-  );
-}
-
 export function ColorSpaceExplorer() {
-  const [rgb, setRgb] = useState<RGB>({ r: 255, g: 99, b: 71 }); // Tomato red
-  const [hsl, setHsl] = useState<HSL>(rgbToHsl(255, 99, 71));
-
-  const updateFromRgb = useCallback((newRgb: RGB) => {
-    setRgb(newRgb);
-    setHsl(rgbToHsl(newRgb.r, newRgb.g, newRgb.b));
-  }, []);
-
-  const updateFromHsl = useCallback((newHsl: HSL) => {
-    setHsl(newHsl);
-    setRgb(hslToRgb(newHsl.h, newHsl.s, newHsl.l));
-  }, []);
-
-  const applyPreset = useCallback(
-    (hex: string) => {
-      const newRgb = hexToRgb(hex);
-      updateFromRgb(newRgb);
-    },
-    [updateFromRgb]
-  );
-
-  const currentColor = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-  const complementaryHue = (hsl.h + 180) % 360;
-  const complementaryColor = `hsl(${complementaryHue}, ${hsl.s}%, ${hsl.l}%)`;
-  const hexColor = rgbToHex(rgb.r, rgb.g, rgb.b);
-
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6 p-6 bg-background/50 rounded-lg border border-border">
-      {/* Color Swatches */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <div
-            className="w-full h-32 rounded-lg border-2 border-border shadow-inner"
-            style={{ backgroundColor: currentColor }}
-          />
-          <p className="text-xs text-center text-muted-foreground font-medium">当前颜色</p>
-        </div>
-        <div className="space-y-2">
-          <div
-            className="w-full h-32 rounded-lg border-2 border-border shadow-inner"
-            style={{ backgroundColor: complementaryColor }}
-          />
-          <p className="text-xs text-center text-muted-foreground font-medium">互补色</p>
-        </div>
-      </div>
-
-      {/* Text Contrast Preview */}
-      <div className="grid grid-cols-2 gap-4">
-        <div
-          className="p-4 rounded-lg border border-border flex items-center justify-center"
-          style={{ backgroundColor: currentColor, color: '#000000' }}
-        >
-          <span className="font-medium text-lg">示例文本</span>
-        </div>
-        <div
-          className="p-4 rounded-lg border border-border flex items-center justify-center"
-          style={{ backgroundColor: currentColor, color: '#FFFFFF' }}
-        >
-          <span className="font-medium text-lg">示例文本</span>
-        </div>
-      </div>
-
-      {/* Sliders */}
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* RGB Sliders */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-foreground mb-3">RGB 色彩空间</h3>
-          <ColorSlider
-            label="R"
-            value={rgb.r}
-            onChange={(r) => updateFromRgb({ ...rgb, r })}
-            min={0}
-            max={255}
-            color="bg-gradient-to-r from-black via-red-500 to-red-600"
-          />
-          <ColorSlider
-            label="G"
-            value={rgb.g}
-            onChange={(g) => updateFromRgb({ ...rgb, g })}
-            min={0}
-            max={255}
-            color="bg-gradient-to-r from-black via-green-500 to-green-600"
-          />
-          <ColorSlider
-            label="B"
-            value={rgb.b}
-            onChange={(b) => updateFromRgb({ ...rgb, b })}
-            min={0}
-            max={255}
-            color="bg-gradient-to-r from-black via-blue-500 to-blue-600"
-          />
-        </div>
-
-        {/* HSL Sliders */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-foreground mb-3">HSL 色彩空间</h3>
-          <ColorSlider
-            label="H"
-            value={hsl.h}
-            onChange={(h) => updateFromHsl({ ...hsl, h })}
-            min={0}
-            max={360}
-            color="bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-cyan-500 via-blue-500 via-purple-500 to-red-500"
-          />
-          <ColorSlider
-            label="S"
-            value={hsl.s}
-            onChange={(s) => updateFromHsl({ ...hsl, s })}
-            min={0}
-            max={100}
-            color="bg-gradient-to-r from-muted to-purple-500"
-          />
-          <ColorSlider
-            label="L"
-            value={hsl.l}
-            onChange={(l) => updateFromHsl({ ...hsl, l })}
-            min={0}
-            max={100}
-            color="bg-gradient-to-r from-black via-muted to-white"
-          />
-        </div>
-      </div>
-
-      {/* Format Display */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-foreground">颜色格式</h3>
-        <div className="grid md:grid-cols-2 gap-3">
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <p className="text-xs text-muted-foreground mb-1">HEX</p>
-            <code className="text-sm font-mono font-semibold">{hexColor}</code>
-          </div>
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <p className="text-xs text-muted-foreground mb-1">RGB</p>
-            <code className="text-sm font-mono font-semibold">{`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`}</code>
-          </div>
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <p className="text-xs text-muted-foreground mb-1">HSL</p>
-            <code className="text-sm font-mono font-semibold">{`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`}</code>
-          </div>
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <p className="text-xs text-muted-foreground mb-1">OKLCH</p>
-            <code className="text-sm font-mono font-semibold">{`oklch(${(hsl.l / 100).toFixed(
-              2
-            )} ${(hsl.s / 100).toFixed(2)} ${hsl.h})`}</code>
-          </div>
-        </div>
-      </div>
-
-      {/* CSS Code Output */}
-      <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-foreground">CSS 代码</h3>
-        <div className="p-4 bg-muted/50 rounded-md border border-border font-mono text-sm">
-          <div className="space-y-1">
-            <div>
-              <span className="text-muted-foreground">color:</span>{' '}
-              <span className="text-foreground font-semibold">{hexColor}</span>;
-            </div>
-            <div>
-              <span className="text-muted-foreground">color:</span>{' '}
-              <span className="text-foreground font-semibold">{`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`}</span>
-              ;
-            </div>
-            <div>
-              <span className="text-muted-foreground">color:</span>{' '}
-              <span className="text-foreground font-semibold">{`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`}</span>
-              ;
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Presets */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-foreground">预设颜色</h3>
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-          {PRESETS.map((preset) => (
-            <button
-              key={preset.name}
-              onClick={() => applyPreset(preset.hex)}
-              className="group relative flex flex-col items-center gap-2 p-2 rounded-lg border border-border hover:border-foreground/50 transition-colors"
-            >
-              <div
-                className="w-full h-12 rounded-md border border-border group-hover:scale-105 transition-transform"
-                style={{ backgroundColor: preset.hex }}
-              />
-              <span className="text-xs text-muted-foreground font-medium">{preset.name}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={380}
+    />
   );
 }

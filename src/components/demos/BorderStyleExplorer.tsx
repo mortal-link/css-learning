@@ -1,160 +1,195 @@
 'use client';
 
-import { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
+import { DemoPlayground } from './DemoPlayground';
 
-type BorderStyle =
-  | 'none'
-  | 'hidden'
-  | 'dotted'
-  | 'dashed'
-  | 'solid'
-  | 'double'
-  | 'groove'
-  | 'ridge'
-  | 'inset'
-  | 'outset';
-
-interface StyleInfo {
-  value: BorderStyle;
-  label: string;
-  description: string;
+const defaultCSS = `/* 所有 border-style 值一览 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  padding: 16px;
 }
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+.preview {
+  width: 100%;
+  height: 60px;
+  border-width: 4px;
+  border-color: #334155;
+  background: white;
+  border-radius: 4px;
+}
+.label {
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: 600;
+  color: #334155;
+}
+.note {
+  margin: 0 16px 16px;
+  padding: 10px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #1e40af;
+  line-height: 1.6;
+}`;
 
-const BORDER_STYLES: StyleInfo[] = [
+const defaultHTML = `<div class="grid">
+  <div class="item">
+    <div class="preview" style="border-style: none;"></div>
+    <span class="label">none</span>
+  </div>
+  <div class="item">
+    <div class="preview" style="border-style: hidden;"></div>
+    <span class="label">hidden</span>
+  </div>
+  <div class="item">
+    <div class="preview" style="border-style: dotted;"></div>
+    <span class="label">dotted</span>
+  </div>
+  <div class="item">
+    <div class="preview" style="border-style: dashed;"></div>
+    <span class="label">dashed</span>
+  </div>
+  <div class="item">
+    <div class="preview" style="border-style: solid;"></div>
+    <span class="label">solid</span>
+  </div>
+  <div class="item">
+    <div class="preview" style="border-style: double;"></div>
+    <span class="label">double</span>
+  </div>
+  <div class="item">
+    <div class="preview" style="border-style: groove;"></div>
+    <span class="label">groove</span>
+  </div>
+  <div class="item">
+    <div class="preview" style="border-style: ridge;"></div>
+    <span class="label">ridge</span>
+  </div>
+  <div class="item">
+    <div class="preview" style="border-style: inset;"></div>
+    <span class="label">inset</span>
+  </div>
+  <div class="item">
+    <div class="preview" style="border-style: outset;"></div>
+    <span class="label">outset</span>
+  </div>
+</div>
+<div class="note">
+  3D 效果样式（groove、ridge、inset、outset）取决于 border-color。双线（double）要求 border-width ≥ 3px。
+</div>`;
+
+const presets = [
   {
-    value: 'none',
-    label: 'none',
-    description: '无边框。与 hidden 类似，但在表格边框冲突解析中优先级较低。',
+    label: '所有样式',
   },
   {
-    value: 'hidden',
-    label: 'hidden',
-    description: '无边框。与 none 类似，但在表格边框冲突解析中优先级较高。',
+    label: 'solid 详情',
+    css: `.demo {
+  width: 240px;
+  height: 120px;
+  margin: 24px auto;
+  border: 8px solid #3b82f6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #64748b;
+}
+.desc {
+  text-align: center;
+  font-size: 13px;
+  color: #475569;
+  margin-top: 12px;
+  line-height: 1.6;
+}`,
+    html: `<div class="demo">border-style: solid</div>
+<p class="desc">实线边框，最常用的边框样式。单条实线。</p>`,
   },
   {
-    value: 'dotted',
-    label: 'dotted',
-    description: '点线边框。一系列圆点组成。',
+    label: 'double 详情',
+    css: `.demo {
+  width: 240px;
+  height: 120px;
+  margin: 24px auto;
+  border: 8px double #8b5cf6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #64748b;
+}
+.desc {
+  text-align: center;
+  font-size: 13px;
+  color: #475569;
+  margin-top: 12px;
+  line-height: 1.6;
+}`,
+    html: `<div class="demo">border-style: double</div>
+<p class="desc">双线边框。两条平行实线，线宽之和等于 border-width 值。需要 border-width ≥ 3px 才能看到效果。</p>`,
   },
   {
-    value: 'dashed',
-    label: 'dashed',
-    description: '虚线边框。一系列短线段组成。',
-  },
-  {
-    value: 'solid',
-    label: 'solid',
-    description: '实线边框。单条实线。',
-  },
-  {
-    value: 'double',
-    label: 'double',
-    description: '双线边框。两条平行实线，线宽之和等于 border-width 值。',
-  },
-  {
-    value: 'groove',
-    label: 'groove',
-    description: '凹槽边框。显示为雕刻进页面的效果（3D 效果）。',
-  },
-  {
-    value: 'ridge',
-    label: 'ridge',
-    description: '垄状边框。与 groove 相反，显示为凸出页面的效果。',
-  },
-  {
-    value: 'inset',
-    label: 'inset',
-    description: '内嵌边框。使元素看起来像嵌入页面中（3D 效果）。',
-  },
-  {
-    value: 'outset',
-    label: 'outset',
-    description: '外凸边框。与 inset 相反，使元素看起来凸出页面。',
+    label: '3D 效果对比',
+    css: `.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+.item {
+  height: 100px;
+  border-width: 6px;
+  border-color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  border-radius: 4px;
+  background: #f1f5f9;
+}
+.note {
+  margin: 0 16px 16px;
+  padding: 10px;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #5b21b6;
+}`,
+    html: `<div class="grid">
+  <div class="item" style="border-style: groove;">groove (凹槽)</div>
+  <div class="item" style="border-style: ridge;">ridge (垄状)</div>
+  <div class="item" style="border-style: inset;">inset (内嵌)</div>
+  <div class="item" style="border-style: outset;">outset (外凸)</div>
+</div>
+<div class="note">groove 与 ridge 互为反面；inset 与 outset 互为反面。效果取决于 border-color。</div>`,
   },
 ];
 
 export function BorderStyleExplorer() {
-  const [selectedStyle, setSelectedStyle] = useState<BorderStyle>('solid');
-
-  const selectedInfo = BORDER_STYLES.find((s) => s.value === selectedStyle);
-
   return (
-    <div className="space-y-6 p-6 bg-background border rounded-lg">
-      {/* Grid Display */}
-      <div className="space-y-3">
-        <label className="text-sm font-medium">所有边框样式</label>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {BORDER_STYLES.map((style) => (
-            <button
-              key={style.value}
-              onClick={() => setSelectedStyle(style.value)}
-              className={`flex flex-col items-center gap-3 p-4 rounded-lg border-2 transition-all ${
-                selectedStyle === style.value
-                  ? 'border-primary bg-primary/5 scale-105'
-                  : 'border-border hover:border-muted-foreground/50 hover:bg-muted/50'
-              }`}
-            >
-              <div
-                className="w-full h-20 bg-background rounded"
-                style={{
-                  borderWidth: '4px',
-                  borderStyle: style.value,
-                  borderColor: 'hsl(var(--foreground))',
-                }}
-              />
-              <span className="text-xs font-mono font-medium">{style.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Selected Style Preview */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium">当前选中</label>
-          <Badge variant="secondary">{selectedStyle}</Badge>
-        </div>
-        <div className="bg-muted/30 rounded-lg p-12 flex items-center justify-center">
-          <div
-            className="w-64 h-40 bg-background rounded-lg shadow-lg flex items-center justify-center"
-            style={{
-              borderWidth: '8px',
-              borderStyle: selectedStyle,
-              borderColor: 'hsl(var(--primary))',
-            }}
-          >
-            <span className="text-lg font-medium text-muted-foreground">border-style: {selectedStyle}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Explanation */}
-      {selectedInfo && (
-        <div className="space-y-2">
-          <label className="text-sm font-medium">说明</label>
-          <div className="bg-muted/50 rounded-lg p-4 border border-border">
-            <p className="text-sm text-muted-foreground leading-relaxed">{selectedInfo.description}</p>
-          </div>
-        </div>
-      )}
-
-      {/* CSS Code Output */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">CSS 代码</label>
-        <div className="bg-muted/50 rounded p-3 font-mono text-xs overflow-x-auto">
-          <code className="text-foreground">border-style: {selectedStyle};</code>
-        </div>
-      </div>
-
-      {/* Additional Info */}
-      <div className="bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 rounded-lg p-4">
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          <strong className="text-foreground">提示：</strong>
-          3D 效果样式（groove、ridge、inset、outset）的显示效果取决于 border-color 和背景色。
-          在深色主题下可能不太明显。双线样式（double）要求 border-width 至少为 3px 才能看到效果。
-        </p>
-      </div>
-    </div>
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={360}
+    />
   );
 }

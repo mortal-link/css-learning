@@ -1,245 +1,185 @@
-'use client'
+'use client';
+import { DemoPlayground } from './DemoPlayground';
 
-import { useState } from 'react'
-import { Badge } from '@/components/ui/badge'
-
-type MilestoneData = {
-  id: string
-  year: string
-  title: string
-  status: string
-  features: string[]
-  modules?: Array<{ name: string; status: string }>
+const defaultCSS = `/* CSS1 (1996) — 基础样式能力 */
+.demo {
+  font-family: serif;
+  color: #333;
+  background: #fffff0;
+  padding: 20px;
+  border: 1px solid #ccc;
 }
+.demo h2 {
+  color: navy;
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: underline;
+  margin-bottom: 12px;
+}
+.demo p {
+  text-align: justify;
+  margin-bottom: 8px;
+}
+.demo a {
+  color: blue;
+  text-decoration: none;
+}
+.demo .list {
+  list-style: square;
+  padding-left: 24px;
+  margin-top: 8px;
+}`;
+
+const defaultHTML = `<div class="demo">
+  <h2>CSS 演进历程</h2>
+  <p>从 CSS1 (1996) 的基础样式，到如今的模块化架构，CSS 经历了巨大的变革。</p>
+  <p>点击预设按钮，体验不同时代的 CSS 能力。</p>
+  <a href="#">了解更多 CSS 历史</a>
+  <ul class="list">
+    <li>CSS1: 字体、颜色、基础选择器</li>
+    <li>CSS2: 定位、z-index、媒体类型</li>
+    <li>CSS3+: Flex、Grid、动画、变量</li>
+  </ul>
+</div>`;
+
+const presets = [
+  {
+    label: 'CSS1 (1996)',
+    css: `/* CSS1: 基础选择器 + 字体 + 颜色 + 盒模型 */
+.demo {
+  font-family: Times, serif;
+  color: #333;
+  background: #fffff0;
+  padding: 20px;
+  margin: 10px;
+  border: 1px solid #999;
+}
+.demo h2 {
+  color: navy;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: underline;
+  text-align: center;
+}
+.demo p { text-align: justify; margin-bottom: 8px; }
+.demo a { color: blue; }
+.demo .list { list-style: square; padding-left: 24px; }`,
+  },
+  {
+    label: 'CSS2 (1998)',
+    css: `/* CSS2: 定位 + z-index + 伪元素 + 表格布局 */
+.demo {
+  font-family: Verdana, sans-serif;
+  color: #333;
+  padding: 20px;
+  position: relative;
+  border: 1px solid #ccc;
+  background: white;
+}
+.demo h2 {
+  color: darkgreen;
+  font-size: 22px;
+  border-bottom: 2px solid darkgreen;
+  padding-bottom: 6px;
+}
+.demo h2::before { content: ">> "; color: #999; }
+.demo p { margin-bottom: 8px; }
+.demo a { color: darkgreen; text-decoration: none; }
+.demo a:hover { text-decoration: underline; }
+.demo .list { list-style: disc; padding-left: 24px; }`,
+  },
+  {
+    label: 'CSS3 模块化',
+    css: `/* CSS3+: Flexbox + 圆角 + 阴影 + 渐变 + 过渡 + 变量 */
+:root { --primary: #6366f1; --accent: #ec4899; }
+.demo {
+  font-family: system-ui, sans-serif;
+  color: #1e293b;
+  padding: 24px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f8fafc, #eef2ff);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.demo h2 {
+  color: var(--primary);
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+.demo p { margin-bottom: 10px; line-height: 1.6; }
+.demo a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+.demo a:hover { border-bottom-color: var(--accent); }
+.demo .list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+}
+.demo .list li {
+  padding: 6px 14px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 13px;
+}`,
+  },
+  {
+    label: 'CSS Grid + 动画',
+    css: `/* 现代 CSS: Grid + 动画 + 容器查询 */
+.demo {
+  font-family: system-ui, sans-serif;
+  padding: 24px;
+  border-radius: 16px;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+.demo h2 {
+  color: #38bdf8;
+  font-size: 24px;
+  margin-bottom: 16px;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { text-shadow: 0 0 4px #38bdf8; }
+  to { text-shadow: 0 0 16px #38bdf8, 0 0 30px #0ea5e9; }
+}
+.demo p { margin-bottom: 10px; line-height: 1.6; color: #94a3b8; }
+.demo a { color: #a78bfa; text-decoration: none; }
+.demo .list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin-top: 16px;
+}
+.demo .list li {
+  padding: 10px 14px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  font-size: 13px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.demo .list li:hover {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+}`,
+  },
+];
 
 export function CSSTimelineDemo() {
-  const [selectedMilestone, setSelectedMilestone] = useState<string>('css1')
-
-  const milestones: MilestoneData[] = [
-    {
-      id: 'css1',
-      year: '1996',
-      title: 'CSS1',
-      status: '已废弃',
-      features: [
-        '基本选择器（类型、类、ID）',
-        '字体属性（font-family, font-size, font-weight）',
-        '颜色和背景',
-        '文本属性（text-align, text-decoration）',
-        '盒模型基础（margin, padding, border）',
-      ],
-    },
-    {
-      id: 'css2',
-      year: '1998',
-      title: 'CSS2',
-      status: '已废弃',
-      features: [
-        '定位（position: absolute, relative, fixed）',
-        'z-index 和层叠',
-        '媒体类型（@media screen, print）',
-        '伪元素 ::before, ::after',
-        '表格布局',
-        '光标样式',
-      ],
-    },
-    {
-      id: 'css2.1',
-      year: '2011',
-      title: 'CSS2.1',
-      status: '已废弃',
-      features: [
-        '修复 CSS2 错误和矛盾',
-        '移除未实现的功能',
-        '明确继承和计算值规则',
-        '细化浮动和清除规则',
-        '改进 display 和 visibility',
-      ],
-    },
-    {
-      id: 'css2.2',
-      year: '2017',
-      title: 'CSS2.2',
-      status: '当前稳定版',
-      features: [
-        '进一步修正 CSS2.1',
-        '更新双向文本处理',
-        '细化溢出行为',
-        '改进表格算法',
-        '为 CSS3 模块奠定基础',
-      ],
-    },
-    {
-      id: 'css3',
-      year: '2000s-现在',
-      title: 'CSS3 模块',
-      status: '持续演进',
-      features: [
-        '模块化架构，每个功能独立演进',
-        'Flexbox 和 Grid 布局',
-        '变换、过渡和动画',
-        '媒体查询 Level 4+',
-        '变量（自定义属性）',
-        '新选择器（:is, :where, :has）',
-      ],
-      modules: [
-        { name: 'Selectors L3', status: 'REC' },
-        { name: 'Selectors L4', status: 'WD' },
-        { name: 'Flexbox L1', status: 'CR' },
-        { name: 'Grid L1', status: 'CR' },
-        { name: 'Grid L2', status: 'WD' },
-        { name: 'Box Model L3', status: 'WD' },
-        { name: 'Color L4', status: 'WD' },
-        { name: 'Color L5', status: 'WD' },
-        { name: 'Transforms L1', status: 'CR' },
-        { name: 'Animations L1', status: 'WD' },
-        { name: 'Transitions L1', status: 'WD' },
-        { name: 'Media Queries L4', status: 'CR' },
-        { name: 'Custom Properties', status: 'CR' },
-        { name: 'Cascade L4', status: 'CR' },
-        { name: 'Cascade L5', status: 'WD' },
-      ],
-    },
-    {
-      id: 'snapshots',
-      year: '2023',
-      title: 'CSS Snapshot 2023',
-      status: '最新快照',
-      features: [
-        '所有稳定 CSS 规范的集合',
-        '包含已广泛实现的特性',
-        '每年更新一次',
-        '不包含实验性功能',
-        '浏览器兼容性参考',
-      ],
-    },
-  ]
-
-  const currentMilestone = milestones.find(m => m.id === selectedMilestone)!
-
-  const getStatusColor = (status: string) => {
-    if (status === '已废弃') return 'bg-gray-400'
-    if (status === '当前稳定版') return 'bg-green-500'
-    if (status === '持续演进') return 'bg-blue-500'
-    if (status === '最新快照') return 'bg-purple-500'
-    return 'bg-gray-400'
-  }
-
-  const getModuleStatusColor = (status: string) => {
-    if (status === 'REC') return 'bg-green-600'
-    if (status === 'CR') return 'bg-blue-600'
-    if (status === 'WD') return 'bg-yellow-600'
-    return 'bg-gray-600'
-  }
-
-  const getModuleStatusLabel = (status: string) => {
-    if (status === 'REC') return 'REC (推荐标准)'
-    if (status === 'CR') return 'CR (候选推荐)'
-    if (status === 'WD') return 'WD (工作草案)'
-    return status
-  }
-
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg border border-gray-200">
-      <h3 className="text-lg font-bold mb-4">CSS 演进时间线</h3>
-
-      {/* Timeline */}
-      <div className="mb-8 overflow-x-auto">
-        <div className="flex gap-2 min-w-max pb-4">
-          {milestones.map((milestone, index) => (
-            <div key={milestone.id} className="flex items-center">
-              <button
-                onClick={() => setSelectedMilestone(milestone.id)}
-                className={`flex flex-col items-center justify-center w-32 h-32 rounded-lg border-2 transition-all ${
-                  selectedMilestone === milestone.id
-                    ? 'border-blue-500 bg-blue-50 scale-105 shadow-lg'
-                    : 'border-gray-300 bg-white hover:border-blue-300 hover:shadow-md'
-                }`}
-              >
-                <div className="text-2xl font-bold text-gray-800 mb-1">
-                  {milestone.year}
-                </div>
-                <div className="text-sm font-semibold text-gray-700 mb-2">
-                  {milestone.title}
-                </div>
-                <Badge className={getStatusColor(milestone.status)}>
-                  {milestone.status}
-                </Badge>
-              </button>
-              {index < milestones.length - 1 && (
-                <div className="w-8 h-0.5 bg-gray-300 mx-2"></div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Details Panel */}
-      <div className="p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-blue-200">
-        <div className="flex items-center gap-3 mb-4">
-          <h4 className="text-xl font-bold text-gray-800">
-            {currentMilestone.title}
-          </h4>
-          <Badge className={getStatusColor(currentMilestone.status)}>
-            {currentMilestone.status}
-          </Badge>
-          <span className="text-sm text-gray-600">
-            发布于 {currentMilestone.year}
-          </span>
-        </div>
-
-        <div className="mb-4">
-          <h5 className="text-sm font-semibold text-gray-700 mb-3">关键特性</h5>
-          <ul className="space-y-2">
-            {currentMilestone.features.map((feature, index) => (
-              <li key={index} className="flex items-start gap-2 text-sm">
-                <span className="text-blue-500 mt-0.5">▪</span>
-                <span className="text-gray-700">{feature}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* CSS3 Modules Grid */}
-        {currentMilestone.modules && (
-          <div className="mt-6 pt-6 border-t border-blue-200">
-            <h5 className="text-sm font-semibold text-gray-700 mb-3">
-              模块规范（部分列表）
-            </h5>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-              {currentMilestone.modules.map((module, index) => (
-                <div
-                  key={index}
-                  className="group relative p-2 bg-white rounded border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all cursor-help"
-                  title={getModuleStatusLabel(module.status)}
-                >
-                  <div className="text-xs font-mono text-gray-700 mb-1">
-                    {module.name}
-                  </div>
-                  <Badge
-                    variant="secondary"
-                    className={`text-xs ${getModuleStatusColor(module.status)} text-white`}
-                  >
-                    {module.status}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 p-3 bg-white rounded text-xs text-gray-600 space-y-1">
-              <div><strong>REC (Recommendation)</strong> = W3C 推荐标准，稳定且广泛实现</div>
-              <div><strong>CR (Candidate Recommendation)</strong> = 候选推荐，接近稳定</div>
-              <div><strong>WD (Working Draft)</strong> = 工作草案，仍在演进</div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Info */}
-      <div className="mt-4 p-4 bg-yellow-50 rounded border border-yellow-200">
-        <p className="text-sm text-gray-700">
-          <strong>提示：</strong>CSS3 之后不再有统一的大版本号。每个功能模块独立演进，拥有自己的版本号（如 Selectors Level 4, Grid Layout Level 2）。CSS Snapshot 每年发布一次，汇总所有稳定的规范。
-        </p>
-      </div>
-    </div>
-  )
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+    />
+  );
 }

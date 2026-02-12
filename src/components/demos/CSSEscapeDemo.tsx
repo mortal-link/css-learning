@@ -1,272 +1,121 @@
 'use client';
+import { DemoPlayground } from './DemoPlayground';
 
-import { useState } from 'react';
+const defaultCSS = `/* CSS 转义规则演示 */
+.demo { padding: 16px; font-family: system-ui, sans-serif; }
+.info-box { padding: 12px 16px; background: #fff7ed; border-left: 4px solid #f97316; border-radius: 4px; margin-bottom: 16px; font-size: 13px; color: #9a3412; }
+.scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.scenario { padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; }
+.scenario h4 { font-size: 12px; font-weight: 600; margin: 0 0 4px; }
+.scenario .input { font-family: monospace; font-size: 11px; color: #6b7280; }
+.scenario .output { font-family: monospace; font-size: 12px; color: #16a34a; margin-top: 4px; font-weight: 600; }
+.result-box { padding: 16px; border-radius: 8px; margin-bottom: 12px; }
+.result-original { background: #f9fafb; border: 1px solid #e5e7eb; }
+.result-escaped { background: rgba(168,85,247,0.1); border: 2px solid #a855f7; }
+.result-api { background: #f0fdf4; border: 1px solid #22c55e; }
+.result-label { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
+.result-code { font-family: monospace; font-size: 14px; font-weight: 700; word-break: break-all; }
+.rule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.rule-card { padding: 12px; background: #f9fafb; border-radius: 6px; border: 1px solid #e5e7eb; }
+.rule-card h4 { font-size: 12px; font-weight: 600; margin: 0 0 4px; }
+.rule-card p { font-size: 11px; color: #6b7280; margin: 0 0 8px; }
+.rule-example { font-family: monospace; font-size: 11px; }
+.rule-example .bad { color: #dc2626; }
+.rule-example .good { color: #16a34a; }
+.code-block { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 12px; line-height: 1.6; margin-top: 16px; }
+.code-comment { color: #6a9955; }`;
 
-const PRESETS = [
-  { name: '数字开头', input: '1foo', description: 'class="1foo"' },
-  { name: '特殊字符@', input: 'my@class', description: 'class="my@class"' },
-  { name: '空格', input: 'my class', description: 'class="my class"' },
-  { name: '冒号', input: 'col:12', description: 'class="col:12"' },
-  { name: '方括号', input: 'data[value]', description: 'class="data[value]"' },
-  { name: 'Unicode', input: '测试类名', description: 'class="测试类名"' },
+const defaultHTML = `<div class="demo">
+  <div class="info-box">
+    <strong>CSS 转义规则：</strong>当类名或 ID 包含特殊字符、数字开头或空格时，必须在 CSS 选择器中进行转义。
+  </div>
+
+  <div class="scenario-grid">
+    <div class="scenario"><h4>数字开头</h4><div class="input">class="1foo"</div><div class="output">.\\31 foo</div></div>
+    <div class="scenario"><h4>特殊字符 @</h4><div class="input">class="my@class"</div><div class="output">.my\\@class</div></div>
+    <div class="scenario"><h4>空格</h4><div class="input">class="my class"</div><div class="output">.my\\ class</div></div>
+    <div class="scenario"><h4>冒号</h4><div class="input">class="col:12"</div><div class="output">.col\\:12</div></div>
+    <div class="scenario"><h4>方括号</h4><div class="input">class="data[value]"</div><div class="output">.data\\[value\\]</div></div>
+    <div class="scenario"><h4>Unicode</h4><div class="input">class="测试类名"</div><div class="output">.\\6d4b \\8bd5 \\7c7b \\540d</div></div>
+  </div>
+
+  <div class="result-box result-original">
+    <div class="result-label" style="color:#6b7280;">HTML 属性值（原始）</div>
+    <div class="result-code">class="1foo"</div>
+  </div>
+  <div class="result-box result-escaped">
+    <div class="result-label" style="color:#a855f7;">CSS 选择器（转义后）</div>
+    <div class="result-code">.\\31 foo</div>
+  </div>
+
+  <div class="rule-grid">
+    <div class="rule-card">
+      <h4>数字开头</h4><p>使用 Unicode 码点转义</p>
+      <div class="rule-example"><span class="bad">1</span>foo → <span class="good">\\31 </span>foo</div>
+    </div>
+    <div class="rule-card">
+      <h4>特殊字符</h4><p>在字符前加反斜杠</p>
+      <div class="rule-example">my<span class="bad">@</span>class → my<span class="good">\\@</span>class</div>
+    </div>
+    <div class="rule-card">
+      <h4>空格</h4><p>转义为 \\20 或 \\(空格)</p>
+      <div class="rule-example">my<span class="bad"> </span>class → my<span class="good">\\ </span>class</div>
+    </div>
+    <div class="rule-card">
+      <h4>Unicode 字符</h4><p>可选转义（不强制）</p>
+      <div class="rule-example"><span class="bad">测</span>试 → <span class="good">\\6d4b </span>\\8bd5</div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <span class="code-comment">/* HTML */</span><br>
+    &lt;div class="1foo"&gt;内容&lt;/div&gt;<br><br>
+    <span class="code-comment">/* CSS */</span><br>
+    .\\31 foo {<br>
+    &nbsp;&nbsp;color: red;<br>
+    &nbsp;&nbsp;font-weight: bold;<br>
+    }<br><br>
+    <span class="code-comment">/* JavaScript API */</span><br>
+    const selector = "." + CSS.escape("1foo");<br>
+    document.querySelector(selector);
+  </div>
+</div>`;
+
+const presets = [
+  { label: '数字开头', css: `/* 数字开头类名转义 */
+.demo { padding: 16px; font-family: system-ui; }
+.info-box { padding: 12px 16px; background: #fff7ed; border-left: 4px solid #f97316; border-radius: 4px; margin-bottom: 16px; font-size: 13px; color: #9a3412; }
+.result-box { padding: 16px; border-radius: 8px; margin-bottom: 12px; }
+.result-escaped { background: rgba(168,85,247,0.1); border: 2px solid #a855f7; }
+.result-label { font-size: 11px; font-weight: 600; margin-bottom: 4px; color: #a855f7; }
+.result-code { font-family: monospace; font-size: 14px; font-weight: 700; }
+.code-block { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 12px; line-height: 1.6; margin-top: 16px; }
+.code-comment { color: #6a9955; }
+.\\31 foo { color: red; font-weight: bold; padding: 8px; background: #fef2f2; border-radius: 4px; margin-top: 12px; }`,
+    html: `<div class="demo">
+  <div class="info-box"><strong>数字开头：</strong>CSS 标识符不能以数字开头，需要转义。</div>
+  <div class="result-box result-escaped">
+    <div class="result-label">转义结果</div>
+    <div class="result-code">.\\31 foo { color: red; }</div>
+  </div>
+  <div class="1foo">这个元素的 class 是 "1foo"，已通过转义选择器应用样式</div>
+</div>` },
+  { label: '特殊字符', css: `/* 特殊字符转义 */
+.demo { padding: 16px; font-family: system-ui; }
+.info-box { padding: 12px 16px; background: #fff7ed; border-left: 4px solid #f97316; border-radius: 4px; margin-bottom: 16px; font-size: 13px; color: #9a3412; }
+.scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.scenario { padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; }
+.scenario h4 { font-size: 12px; font-weight: 600; margin: 0 0 4px; }
+.scenario .output { font-family: monospace; font-size: 12px; color: #16a34a; margin-top: 4px; font-weight: 600; }` },
 ];
 
-function escapeCSS(input: string): string {
-  if (!input) return '';
-
-  // Use CSS.escape if available
-  if (typeof CSS !== 'undefined' && CSS.escape) {
-    return CSS.escape(input);
-  }
-
-  // Fallback manual escape
-  let result = '';
-  for (let i = 0; i < input.length; i++) {
-    const char = input[i];
-    const code = char.charCodeAt(0);
-
-    // First character is digit
-    if (i === 0 && char >= '0' && char <= '9') {
-      result += '\\3' + char + ' ';
-      continue;
-    }
-
-    // Special characters that need escaping
-    if ('!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~'.includes(char) || char === ' ') {
-      result += '\\' + char;
-      continue;
-    }
-
-    // Non-ASCII characters (optional escape)
-    if (code > 127) {
-      result += '\\' + code.toString(16) + ' ';
-      continue;
-    }
-
-    result += char;
-  }
-
-  return result;
-}
-
-function generateSelector(input: string, type: 'class' | 'id'): string {
-  if (!input) return '';
-  const escaped = escapeCSS(input);
-  return type === 'class' ? `.${escaped}` : `#${escaped}`;
-}
-
 export function CSSEscapeDemo() {
-  const [input, setInput] = useState('1foo');
-  const [selectorType, setSelectorType] = useState<'class' | 'id'>('class');
-
-  const escapedSelector = generateSelector(input, selectorType);
-
   return (
-    <div className="space-y-6">
-      {/* Info Box */}
-      <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border-l-4 border-orange-500 rounded">
-        <p className="text-sm text-orange-900 dark:text-orange-200">
-          <strong>CSS 转义规则：</strong>
-          当类名或 ID 包含特殊字符、数字开头或空格时，必须在 CSS 选择器中进行转义。
-          使用 CSS.escape() API 可以自动处理转义。
-        </p>
-      </div>
-
-      {/* Selector Type Toggle */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">
-          选择器类型
-        </label>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setSelectorType('class')}
-            className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
-              selectorType === 'class'
-                ? 'border-primary bg-primary/10 text-primary'
-                : 'border-border bg-secondary text-muted-foreground hover:bg-secondary/80'
-            }`}
-          >
-            .class
-          </button>
-          <button
-            onClick={() => setSelectorType('id')}
-            className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
-              selectorType === 'id'
-                ? 'border-primary bg-primary/10 text-primary'
-                : 'border-border bg-secondary text-muted-foreground hover:bg-secondary/80'
-            }`}
-          >
-            #id
-          </button>
-        </div>
-      </div>
-
-      {/* Input */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">
-          输入 {selectorType === 'class' ? '类名' : 'ID'}
-        </label>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="w-full p-3 font-mono text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-          placeholder={`输入${selectorType === 'class' ? '类名' : 'ID'}...`}
-        />
-      </div>
-
-      {/* Presets */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-foreground">
-          常见场景
-        </label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {PRESETS.map((preset) => (
-            <button
-              key={preset.name}
-              onClick={() => setInput(preset.input)}
-              className="p-3 text-left rounded-lg border border-border bg-secondary hover:bg-secondary/80 transition-colors"
-            >
-              <div className="text-sm font-semibold text-foreground">
-                {preset.name}
-              </div>
-              <div className="text-xs text-muted-foreground font-mono mt-1">
-                {preset.description}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Results */}
-      <div className="space-y-4">
-        {/* Original */}
-        <div className="p-4 bg-muted/50 rounded-lg border border-border">
-          <div className="text-xs font-semibold text-muted-foreground mb-2">
-            HTML 属性值（原始）
-          </div>
-          <code className="text-sm font-mono text-foreground font-semibold">
-            {selectorType === 'class' ? 'class' : 'id'}="{input || '(空)'}"
-          </code>
-        </div>
-
-        {/* Escaped */}
-        <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary">
-          <div className="text-xs font-semibold text-primary mb-2">
-            CSS 选择器（转义后）
-          </div>
-          <code className="text-lg font-mono text-foreground font-bold break-all">
-            {escapedSelector || '(空)'}
-          </code>
-        </div>
-
-        {/* CSS.escape() output */}
-        <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-500">
-          <div className="text-xs font-semibold text-green-700 dark:text-green-300 mb-2">
-            CSS.escape() 输出
-          </div>
-          <code className="text-sm font-mono text-foreground font-semibold break-all">
-            {input ? escapeCSS(input) : '(空)'}
-          </code>
-        </div>
-      </div>
-
-      {/* Escape Rules */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          转义规则说明
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <div className="text-xs font-semibold text-foreground mb-1">
-              数字开头
-            </div>
-            <div className="text-xs text-muted-foreground mb-2">
-              使用 Unicode 码点转义
-            </div>
-            <div className="text-xs font-mono">
-              <span className="text-red-500">1</span>foo →{' '}
-              <span className="text-green-600">\31</span> foo
-            </div>
-          </div>
-
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <div className="text-xs font-semibold text-foreground mb-1">
-              特殊字符
-            </div>
-            <div className="text-xs text-muted-foreground mb-2">
-              在字符前加反斜杠
-            </div>
-            <div className="text-xs font-mono">
-              my<span className="text-red-500">@</span>class →{' '}
-              my<span className="text-green-600">\@</span>class
-            </div>
-          </div>
-
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <div className="text-xs font-semibold text-foreground mb-1">
-              空格
-            </div>
-            <div className="text-xs text-muted-foreground mb-2">
-              转义为 \20 或 \\(空格)
-            </div>
-            <div className="text-xs font-mono">
-              my<span className="text-red-500"> </span>class →{' '}
-              my<span className="text-green-600">\ </span>class
-            </div>
-          </div>
-
-          <div className="p-3 bg-muted/50 rounded-md border border-border">
-            <div className="text-xs font-semibold text-foreground mb-1">
-              Unicode 字符
-            </div>
-            <div className="text-xs text-muted-foreground mb-2">
-              可选转义（不强制）
-            </div>
-            <div className="text-xs font-mono">
-              <span className="text-red-500">测</span>试 →{' '}
-              <span className="text-green-600">\6d4b</span> \8bd5
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CSS Example */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          CSS 代码示例
-        </div>
-        <div className="p-4 bg-gray-900 dark:bg-gray-950 rounded-lg border border-border">
-          <pre className="text-sm font-mono text-gray-100">
-            <code>{`/* HTML */
-<div ${selectorType}="${input || 'example'}">内容</div>
-
-/* CSS */
-${escapedSelector || '(空)'} {
-  color: red;
-  font-weight: bold;
-}`}</code>
-          </pre>
-        </div>
-      </div>
-
-      {/* JavaScript Example */}
-      <div className="space-y-2">
-        <div className="text-sm font-medium text-foreground">
-          JavaScript API 使用
-        </div>
-        <div className="p-4 bg-gray-900 dark:bg-gray-950 rounded-lg border border-border">
-          <pre className="text-sm font-mono text-gray-100">
-            <code>{`// 使用 CSS.escape() API
-const className = "${input || 'example'}";
-const selector = "." + CSS.escape(className);
-// 结果: ${escapedSelector || '(空)'}
-
-// 然后可以安全地用于 querySelector
-document.querySelector(selector);`}</code>
-          </pre>
-        </div>
-      </div>
-    </div>
+    <DemoPlayground
+      defaultCSS={defaultCSS}
+      defaultHTML={defaultHTML}
+      presets={presets}
+      iframeHeight={500}
+    />
   );
 }
